@@ -18,3 +18,6 @@ $string['type'] = 'Type';
 $string['source'] = 'Source';
 
 $string['managecredits'] = 'Manage corporate credits';
+
+$string['corporatecredits:manage'] = 'Manage corporate credits';
+$string['corporatecredits:view'] = 'View corporate credits';

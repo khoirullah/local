@@ -77,3 +77,8 @@ $string['entstatus'] = 'Status';
 $string['entdesc'] = 'View all purchased product licenses, monitor seat utilization, and manage employee access across your organization.';
 $string['ovwdesc'] = 'View all purchased product licenses, monitor seat utilization, and manage employee access across your organization.';
 $string['wltdesc'] = 'View all purchased product licenses, monitor seat utilization, and manage employee access across your organization.';
+
+// capabilities
+$string['company:manage'] = 'Manage Own Company';
+$string['company:manageall'] = 'Manage All Companies';
+$string['company:view'] = 'View Company';
