@@ -1,0 +1,180 @@
+﻿Diagnose log at 2026-06-20T07:50:51Z
+
+AppPath: C:\Program Files\Git\mingw64\bin\git-credential-manager.exe
+InstallDir: C:\Program Files\Git\mingw64\bin\
+Version: 2.6.1+786ab03440ddc82e807a97c0e540f5247e44cec6
+
+------------
+Diagnostic: Environment
+Skipped: False
+Success: True
+Exception: None
+Log:
+OSType: Windows
+OSVersion: 10.0 (build 22631)
+Reading environment variables... OK
+ Variables:
+HOMEPATH=\Users\SSI
+DriverData=C:\Windows\System32\Drivers\DriverData
+COMPUTERNAME=SSI-LEN-13
+GIT_TRACE2_PARENT_SID=c807d536-1cd5-4ae8-baa5-02a45903ab8d
+CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+OneDrive=C:\Users\SSI\OneDrive
+WT_PROFILE_ID={61c54bbd-c2c6-5271-96e7-009a87ff44bf}
+TMP=C:\Users\SSI\AppData\Local\Temp
+HOME=C:\Users\SSI
+PROCESSOR_REVISION=5000
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.CPL
+GIT_EXEC_PATH=C:/Program Files/Git/mingw64/libexec/git-core
+TEMP=C:\Users\SSI\AppData\Local\Temp
+LOCALAPPDATA=C:\Users\SSI\AppData\Local
+MSYSTEM=MINGW64
+TERM=xterm-256color
+COLORTERM=truecolor
+USERDOMAIN=SSI-LEN-13
+ProgramFiles(x86)=C:\Program Files (x86)
+Path=C:/Program Files/Git/mingw64/libexec/git-core;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\SSI\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\TortoiseGit\bin;C:\Users\SSI\Documents\khoir\freelance\php;C:\composer;C:\Users\SSI\AppData\Local\Muse Hub\lib;C:\Program Files\PuTTY\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\SSI\AppData\Local\Microsoft\WindowsApps;C:\Users\SSI\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\SSI\AppData\Roaming\npm;C:\Users\SSI\AppData\Roaming\Composer\vendor\bin;C:\composer;C:\Users\SSI\AppData\Local\Muse Hub\lib
+PROCESSOR_LEVEL=25
+PROCESSOR_IDENTIFIER=AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+TMPDIR=C:\Users\SSI\AppData\Local\Temp
+APPDATA=C:\Users\SSI\AppData\Roaming
+PSModulePath=C:\Users\SSI\Documents\WindowsPowerShell\Modules;C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+PUBLIC=C:\Users\Public
+NUMBER_OF_PROCESSORS=16
+CommonProgramFiles=C:\Program Files (x86)\Common Files
+WT_SESSION=b16cf4bc-fe12-4910-9902-32d2aeb45429
+WSLENV=WT_SESSION:WT_PROFILE_ID:
+PLINK_PROTOCOL=ssh
+ProgramData=C:\ProgramData
+ProgramW6432=C:\Program Files
+ProgramFiles=C:\Program Files (x86)
+SystemRoot=C:\WINDOWS
+INTEL_DEV_REDIST=C:\Program Files (x86)\Common Files\Intel\Shared Libraries\
+SESSIONNAME=Console
+LC_CTYPE=C.UTF-8
+CommonProgramW6432=C:\Program Files\Common Files
+LOGONSERVER=\\SSI-LEN-13
+USERPROFILE=C:\Users\SSI
+USERDOMAIN_ROAMINGPROFILE=SSI-LEN-13
+PROCESSOR_ARCHITEW6432=AMD64
+HOMEDRIVE=C:
+USERNAME=SSI
+MIC_LD_LIBRARY_PATH=C:\Program Files (x86)\Common Files\Intel\Shared Libraries\compiler\lib\mic
+PROCESSOR_ARCHITECTURE=x86
+OS=Windows_NT
+ComSpec=C:\WINDOWS\system32\cmd.exe
+SystemDrive=C:
+windir=C:\WINDOWS
+ALLUSERSPROFILE=C:\ProgramData
+
+
+------------
+Diagnostic: File system
+Skipped: False
+Success: True
+Exception: None
+Log:
+Temporary directory is 'C:\Users\SSI\AppData\Local\Temp\'...
+Checking basic file I/O...
+Writing to temporary file 'C:\Users\SSI\AppData\Local\Temp\6f254ec4acf7e5472307921f'... OK
+Reading from temporary file 'C:\Users\SSI\AppData\Local\Temp\6f254ec4acf7e5472307921f'... OK
+Deleting temporary file 'C:\Users\SSI\AppData\Local\Temp\6f254ec4acf7e5472307921f'... OK
+Testing IFileSystem instance...
+UserHomePath: C:\Users\SSI
+UserDataDirectoryPath: C:\Users\SSI\.gcm
+GetCurrentDirectory(): C:\Users\SSI\Documents\khoir\freelance\server\htdocs\moodle\local
+
+------------
+Diagnostic: Networking
+Skipped: False
+Success: True
+Exception: None
+Log:
+Checking networking and HTTP stack...
+Creating HTTP client... OK
+IsNetworkAvailable: True
+Sending HEAD request to http://example.com...Sending HEAD request to https://example.com... OK
+ OK
+Acquiring free TCP port... OK
+Testing local HTTP loopback connections...
+Creating new HTTP listener for http://localhost:65511/... OK
+Waiting for loopback connection... OK
+Writing response... OK
+Waiting for response data... OK
+Loopback connection data OK
+
+------------
+Diagnostic: Git
+Skipped: False
+Success: True
+Exception: None
+Log:
+Getting Git version... OK
+Git version is '2.50.1.windows.1'
+Locating current repository...Git repository at 'C:/Users/SSI/Documents/khoir/freelance/server/htdocs/moodle/local/.git'
+ OK
+Listing all Git configuration... OK
+Git configuration:
+file:C:/Program Files/Git/etc/gitconfig	diff.astextplain.textconv=astextplain
+file:C:/Program Files/Git/etc/gitconfig	filter.lfs.clean=git-lfs clean -- %f
+file:C:/Program Files/Git/etc/gitconfig	filter.lfs.smudge=git-lfs smudge -- %f
+file:C:/Program Files/Git/etc/gitconfig	filter.lfs.process=git-lfs filter-process
+file:C:/Program Files/Git/etc/gitconfig	filter.lfs.required=true
+file:C:/Program Files/Git/etc/gitconfig	http.sslbackend=schannel
+file:C:/Program Files/Git/etc/gitconfig	core.autocrlf=true
+file:C:/Program Files/Git/etc/gitconfig	core.fscache=true
+file:C:/Program Files/Git/etc/gitconfig	core.symlinks=false
+file:C:/Program Files/Git/etc/gitconfig	pull.rebase=false
+file:C:/Program Files/Git/etc/gitconfig	credential.helper=manager
+file:C:/Program Files/Git/etc/gitconfig	credential.https://dev.azure.com.usehttppath=true
+file:C:/Program Files/Git/etc/gitconfig	init.defaultbranch=master
+file:C:/Users/SSI/.gitconfig	core.editor="C:\Users\SSI\AppData\Local\Programs\Microsoft VS Code\bin\code" --wait
+file:C:/Users/SSI/.gitconfig	user.name=khoirfreelance
+file:C:/Users/SSI/.gitconfig	user.email=free.khoir@gmail.com
+file:.git/config	core.bare=false
+file:.git/config	core.repositoryformatversion=0
+file:.git/config	core.filemode=false
+file:.git/config	core.symlinks=false
+file:.git/config	core.ignorecase=true
+file:.git/config	core.logallrefupdates=true
+file:.git/config	gui.wmstate=normal
+file:.git/config	gui.geometry=1109x563+32+32 216 255
+file:.git/config	remote.origin.url=https://github.com/khoirullah/local.git
+file:.git/config	remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+
+
+------------
+Diagnostic: Credential storage
+Skipped: False
+Success: True
+Exception: None
+Log:
+ICredentialStore instance is of type: CredentialStore
+Writing test credential... OK
+Reading test credential... OK
+Deleting test credential... OK
+
+------------
+Diagnostic: Microsoft authentication (AAD/MSA)
+Skipped: False
+Success: True
+Exception: None
+Log:
+Broker is not enabled.
+Flow type is: Auto
+Gathering MSAL token cache data... OK
+CacheDirectory: C:\Users\SSI\AppData\Local\.IdentityService
+CacheFileName: msal.cache
+CacheFilePath: C:\Users\SSI\AppData\Local\.IdentityService\msal.cache
+Creating cache helper... OK
+Verifying MSAL token cache persistence... OK
+
+------------
+Diagnostic: GitHub API
+Skipped: False
+Success: True
+Exception: None
+Log:
+Using 'https://github.com/' as API target.
+Querying '/meta' endpoint... OK
+
