@@ -1,0 +1,79 @@
+<div class="course-card h-100 {{^visible}}course-card-hidden{{/visible}}">
+
+    <div class="course-image">
+        <div class="course-image-inner">
+            <img
+                src="{{imageurl}}"
+                alt="{{name}}"
+            >
+            <span class="type badge badge-success p-2">
+                {{type}}
+            </span>
+            {{^visible}}
+            <span class="unactive badge badge-secondary p-2">
+                {{#str}}hidden, local_learningproducts{{/str}}
+            </span>
+            {{/visible}}
+        </div>
+    </div>
+
+    <div class="course-body">
+
+        <h5 class="course-title">
+            {{name}}
+        </h5>
+
+        <div class="course-meta">
+            
+            <span class="course-rating-badge">
+                ⭐ {{rating}}
+            </span>
+
+            <span class="course-rating-count">
+                {{ratingcount}} {{#str}}rating, local_learningproducts{{/str}}
+            </span>
+
+        </div>
+
+        <div class="mt-auto">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <div class="course-students">
+                    👥 {{studentcount}} {{#str}}participant, local_learningproducts{{/str}}
+                </div>
+
+                <div class="course-price">
+                    {{price}} 🪙
+                </div>
+
+            </div>
+
+            <div class="course-actions">
+
+                <a
+                    href="view.php?id={{id}}"
+                    class="btn btn-outline-secondary"
+                >
+                    {{#str}}moreinfo, local_learningproducts{{/str}}
+                </a>
+
+                {{#isenrolled}}
+                <a href="{{actionurl}}" class="btn btn-success btn-block">
+                    {{#str}}contleaning, local_learningproducts{{/str}}
+                </a>
+                {{/isenrolled}}
+
+                {{^isenrolled}}
+                <a href="{{actionurl}}" class="btn btn-primary btn-block">
+                    {{#str}}buy, local_learningproducts{{/str}}
+                </a>
+                {{/isenrolled}}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

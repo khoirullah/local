@@ -1,0 +1,247 @@
+.wallet-topup-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.wallet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.wallet-header h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.wallet-header p {
+    color: #667085;
+    margin: 0;
+}
+
+.balance-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #f8fafc;
+    border: 1px solid #e4e7ec;
+    border-radius: 20px;
+    padding: 24px 32px;
+    min-width: 320px;
+}
+
+.balance-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: #e9f2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #2563eb;
+}
+
+.balance-card h2 {
+    margin: 0;
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.balance-card h2 span {
+    color: #2563eb;
+    font-size: 28px;
+}
+
+.section-card {
+    background: white;
+    border: 1px solid #eaecf0;
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+.section-card h3 {
+    font-size: 28px;
+    margin-bottom: 25px;
+}
+
+.amount-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+}
+
+.amount-card {
+    position: relative;
+    border: 1px solid #d0d5dd;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.amount-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+.amount-card.active {
+    border: 2px solid #2563eb;
+    background: #f8fbff;
+}
+
+.coin-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.amount {
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.label {
+    color: #667085;
+}
+
+.checkmark {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-card {
+    grid-column: span 2;
+    border: 1px solid #d0d5dd;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.custom-card label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.custom-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d0d5dd;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.custom-input input {
+    flex: 1;
+    border: none;
+    padding: 18px;
+}
+
+.custom-input span {
+    padding: 0 20px;
+    color: #667085;
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.secure-badge {
+    background: #ecfdf3;
+    color: #027a48;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+}
+
+.summary-grid {
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.summary-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #eef4ff;
+    color: #2563eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+}
+
+.divider {
+    width: 1px;
+    height: 80px;
+    background: #eaecf0;
+}
+
+.topup-btn {
+    width: 100%;
+    border: none;
+    border-radius: 18px;
+    padding: 22px;
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #0052cc
+    );
+}
+
+.payment-note {
+    text-align: center;
+    margin-top: 15px;
+    color: #667085;
+}
+
+@media (max-width: 992px) {
+
+    .wallet-header {
+        flex-direction: column;
+    }
+
+    .amount-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .custom-card {
+        grid-column: span 2;
+    }
+
+    .summary-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .divider {
+        display: none;
+    }
+}

@@ -1,0 +1,123 @@
+<div class="row ml-auto mr-auto">
+    <div class="col-md-6 col-sm-12 my-auto">
+        <form id="mform" class="mform full-width-labels ml-auto mr-auto p-3 rounded" accept-charset="utf-8" action="{{signupaction}}" autocomplete="off" method="post" data-boost-form-errors-enhanced="1">
+            <div class="form-group">
+                <label for="fullname">{{#str}}fullname, local_auth{{/str}} <span class="text-danger">*</span></label>
+                <input id="fullname" class="form-control" name="fullname" type="text" value="{{data.fullname}}" >
+                {{#errors.fullname}}<div class="text-danger">{{.}}</div>{{/errors.fullname}}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_email">{{#str}}email, local_auth{{/str}} <span class="text-danger">*</span></label>
+                    <input id="id_email" class="form-control" name="email" type="email" value="{{data.email}}" >
+                    {{#errors.email}}<div class="text-danger">{{{.}}}</div>{{/errors.email}}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="id_email2">{{#str}}confirmemail, local_auth{{/str}} <span class="text-danger">*</span></label>
+                    <input id="id_email2" class="form-control" name="email2" type="email" value="{{data.email2}}" >
+                    {{#errors.email2}}<div class="text-danger">{{.}}</div>{{/errors.email2}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">{{#str}}password, local_auth{{/str}} <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input id="id_password" class="form-control" autocomplete="new-password" maxlength="128" name="password" size="12" type="password">
+                    <div class="input-group-append">
+                        <span id="togglePassword" class="input-group-text border border-dark" style="cursor: pointer; background: #f2f0ef; border: 0;"> 
+                            <i class="fa fa-eye" aria-hidden="true"></i> 
+                        </span>
+                    </div>
+                </div>
+                {{#errors.password}}<div class="text-danger">{{.}}</div>{{/errors.password}}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_signup_token">{{#str}}enrollmentkey, local_auth{{/str}}</label>
+                    <input id="id_signup_token" class="form-control" name="signup_token" type="text" value="{{data.signup_token}}" readonly="readonly">
+                    {{#errors.signup_token}}<div class="text-danger">{{.}}</div>{{/errors.signup_token}}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="id_profile_field_company">{{#str}}company, local_auth{{/str}}</label>
+                    <input id="id_profile_field_company" class="form-control" name="profile_field_company" type="text" value="{{data.company}}">
+                </div>
+            </div>
+
+            <!-- hidden fields -->
+            <div style="display: none;">
+                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                <input name="_qf__login_signup_form" type="hidden" value="1"> 
+                <input name="mform_isexpanded_id_category_2" type="hidden" value="1"> 
+                <input id="id_firstname" name="firstname" type="hidden">
+                <input id="id_lastname" name="lastname" type="hidden"> 
+                <input id="id_username" name="username" type="hidden">
+                <input name="mform_isexpanded_id_category_2" type="hidden" value="1">
+                <input name="_qf__auth_enrolkey_form_enrolkey_signup_form" type="hidden" value="1">
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-paper-plane"></i> &nbsp; {{#str}}createaccount, local_auth{{/str}}
+            </button>
+        </form>
+    </div>
+
+    <div class="col-md-6 col-sm-12 my-auto">
+        <img class="img-fluid align-middle" src="http://staging.integrity-academy.com/moodle/pluginfile.php/1/theme_almondb/loginbackgroundimage/-1/bg_signup.png" alt="signup_img">
+        <!-- <img class="img-fluid align-middle" src="https://www.integrity-academy.com/team/pluginfile.php/2/course/section/6/Pictu.png?1731037020435" alt="signup_img">-->
+        <!-- <img class="img-fluid align-middle" src="{{imageurl}}" alt="signup_img" width="80%"> -->
+    </div>
+</div>
+{{! Optional JS script block }}
+<script>
+const company = document.getElementById("id_profile_field_company");
+const key = document.getElementById("id_signup_token");
+
+company?.addEventListener("input", () => {
+    const hasValue = company.value.trim() !== "";
+    key.readOnly = !hasValue;
+    if (!hasValue) key.value = "";
+});
+
+document.getElementById('fullname').addEventListener('input', function() {
+  var fullName = this.value.trim();
+  var nameParts = fullName.split(' ');
+
+    if (nameParts.length > 1) {
+        document.getElementById('id_firstname').value = nameParts[0];
+        var lastName = nameParts.slice(1).join(' ').trim();
+
+        // Jika lastname tidak didefinisikan atau kosong, isi dengan firstname
+        if (lastName === "") {
+        document.getElementById('id_lastname').value = nameParts[0];
+        } else {
+        document.getElementById('id_lastname').value = lastName;
+        }
+    } else {
+        document.getElementById('id_firstname').value = fullName;
+        document.getElementById('id_lastname').value = fullName;
+    }
+});
+
+document.getElementById('id_email').addEventListener('input', function() {
+    var email = this.value.trim();
+    var username = email;
+    // Mengisi input hidden username dengan nilai yang diproses
+    document.getElementById('id_username').value = username;
+});
+
+const togglePassword = document.querySelector('#togglePassword');
+const passwordInput = document.querySelector('#id_password');
+
+togglePassword.addEventListener('click', function(e) {
+    // Toggle the type attribute
+    const type = passwordInput.getAttribute('type') === 'password' ?
+        'text' : 'password';
+    passwordInput.setAttribute('type', type);
+
+    // Toggle the eye icon (optional)
+    this.querySelector('i').classList.toggle('fa-eye');
+    this.querySelector('i').classList.toggle('fa-eye-slash');
+});
+</script>

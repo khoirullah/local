@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/company/db" VERSION="2026022300" COMMENT="Company plugin tables"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+
+<TABLES>
+
+    <TABLE NAME="local_company" COMMENT="Company master table">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="cohortid" TYPE="int" LENGTH="10" NOTNULL="false"/>
+            <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true"/>
+            <FIELD NAME="shortname" TYPE="char" LENGTH="100" NOTNULL="true"/>
+            <FIELD NAME="description" TYPE="text" NOTNULL="false"/>
+            <FIELD NAME="logo" TYPE="char" LENGTH="255" NOTNULL="false"/>
+            <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+            <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+    </TABLE>
+
+    <TABLE NAME="local_company_user" COMMENT="Mapping user to company">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="companyid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="role" TYPE="char" NOTNULL="true" DEFAULT="member"/>
+            <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+        <INDEXES>
+            <INDEX NAME="company_user_idx" UNIQUE="true" FIELDS="companyid, userid"/>
+        </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_company_subscription" COMMENT="Company course subscription">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="companyid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="quota" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+            <FIELD NAME="startdate" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="enddate" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+            <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+        <INDEXES>
+            <INDEX NAME="company_course_idx" UNIQUE="true" FIELDS="companyid, courseid"/>
+        </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_company_transaction" COMMENT="Company coin/wallet transaction history">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            
+            <FIELD NAME="companyid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+
+            <FIELD NAME="type" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT=""/>
+
+            <FIELD NAME="amount" TYPE="number" LENGTH="12" DECIMALS="2" NOTNULL="true" DEFAULT="0"/>
+
+            <FIELD NAME="source" TYPE="char" LENGTH="50" NOTNULL="false"/>
+
+            <FIELD NAME="referencecomponent" TYPE="char" LENGTH="100" NOTNULL="false"/>
+
+            <FIELD NAME="referenceid" TYPE="int" LENGTH="10" NOTNULL="false"/>
+
+            <FIELD NAME="description" TYPE="text" NOTNULL="false"/>
+
+            <FIELD NAME="balancebefore" TYPE="number" LENGTH="12" DECIMALS="2" NOTNULL="true" DEFAULT="0"/>
+
+            <FIELD NAME="balanceafter" TYPE="number" LENGTH="12" DECIMALS="2" NOTNULL="true" DEFAULT="0"/>
+
+            <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+
+            <FIELD NAME="createdby" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        </FIELDS>
+
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+
+            <KEY NAME="companyid_fk"
+                TYPE="foreign"
+                FIELDS="companyid"
+                REFTABLE="local_company"
+                REFFIELDS="id"/>
+        </KEYS>
+
+        <INDEXES>
+            <INDEX NAME="companyid_idx"
+                UNIQUE="false"
+                FIELDS="companyid"/>
+
+            <INDEX NAME="type_idx"
+                UNIQUE="false"
+                FIELDS="type"/>
+
+            <INDEX NAME="reference_idx"
+                UNIQUE="false"
+                FIELDS="referencecomponent, referenceid"/>
+
+            <INDEX NAME="timecreated_idx"
+                UNIQUE="false"
+                FIELDS="timecreated"/>
+        </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_company_entitlement"
+       COMMENT="Company product entitlement and license allocation">
+
+        <FIELDS>
+
+            <FIELD NAME="id"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                SEQUENCE="true"/>
+
+            <FIELD NAME="companyid"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="productid"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="qty"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="usedqty"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="startdate"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="enddate"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="status"
+                TYPE="char"
+                LENGTH="20"
+                NOTNULL="true"
+                DEFAULT="active"/>
+
+            <FIELD NAME="timecreated"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="timemodified"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+        </FIELDS>
+
+        <KEYS>
+
+            <KEY NAME="primary"
+                TYPE="primary"
+                FIELDS="id"/>
+
+            <KEY NAME="companyid_fk"
+                TYPE="foreign"
+                FIELDS="companyid"
+                REFTABLE="local_company"
+                REFFIELDS="id"/>
+
+        </KEYS>
+
+        <INDEXES>
+
+            <INDEX NAME="company_product_idx"
+                UNIQUE="false"
+                FIELDS="companyid,productid"/>
+
+            <INDEX NAME="status_idx"
+                UNIQUE="false"
+                FIELDS="status"/>
+
+            <INDEX NAME="enddate_idx"
+                UNIQUE="false"
+                FIELDS="enddate"/>
+
+        </INDEXES>
+
+    </TABLE>
+
+    <TABLE NAME="local_company_assignment"
+       COMMENT="Company entitlement assignment to users">
+
+        <FIELDS>
+
+            <FIELD NAME="id"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                SEQUENCE="true"/>
+
+            <FIELD NAME="entitlementid"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="userid"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="assignedby"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+            <FIELD NAME="status"
+                TYPE="char"
+                LENGTH="20"
+                NOTNULL="true"
+                DEFAULT="active"/>
+
+            <FIELD NAME="timecreated"
+                TYPE="int"
+                LENGTH="10"
+                NOTNULL="true"
+                DEFAULT="0"/>
+
+        </FIELDS>
+
+        <KEYS>
+
+            <KEY NAME="primary"
+                TYPE="primary"
+                FIELDS="id"/>
+
+            <KEY NAME="entitlementid_fk"
+                TYPE="foreign"
+                FIELDS="entitlementid"
+                REFTABLE="local_company_entitlement"
+                REFFIELDS="id"/>
+
+        </KEYS>
+
+        <INDEXES>
+
+            <INDEX NAME="entitlementid_idx"
+                UNIQUE="false"
+                FIELDS="entitlementid"/>
+
+            <INDEX NAME="userid_idx"
+                UNIQUE="false"
+                FIELDS="userid"/>
+
+            <INDEX NAME="status_idx"
+                UNIQUE="false"
+                FIELDS="status"/>
+
+            <INDEX NAME="entitlement_user_uix"
+                UNIQUE="true"
+                FIELDS="entitlementid,userid"/>
+
+        </INDEXES>
+
+    </TABLE>
+
+</TABLES>
+</XMLDB>

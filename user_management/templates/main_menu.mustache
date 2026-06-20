@@ -1,0 +1,114 @@
+<div class="container-fluid">
+    <div class="row usermgmt-cards">
+
+        {{#cards}}
+        <div class="col-md-6 mb-4">
+            <a href="{{url}}" class="usermgmt-card {{class}}">
+                <div class="card h-100">
+                    <div class="card-body usermgmt-card-body">
+
+                        <!-- LEFT: ICON (30%) -->
+                        <div class="usermgmt-icon-wrap">
+                            <div class="usermgmt-icon display-3 {{iconcolor}}">
+                                <i class="fa {{icon}}"></i>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT: TEXT (70%) -->
+                        <div class="usermgmt-content">
+                            <h5 class="card-title mb-1 text-dark">{{title}}</h5>
+                            <p class="card-text text-muted mb-2">
+                                {{description}}
+                            </p>
+
+                            <!-- {{#warning}}
+                                <div class="alert alert-danger mt-2 p-2 fw-bold mb-0">
+                                    {{warningtext}}
+                                </div>
+                            {{/warning}}-->
+                        </div>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        {{/cards}}
+
+    </div>
+</div>
+
+<style>
+.usermgmt-cards a {
+    text-decoration: none;
+}
+
+/* Card base */
+.usermgmt-card .card {
+    border: 2px solid #f3b6b6;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    background: #fff;
+}
+
+.usermgmt-card .card:hover {
+    border-color: #e74c3c;
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.25);
+    transform: translateY(-3px);
+}
+
+/* Flex layout */
+.usermgmt-card-body {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* LEFT 30% */
+.usermgmt-icon-wrap {
+    flex: 0 0 30%;
+    text-align: center;
+}
+
+.usermgmt-icon i {
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.usermgmt-card:hover .usermgmt-icon i {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+
+/* RIGHT 70% */
+.usermgmt-content {
+    flex: 0 0 70%;
+}
+
+/* Title */
+.usermgmt-card .card-title {
+    font-weight: 600;
+}
+
+/* Danger variant */
+.usermgmt-card.danger .card {
+    border-color: #e74c3c;
+    background: #fff5f5;
+}
+
+.usermgmt-card.danger .card:hover {
+    background: #ffecec;
+}
+
+/* Mobile friendly */
+@media (max-width: 576px) {
+    .usermgmt-card-body {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .usermgmt-icon-wrap,
+    .usermgmt-content {
+        flex: 0 0 100%;
+    }
+}
+</style>

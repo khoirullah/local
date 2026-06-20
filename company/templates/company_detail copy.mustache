@@ -1,0 +1,485 @@
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#overview">{{#str}} navoverview, local_company {{/str}}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#subscription">{{#str}} navsubscription, local_company {{/str}}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#profile">{{#str}} navprofile, local_company {{/str}}</a>
+    </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div id="overview" class="container-fluid tab-pane fade"><br>
+        <div class="d-flex flex-wrap mb-4 stats-cards">
+            {{#stats}}
+
+            <div class="stat-card text-center">
+                <div class="card text-white bg-primary border-0">
+                    <div class="card-body py-2">
+                        <p>{{#str}} substatus, local_company {{/str}}</p>
+                        <h5 class="font-weight-bold mb-0">{{status}}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card text-center">
+                <div class="card text-white bg-primary border-0">
+                    <div class="card-body py-2">
+                        <p>{{#str}} subcourse, local_company {{/str}}</p>
+                        <h5 class="font-weight-bold mb-0">{{totalcourses}}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card text-center">
+                <div class="card text-white bg-primary border-0">
+                    <div class="card-body py-2">
+                        <p>{{#str}} subpurchased, local_company {{/str}}</p>
+                        <h5 class="font-weight-bold mb-0">{{seatspurchased}}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card text-center">
+                <div class="card text-white bg-primary border-0">
+                    <div class="card-body py-2">
+                        <p>{{#str}} subused, local_company {{/str}}</p>
+                        <h5 class="font-weight-bold mb-0">{{seatsused}}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card text-center">
+                <div class="card text-white bg-primary border-0">
+                    <div class="card-body py-2">
+                        <p>{{#str}} subremain, local_company {{/str}}</p>
+                        <h5 class="font-weight-bold mb-0">{{seatsremaining}}</h5>
+                    </div>
+                </div>
+            </div>
+
+            {{/stats}}
+        </div>
+
+        <div class="d-flex flex-column">
+            <div class="card border border-primary border-radius mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{{#str}} chartenrollment, local_company {{/str}}</h5>
+                    <small class="mt-0">{{#str}} chartenrollmentdes, local_company {{/str}}</small>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="d-flex justify-content-end my-auto">
+                        <input type="hidden" name="id" value="{{company.id}}">
+                        <select name="course" class="form-control me-2">
+                            {{#subscriptions}}
+                            <option value="{{courseid}}" {{#selected}}selected{{/selected}}>
+                                {{course}}
+                            </option>
+                            {{/subscriptions}}
+                        </select>
+
+                        <select name="year" class="form-control me-2">
+                            {{#years}}
+                            <option value="{{year}}">
+                                {{year}}
+                            </option>
+                            {{/years}}
+                        </select>
+
+                        <button class="btn btn-outline-primary">
+                            {{#str}} apply, local_company {{/str}}
+                        </button>
+
+                    </form>
+                    <canvas id="enrollments" style="max-height: 500px;"></canvas>
+                </div>
+            </div>
+
+            <div class="card border border-dark border-radius">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">{{#str}} chartcompletion, local_company {{/str}}</h5>
+                    <small class="mt-0">{{#str}} chartcompletiondes, local_company {{/str}}</small>
+                </div>
+                <div class="card-body">
+                    <canvas id="completions" style="max-height: 500px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="profile" class="container tab-pane fade text-justify"><br>
+
+        {{#company}}
+        <div class="card shadow-sm border-0 mb-4 company-profile">
+
+            <div class="card-body">
+
+                <div class="d-flex align-items-start">
+
+                    <!-- Logo -->
+                    <div class="company-logo me-4">
+                        {{#logo}}
+                            <img src="{{logo}}" class="img-fluid rounded shadow-sm p-2">
+                        {{/logo}}
+                        
+                        {{^logo}}
+                            <div class="logo-placeholder">
+                                {{name}}
+                            </div>
+                        {{/logo}}
+                    </div>
+
+                    <!-- Company Info -->
+                    <div class="flex-grow-1">
+
+                        <div class="d-flex justify-content-between align-items-center mb-0">
+                            <h3 class="mb-0">
+                                {{name}}
+                            </h3>
+                            <span class="{{statusclass}}">
+                                {{status}}
+                            </span>
+                        </div>
+
+                        <div class="text-muted small mt-0 mb-3">
+                            {{#str}} joining, local_company {{/str}} 
+                            <strong>{{timecreated}}</strong> 
+                        </div>
+                        <!-- Description -->
+                        {{#description}}
+                        <p class="text-muted mb-2 company-desc">
+                            {{description}}
+                        </p>
+                        {{/description}}
+
+                        <div class="mt-3">
+                            <strong>{{#str}} enrolled, local_company {{/str}}</strong>
+                        </div>
+
+                        <div class="mt-2 row">
+                            {{#subscriptions}}
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100 shadow-sm border-0 subscription-card d-flex flex-column">
+                                    
+                                    <div class="card-body d-flex flex-column text-center">
+
+                                        <!-- Title -->
+                                        <h5 class="card-title mb-3">
+                                            <a href="{{courseurl}}" class="text-primary font-weight-bold text-decoration-none">
+                                                {{course}}
+                                            </a>
+                                        </h5>
+
+                                        <!-- Push content below -->
+                                        <div class="mt-auto">
+
+                                            <span class="badge bg-danger text-white p-2 mb-2">
+                                                {{category}}
+                                            </span>
+
+                                            <div>
+                                                <span class="h4 font-weight-bold text-secondary">
+                                                    {{used}}
+                                                </span>
+                                                <div class="small text-muted">
+                                                    {{#str}}courseparticipant, local_company{{/str}}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            {{/subscriptions}}
+
+                            {{^subscriptions}}
+                            <div class="alert alert-danger mt-2 text-center px-3">
+                                {{#str}}nosub, local_company{{/str}}
+                            </div>
+                            {{/subscriptions}}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        {{/company}}
+
+    </div>
+    <div id="subscription" class="container-fluid tab-pane active"><br>
+        <!--<div class="mb-4 d-flex justify-content-between align-items-center">-->
+        <div class="mb-4 d-flex justify-content-between">
+            <div class="d-flex py-2">
+                <button class="btn btn-primary" data-toggle="collapse" data-target="#form">
+                    {{#str}} addsubs, local_company {{/str}}
+                </button>
+            </div>
+            
+            <form method="get" class="d-flex justify-content-between my-auto">
+                <input type="hidden" name="id" value="{{company.id}}">
+
+                    <input type="text"
+                        name="search"
+                        value="{{search}}"
+                        class="form-control me-2"
+                        placeholder="{{#str}} search {{/str}}"
+                    >
+
+                    <select name="status" class="form-control me-2">
+                        <option value="">
+                            {{#str}} filterstatus, local_company {{/str}}
+                        </option>
+
+                        <option value="1" {{#statusactive}}selected{{/statusactive}}>
+                            {{#str}} statusactive, local_company {{/str}}
+                        </option>
+
+                        <option value="0" {{#statussuspend}}selected{{/statussuspend}}>
+                            {{#str}} statussuspend, local_company {{/str}}
+                        </option>
+                    </select>
+
+                    <button class="btn btn-outline-primary">
+                        {{#str}} apply, local_company {{/str}}
+                    </button>
+
+            </form>
+        </div>
+
+        <div id="form" class="card collapse">
+            <div class="card-body">
+
+                {{{form}}}
+
+            </div>
+        </div>
+
+        <div class="mt-4 table-responsive">
+
+            {{#hassubscriptions}}
+
+            <table class="table table-bordered table-hover">
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th>{{#str}} clientcourse, local_company {{/str}}</th>
+                        <th>{{#str}} substart, local_company {{/str}}</th>
+                        <th>{{#str}} subend, local_company {{/str}}</th>
+                        <th>{{#str}} status {{/str}}</th>
+                        <th>{{#str}} clientquota, local_company {{/str}}</th>
+                        <th>{{#str}} clientquotaused, local_company {{/str}}</th>
+                        <th>{{#str}} clientquotaleft, local_company {{/str}}</th>
+                        <th>{{#str}} clientcompletion, local_company {{/str}}</th>
+                        <!-- <th>{{#str}} clientaction, local_company {{/str}}</th> -->
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {{#subscriptions}}
+                <tr>
+
+                    <td>
+                        <a href="{{courseurl}}" class="text-primary font-weight-bold text-decoration-none">
+                            {{course}}
+                        </a>
+                    </td>
+
+                    <td>{{startdate}}</td>
+
+                    <td>{{enddate}}</td>
+
+                    <td>
+                        <span>
+                            {{status}}
+                        </span>
+                    </td>
+
+                    <td>{{quota}}</td>
+
+                    <td>{{used}}</td>
+
+                    <td>{{left}}</td>
+
+                    <td> 
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped" style="width:{{completion}}">
+                                {{completion}}
+                            </div>
+                        </div>
+                        
+                    </td>
+
+                    <!-- <td class="text-center">
+                        <a href="{{deleteurl}}"
+                            class="btn btn-sm btn-danger"
+                            onclick="return confirm('{{#str}}confirmdelete, local_company{{/str}}')">
+                            {{#str}}delete, local_company{{/str}}
+                        </a>
+                    </td> -->
+
+                </tr>
+                {{/subscriptions}}
+
+                </tbody>
+            </table>
+
+            {{/hassubscriptions}}
+
+            {{^hassubscriptions}}
+
+            <div class="alert alert-info">
+                {{#str}} nosub, local_company {{/str}}
+            </div>
+
+            {{/hassubscriptions}}
+
+        </div>
+    </div>
+</div>
+<style>
+    .company-profile{
+        border-radius:10px;
+    }
+
+    .company-logo img{
+        width:80px;
+        height:80px;
+        object-fit:cover;
+    }
+
+    .logo-placeholder{
+        width:80px;
+        height:80px;
+        background:#e9ecef;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        font-size:12px;
+        border-radius:10px;
+        color:#666;
+    }
+
+    .company-desc{
+        max-width:600px;
+        line-height:1.4;
+    }
+
+    .stats-cards {
+        gap: 10px;
+    }
+
+    .stat-card {
+        flex: 1;
+        min-width: 180px;
+    }
+
+    .stat-card .card {
+        border-radius: 8px;
+    }
+
+    .stat-card small {
+        font-size: 12px;
+        opacity: .9;
+    }
+    .stat-card h5{
+        font-size: 22px;
+        letter-spacing: .5px;
+    }
+    #completions{
+        height:300px;
+    }
+    .subscription-card {
+        border-radius: 14px;
+        transition: all .25s ease;
+    }
+    .subscription-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const ctx = document.getElementById('enrollments');
+
+    if (!ctx) return;
+
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{{enrollmentlabels}}},
+            datasets: [{
+                label: 'Enrollments',
+                data: {{{enrollmentdata}}},
+                borderWidth: 2,
+                fill: false,
+                tension: 0.2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const ctxCompletion = document.getElementById('completions');
+
+        if (!ctxCompletion) return;
+
+        new Chart(ctxCompletion, {
+            type: 'bar',
+            data: {
+                labels: {{{completionlabels}}},
+                datasets: [{
+                    //label: {{#str}} clientcompletion, local_company {{/str}},
+                    label: 'Completion %',
+                    data: {{{completiondata}}},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y', // 🔥 horizontal bar
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+    });
+</script>

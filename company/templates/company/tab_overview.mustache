@@ -1,0 +1,97 @@
+{{#overview}}
+<div class="d-flex flex-wrap my-4 stats-cards">
+    {{#stats}}
+
+    <div class="stat-card text-center">
+        <div class="card text-white bg-primary border-0">
+            <div class="card-body py-2">
+                <p>{{#str}} substatus, local_company {{/str}}</p>
+                <h5 class="font-weight-bold mb-0">{{status}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card text-center">
+        <div class="card text-white bg-primary border-0">
+            <div class="card-body py-2">
+                <p>{{#str}} subcourse, local_company {{/str}}</p>
+                <h5 class="font-weight-bold mb-0">{{totalcourses}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card text-center">
+        <div class="card text-white bg-primary border-0">
+            <div class="card-body py-2">
+                <p>{{#str}} subpurchased, local_company {{/str}}</p>
+                <h5 class="font-weight-bold mb-0">{{seatspurchased}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card text-center">
+        <div class="card text-white bg-primary border-0">
+            <div class="card-body py-2">
+                <p>{{#str}} subused, local_company {{/str}}</p>
+                <h5 class="font-weight-bold mb-0">{{seatsused}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card text-center">
+        <div class="card text-white bg-primary border-0">
+            <div class="card-body py-2">
+                <p>{{#str}} subremain, local_company {{/str}}</p>
+                <h5 class="font-weight-bold mb-0">{{seatsremaining}}</h5>
+            </div>
+        </div>
+    </div>
+
+    {{/stats}}
+</div>
+
+<div class="d-flex flex-column">
+    <div class="card border border-primary border-radius mb-3">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">{{#str}} chartenrollment, local_company {{/str}}</h5>
+            <small class="mt-0">{{#str}} chartenrollmentdes, local_company {{/str}}</small>
+        </div>
+        <div class="card-body">
+            <form method="get" class="d-flex justify-content-end my-auto">
+                <input type="hidden" name="id" value="{{company.id}}">
+                <select name="course" class="form-control me-2">
+                    {{#subscriptions}}
+                    <option value="{{courseid}}" {{#selected}}selected{{/selected}}>
+                        {{course}}
+                    </option>
+                    {{/subscriptions}}
+                </select>
+
+                <select name="year" class="form-control me-2">
+                    {{#years}}
+                    <option value="{{year}}">
+                        {{year}}
+                    </option>
+                    {{/years}}
+                </select>
+
+                <button class="btn btn-outline-primary">
+                    {{#str}} apply, local_company {{/str}}
+                </button>
+
+            </form>
+            <canvas id="enrollments" style="max-height: 500px;"></canvas>
+        </div>
+    </div>
+
+    <div class="card border border-dark border-radius">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">{{#str}} chartcompletion, local_company {{/str}}</h5>
+            <small class="mt-0">{{#str}} chartcompletiondes, local_company {{/str}}</small>
+        </div>
+        <div class="card-body">
+            <canvas id="completions" style="max-height: 500px;"></canvas>
+        </div>
+    </div>
+</div>
+{{/overview}}

@@ -1,0 +1,63 @@
+/* Style the rules and actions on the view/edit rules page. */
+.localprofile-rule-actions {
+    border-left: 1px solid #888;
+    color: #888;
+    margin-left: 15px;
+    margin-top: 10px;
+    padding-left: 15px;
+}
+.localprofile-flash {
+    animation-duration: 1s;
+    animation-name: localprofile-flash;
+}
+
+@keyframes localprofile-flash {
+    from {
+        background-color: inherit;
+    }
+    25% {
+        background-color: #468847;
+    }
+    50% {
+        background-color: #468847;
+    }
+    to {
+        background-color: inherit;
+    }
+}
+.localprofile-combined {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    margin: 5px;
+    padding: 20px;
+}
+.localprofile-combined .localprofile-fieldwrapper + .localprofile-fieldwrapper .localprofile-value {
+    display: none;
+}
+.localprofile-fieldwrapper {
+    margin-top: 30px;
+}
+.localprofile-fieldwrapper.todelete,
+.localprofile-fieldwrapper.todelete span,
+.localprofile-fieldwrapper.todelete div,
+.localprofile-fieldwrapper.todelete fieldset,
+.localprofile-fieldwrapper.todelete label,
+.localprofile-fieldwrapper.todelete select,
+.localprofile-fieldwrapper.todelete input {
+    color: #c38a8a;
+    text-decoration: line-through solid currentColor;
+}
+.localprofile-fieldwrapper.todelete label.deleterule {
+    color: #888;
+    text-decoration: none;
+}
+
+/* Style the rules and actions on the view/edit rules page. */
+form #id_hiddenheading legend {
+    display: none;
+}
+
+/* Add some space to the admin page intro */
+.path-admin-local-profilecohort #intro {
+    margin-bottom: 1rem;
+}

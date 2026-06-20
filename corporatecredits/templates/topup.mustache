@@ -1,0 +1,276 @@
+<form method="post">
+
+    <input
+        type="hidden"
+        name="coins"
+        id="selected-coins"
+        value="10000">
+        
+        <input
+    type="hidden"
+    name="sesskey"
+    value="{{sesskey}}">
+
+    <div class="wallet-topup-container">
+
+        <div class="wallet-header">
+
+            <div>
+                <h1>Top Up Wallet</h1>
+                <p>Add coins to your wallet to access more features and content.</p>
+            </div>
+
+            <div class="balance-card">
+
+                <div class="balance-icon">
+                    <i class="fa fa-wallet"></i>
+                </div>
+
+                <div>
+                    <small>Current Balance</small>
+                    <h2>{{balance}} <span>Coins</span></h2>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="section-card">
+
+            <h3>1. Choose Amount</h3>
+
+            <div class="amount-grid">
+
+                <div class="amount-card" data-coins="1000">
+                    <div class="coin-icon">🪙</div>
+                    <div class="amount">1,000</div>
+                    <div class="label">Coins</div>
+                </div>
+
+                <div class="amount-card" data-coins="5000">
+                    <div class="coin-icon">🪙</div>
+                    <div class="amount">5,000</div>
+                    <div class="label">Coins</div>
+                </div>
+
+                <div class="amount-card active" data-coins="10000">
+
+                    <div class="checkmark">
+                        <i class="fa fa-check"></i>
+                    </div>
+
+                    <div class="coin-icon">🪙</div>
+                    <div class="amount">10,000</div>
+                    <div class="label">Coins</div>
+
+                </div>
+
+                <div class="amount-card" data-coins="25000">
+                    <div class="coin-icon">🪙</div>
+                    <div class="amount">25,000</div>
+                    <div class="label">Coins</div>
+                </div>
+
+                <div class="amount-card" data-coins="50000">
+                    <div class="coin-icon">🪙</div>
+                    <div class="amount">50,000</div>
+                    <div class="label">Coins</div>
+                </div>
+
+                <div class="amount-card" data-coins="100000">
+                    <div class="coin-icon">🪙</div>
+                    <div class="amount">100,000</div>
+                    <div class="label">Coins</div>
+                </div>
+
+                <div class="custom-card">
+
+                    <label>Custom Amount</label>
+
+                    <div class="custom-input">
+                        <input
+                            type="text"
+                            id="custom-amount"
+                            placeholder="Enter amount">
+                        <span>Coins</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="section-card">
+
+            <div class="summary-header">
+
+                <h3>2. Payment Summary</h3>
+
+                <span class="secure-badge">
+                    <i class="fa fa-shield-alt"></i>
+                    Secure Transaction
+                </span>
+
+            </div>
+
+            <div class="summary-grid">
+
+                <div class="summary-item">
+
+                    <div class="summary-icon">
+                        <i class="fa fa-coins"></i>
+                    </div>
+
+                    <div>
+                        <small>You Will Receive</small>
+                        <h2 id="summary-coins">
+                            10,000 Coins
+                        </h2>
+                    </div>
+
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="summary-item">
+
+                    <div class="summary-icon">
+                        <i class="fa fa-file-invoice-dollar"></i>
+                    </div>
+
+                    <div>
+                        <small>Total Payment</small>
+                        <h2 id="summary-payment">
+                            Rp 10.000.000
+                        </h2>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <button
+            type="submit"
+            class="topup-btn">
+
+            Top Up Now
+            <i class="fa fa-arrow-right ml-2"></i>
+
+        </button>
+
+        <div class="payment-note">
+            🔒 Your payment is secure and encrypted
+        </div>
+
+    </div>
+
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const RATE = 1000;
+
+    const cards =
+        document.querySelectorAll('.amount-card');
+
+    const customInput =
+        document.getElementById('custom-amount');
+
+    const summaryCoins =
+        document.getElementById('summary-coins');
+
+    const summaryPayment =
+        document.getElementById('summary-payment');
+
+    const selectedCoinsInput =
+        document.getElementById('selected-coins');
+
+    function format(number) {
+        return new Intl.NumberFormat('id-ID')
+            .format(number);
+    }
+
+    function updateSummary(coins) {
+
+        coins = parseInt(coins) || 0;
+
+        selectedCoinsInput.value = coins;
+
+        summaryCoins.textContent =
+            format(coins) + ' Coins';
+
+        summaryPayment.textContent =
+            'Rp ' + format(coins * RATE);
+
+    }
+
+    cards.forEach(card => {
+
+        card.addEventListener('click', () => {
+
+            cards.forEach(c => {
+                c.classList.remove('active');
+
+                const mark =
+                    c.querySelector('.checkmark');
+
+                if (mark) {
+                    mark.remove();
+                }
+            });
+
+            card.classList.add('active');
+
+            const checkmark =
+                document.createElement('div');
+
+            checkmark.className = 'checkmark';
+
+            checkmark.innerHTML =
+                '<i class="fa fa-check"></i>';
+
+            card.appendChild(checkmark);
+
+            customInput.value = '';
+
+            updateSummary(
+                card.dataset.coins
+            );
+
+        });
+
+    });
+
+    customInput.addEventListener('input', function() {
+
+        let value =
+            this.value.replace(/\D/g, '');
+
+        this.value =
+            format(value);
+
+        cards.forEach(c => {
+
+            c.classList.remove('active');
+
+            const mark =
+                c.querySelector('.checkmark');
+
+            if (mark) {
+                mark.remove();
+            }
+
+        });
+
+        updateSummary(value);
+
+    });
+
+    updateSummary(10000);
+
+});
+</script>

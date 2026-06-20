@@ -1,0 +1,75 @@
+<h1 class="sr-only">{{logintext}}</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-sm-12 d-flex align-items-center justify-content-center">
+        {{#mainimageurl}}<img src="{{mainimageurl}}" class="img-fluid w-100" alt="Side Image">{{/mainimageurl}}
+    </div>
+
+    <div class="col-md-4 col-sm-12 d-flex align-items-center">
+        <form action="{{actionurl}}" method="post" class="mform w-100">
+            <div class="text-center mb-4">
+                <img src="{{logourl}}" class="img-fluid" alt="Logo" width="50%">
+            </div>
+
+            <div class="form-group">
+                <label for="username">{{usernametext}}</label>
+                <input id="username" name="username" type="text" class="form-control" placeholder="{{usernametext}}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">{{passwordtext}}</label>
+                <div class="input-group">
+                    <input id="id_password" name="password" type="password" class="form-control" placeholder="{{passwordtext}}" required maxlength="128" autocomplete="new-password">
+                    <div class="input-group-append">
+                        <span id="togglePassword" class="input-group-text" style="cursor: pointer; background: #f2f0ef; border: 0;">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+
+            <button type="submit" class="btn btn-primary btn-block mt-3">
+                <i class="fa fa-sign-in" aria-hidden="true"></i> <strong>{{logintext}}</strong>
+            </button>
+
+            <hr>
+
+            <div class="text-center mt-3">
+                <a href="{{forgotpasswordurl}}" class="text-danger">
+                    {{forgotpasswordtext}}
+                </a>
+            </div>
+
+            <div class="text-center mt-3">
+                <span>{{noaccounttext}}</span><br>
+                <a href="{{signupurl}}" class="text-danger">{{signuptext}}</a>
+            </div>
+        </form>
+        {{#loginbuttons}}
+            <a href="{{loginurl}}" class="btn btn-outline-secondary btn-block mt-2">
+                {{#iconurl}}
+                    <img src="{{iconurl}}" alt="{{name}}" style="height: 20px; margin-right: 8px;">
+                {{/iconurl}}
+                {{name}}
+            </a>
+        {{/loginbuttons}}
+    </div>
+</div>
+{{! Optional JS script block }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('togglePassword');
+        const password = document.getElementById('id_password');
+
+        if (toggle) {
+            toggle.addEventListener('click', function () {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        }
+    });
+</script>

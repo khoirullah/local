@@ -1,0 +1,38 @@
+.usermgmt-cards a {
+    text-decoration: none;
+}
+
+.usermgmt-card .card {
+    border: 2px solid #f3b6b6;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    background: #fff;
+}
+
+.usermgmt-card .card:hover {
+    border-color: #e74c3c;
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.25);
+    transform: translateY(-3px);
+}
+
+/* icon besar */
+.usermgmt-icon img {
+    width: 64px;
+    height: 64px;
+}
+
+/* judul */
+.usermgmt-card .card-title {
+    font-weight: 600;
+}
+
+/* warning card khusus suspend */
+.usermgmt-card.danger .card {
+    border-color: #e74c3c;
+    background: #fff5f5;
+}
+
+.usermgmt-card.danger .card:hover {
+    background: #ffecec;
+}

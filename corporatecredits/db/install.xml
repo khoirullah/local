@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/corporatecredits/db"
+       VERSION="2026050800"
+       COMMENT="Corporate Credits"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+
+    <TABLES>
+
+       <TABLE NAME="local_corpcredits_wallet"
+              COMMENT="Corporate wallet table">
+
+              <FIELDS>
+
+                     <FIELD NAME="id"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            SEQUENCE="true"
+                            COMMENT="Primary key"/>
+
+                     <FIELD NAME="companyid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Company ID"/>
+
+                     <FIELD NAME="balance"
+                            TYPE="number"
+                            LENGTH="20"
+                            DECIMALS="2"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Wallet balance"/>
+
+                     <FIELD NAME="status"
+                            TYPE="char"
+                            LENGTH="20"
+                            NOTNULL="true"
+                            DEFAULT="active"
+                            COMMENT="Wallet status"/>
+
+                     <FIELD NAME="timecreated"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Time created"/>
+
+                     <FIELD NAME="timemodified"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Time modified"/>
+
+              </FIELDS>
+
+              <KEYS>
+                     <KEY NAME="primary"
+                     TYPE="primary"
+                     FIELDS="id"/>
+              </KEYS>
+
+       </TABLE>
+
+       <TABLE NAME="local_corpcredits_txn"
+              COMMENT="Corporate wallet transactions">
+
+              <FIELDS>
+
+                     <FIELD NAME="id"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            SEQUENCE="true"
+                            COMMENT="Primary key"/>
+
+                     <FIELD NAME="walletid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Wallet ID"/>
+
+                     <FIELD NAME="companyid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Company ID"/>
+
+                     <FIELD NAME="type"
+                            TYPE="char"
+                            LENGTH="20"
+                            NOTNULL="true"
+                            DEFAULT=""
+                            COMMENT="Transaction type"/>
+
+                     <FIELD NAME="source"
+                            TYPE="char"
+                            LENGTH="50"
+                            NOTNULL="true"
+                            DEFAULT=""
+                            COMMENT="Transaction source"/>
+
+                     <FIELD NAME="referenceid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Reference ID"/>
+
+                     <FIELD NAME="amount"
+                            TYPE="number"
+                            LENGTH="20"
+                            DECIMALS="2"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Transaction amount"/>
+
+                     <FIELD NAME="balancebefore"
+                            TYPE="number"
+                            LENGTH="20"
+                            DECIMALS="2"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Balance before"/>
+
+                     <FIELD NAME="balanceafter"
+                            TYPE="number"
+                            LENGTH="20"
+                            DECIMALS="2"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Balance after"/>
+
+                     <FIELD NAME="description"
+                            TYPE="text"
+                            NOTNULL="false"
+                            COMMENT="Transaction description"/>
+
+                     <FIELD NAME="userid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="User ID"/>
+
+                     <FIELD NAME="createdby"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="false"
+                            DEFAULT="0"/>
+
+                     <FIELD NAME="timecreated"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            DEFAULT="0"
+                            COMMENT="Time created"/>
+
+              </FIELDS>
+
+              <KEYS>
+                     <KEY NAME="primary"
+                     TYPE="primary"
+                     FIELDS="id"/>
+              </KEYS>
+
+       </TABLE>
+
+       <TABLE NAME="local_corpcredits_invoice" 
+              COMMENT="Corporate Invoice">
+
+              <FIELDS>
+
+                     <FIELD NAME="id"
+                     TYPE="int"
+                     LENGTH="10"
+                     NOTNULL="true"
+                     SEQUENCE="true"/>
+
+                     <FIELD NAME="companyid"
+                     TYPE="int"
+                     LENGTH="10"
+                     NOTNULL="true"/>
+
+                     <FIELD NAME="invoicecode"
+                     TYPE="char"
+                     LENGTH="50"
+                     NOTNULL="true"/>
+
+                     <FIELD NAME="coins"
+                     TYPE="int"
+                     LENGTH="10"
+                     NOTNULL="true"/>
+
+                     <FIELD NAME="amount"
+                     TYPE="number"
+                     LENGTH="12"
+                     DECIMALS="2"
+                     NOTNULL="true"/>
+
+                     <FIELD NAME="status"
+                     TYPE="char"
+                     LENGTH="20"
+                     NOTNULL="true"
+                     DEFAULT="pending"/>
+
+                     <FIELD NAME="paymentmethod"
+                     TYPE="char"
+                     LENGTH="50"
+                     NOTNULL="false"/>
+
+                     <FIELD NAME="timepaid"
+                     TYPE="int"
+                     LENGTH="10"
+                     NOTNULL="false"/>
+
+                     <FIELD NAME="timecreated"
+                     TYPE="int"
+                     LENGTH="10"
+                     NOTNULL="true"/>
+
+                     <FIELD NAME="timemodified"
+                     TYPE="int"
+                     LENGTH="10"
+                     NOTNULL="true"/>
+
+              </FIELDS>
+
+              <KEYS>
+                     <KEY NAME="primary"
+                     TYPE="primary"
+                     FIELDS="id"/>
+              </KEYS>
+
+       </TABLE>
+    </TABLES>
+
+</XMLDB>

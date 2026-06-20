@@ -1,0 +1,327 @@
+<div class="lp-catalog container-fluid ">
+
+    <!-- ========================= -->
+    <!-- SECTION 1 : TOPUP BANNER -->
+    <!-- ========================= -->
+    <section class="mb-5">
+
+        <div class="card border-0 shadow-lg overflow-hidden lp-topup-banner">
+
+            <div class="row no-gutters align-items-center">
+
+                <div class="col-lg-8 p-5">
+
+                    <span class="badge badge-danger px-3 py-2 mb-3">
+                        {{#str}} topup, local_learningproducts {{/str}}
+                    </span>
+
+                    <h2 class="font-weight-bold mb-3">
+                        {{#str}} recharge, local_learningproducts {{/str}}
+                    </h2>
+
+                    <p class="text-muted mb-4">
+                       {{#str}} desctopup, local_learningproducts {{/str}} 
+                    </p>
+
+                    <div class="d-flex flex-wrap">
+
+                        <a
+                            href="{{topupurl}}"
+                            class="btn btn-primary rounded-pill px-4 mr-2 mb-2"
+                        >
+                           {{#str}} topupnow, local_learningproducts {{/str}}
+                        </a>
+
+                        <a
+                            href="#"
+                            class="btn btn-outline-dark rounded-pill px-4 mb-2"
+                        >
+                            {{#str}} learnmore, local_learningproducts {{/str}}
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4 text-center p-4">
+
+                    <div style="font-size:100px;">
+                        🪙
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- SECTION 2 : NEW PRODUCTS -->
+    <!-- ========================= -->
+    <section class="lp-hero-slider mb-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h3 class="font-weight-bold mb-1">
+                    {{#str}} newproduct, local_learningproducts {{/str}}
+                </h3>
+
+                <div class="text-muted">
+                    {{#str}} latest, local_learningproducts {{/str}}
+                </div>
+
+            </div>
+
+            <div class="lp-slider-nav">
+
+                <button
+                    class="lp-slider-btn"
+                    id="lp-prev"
+                    type="button"
+                >
+                    ‹
+                </button>
+
+                <button
+                    class="lp-slider-btn"
+                    id="lp-next"
+                    type="button"
+                >
+                    ›
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="lp-hero-slider-container">
+
+            <!-- ABSTRACT BACKGROUND -->
+            <div class="lp-hero-bg">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 1600 500"
+                    preserveAspectRatio="none"
+                >
+
+                    <defs>
+
+                        <linearGradient id="lpbg" x1="0" y1="0" x2="1" y2="1">
+
+                            <stop offset="0%" stop-color="#090909"/>
+                            <stop offset="100%" stop-color="#7f1d1d"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <rect width="1600" height="500" fill="url(#lpbg)"/>
+
+                    <circle
+                        cx="260"
+                        cy="120"
+                        r="220"
+                        fill="#dc2626"
+                        fill-opacity=".18"
+                    />
+
+                    <circle
+                        cx="1350"
+                        cy="420"
+                        r="260"
+                        fill="#991b1b"
+                        fill-opacity=".25"
+                    />
+
+                    <path
+                        d="M0 320
+                        Q250 180 550 320
+                        T1200 280
+                        T1600 360
+                        V500
+                        H0Z"
+                        fill="#000"
+                        fill-opacity=".28"
+                    />
+
+                    <path
+                        d="M0 80
+                        L600 0
+                        L1000 500
+                        L0 500Z"
+                        fill="#ffffff"
+                        fill-opacity=".03"
+                    />
+
+                </svg>
+
+            </div>
+            
+            <div class="lp-slider-track" id="lp-slider-track">
+
+            <!-- PROMO CARD -->
+            <div class="lp-slider-promo my-auto">
+
+                <div class="lp-promo-shape">
+
+                    <div class="lp-promo-content">
+
+                        <h4 class="font-weight-bold mb-3">
+                            {{#str}}startjourney, local_learningproducts{{/str}}
+                        </h4>
+                        <br>
+                        <p class="mb-4">
+                            {{#str}}findjourney, local_learningproducts{{/str}}
+                            <strong>Integrity Academy</strong>.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+                {{#newproducts}}
+                    <div class="lp-slider-item">
+                        {{> local_learningproducts/product-card}}
+                    </div>
+                {{/newproducts}}
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- SECTION 3 : CATEGORY -->
+    <!-- ========================= -->
+    <section class="mb-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div>
+                <h3 class="font-weight-bold mb-1">
+                    {{#str}} explore, local_learningproducts {{/str}}
+                </h3>
+
+                <div class="text-muted">
+                    {{#str}} browsecat, local_learningproducts {{/str}}
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center">
+
+                <label class="mr-2 mb-0 font-weight-bold">
+                    {{#str}} category, local_learningproducts{{/str}}
+                </label>
+
+                <select
+                    class="form-control rounded-pill"
+                    id="lp-category-filter"
+                >
+
+                    {{#categories}}
+
+                        <option value="{{id}}">
+                            {{name}}
+                        </option>
+
+                    {{/categories}}
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="row lp-product-grid">
+
+            {{#products}}
+
+                <div
+                    class="col-md-6 col-lg-3 mb-4 lp-product-item"
+                    data-category="{{categoryid}}"
+                >
+
+                    {{> local_learningproducts/product-card}}
+
+                </div>
+
+            {{/products}}
+
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const filter = document.getElementById('lp-category-filter');
+
+    const items = document.querySelectorAll('.lp-product-item');
+
+    filter.addEventListener('change', function() {
+
+        const categoryid = this.value;
+
+        items.forEach(item => {
+
+            if (
+                item.dataset.category === categoryid
+            ) {
+
+                item.style.display = '';
+
+            } else {
+
+                item.style.display = 'none';
+            }
+        });
+
+    });
+
+    // trigger default first category
+    filter.dispatchEvent(new Event('change'));
+
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const track = document.getElementById('lp-slider-track');
+
+    const next = document.getElementById('lp-next');
+
+    const prev = document.getElementById('lp-prev');
+
+    const scrollAmount = 360;
+
+    next.addEventListener('click', function() {
+
+        track.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+
+    });
+
+    prev.addEventListener('click', function() {
+
+        track.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
+
+    });
+
+});
+</script>

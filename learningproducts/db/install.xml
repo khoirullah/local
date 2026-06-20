@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/learningproducts/db"
+       VERSION="2026051100"
+       COMMENT="Learning products tables"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+
+       <TABLES>
+              <TABLE NAME="local_lp_products"
+                     COMMENT="Learning products">
+
+                     <FIELDS>
+
+                            <FIELD NAME="id"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   SEQUENCE="true"/>
+
+                            <FIELD NAME="name"
+                                   TYPE="char"
+                                   LENGTH="255"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="shortname"
+                                   TYPE="char"
+                                   LENGTH="100"
+                                   NOTNULL="true"/>
+                                   
+                            <FIELD NAME="categoryid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="false"/>
+
+                            <FIELD NAME="type"
+                                   TYPE="char"
+                                   LENGTH="50"
+                                   NOTNULL="true"
+                                   DEFAULT="single"/>
+
+                            <FIELD NAME="description"
+                                   TYPE="text"
+                                   NOTNULL="false"/>
+
+                            <FIELD NAME="price"
+                                   TYPE="number"
+                                   LENGTH="10"
+                                   DECIMALS="2"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                            <FIELD NAME="image"
+                                   TYPE="char"
+                                   LENGTH="255"
+                                   NOTNULL="false"/>
+
+                            <FIELD NAME="visible"
+                                   TYPE="int"
+                                   LENGTH="1"
+                                   NOTNULL="true"
+                                   DEFAULT="1"/>
+
+                            <FIELD NAME="timecreated"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="timemodified"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                     </FIELDS>
+
+                     <KEYS>
+
+                            <KEY NAME="primary"
+                            TYPE="primary"
+                            FIELDS="id"/>
+
+                     </KEYS>
+
+              </TABLE>
+
+              <TABLE NAME="local_lp_product_courses"
+                     COMMENT="Product course mappings">
+
+                     <FIELDS>
+
+                            <FIELD NAME="id"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   SEQUENCE="true"/>
+
+                            <FIELD NAME="productid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="courseid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="isdefault"
+                                   TYPE="int"
+                                   LENGTH="1"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                            <FIELD NAME="sortorder"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                            <FIELD NAME="timecreated"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                     </FIELDS>
+
+                     <KEYS>
+
+                            <KEY NAME="primary"
+                            TYPE="primary"
+                            FIELDS="id"/>
+
+                     </KEYS>
+
+              </TABLE>
+
+              <TABLE NAME="local_lp_bundle_items"
+                     COMMENT="Bundle product items">
+
+                     <FIELDS>
+
+                            <FIELD NAME="id"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   SEQUENCE="true"/>
+
+                            <FIELD NAME="bundleid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="productid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="sortorder"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                     </FIELDS>
+
+                     <KEYS>
+
+                            <KEY NAME="primary"
+                            TYPE="primary"
+                            FIELDS="id"/>
+
+                     </KEYS>
+
+              </TABLE>
+
+              <TABLE NAME="local_lp_product_visibility"
+                     COMMENT="Product visibility rules">
+
+                     <FIELDS>
+
+                            <FIELD NAME="id"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   SEQUENCE="true"/>
+
+                            <FIELD NAME="productid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="companyid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                     </FIELDS>
+
+                     <KEYS>
+
+                            <KEY NAME="primary"
+                            TYPE="primary"
+                            FIELDS="id"/>
+
+                     </KEYS>
+
+              </TABLE>
+
+              <TABLE NAME="local_lp_course_rules"
+                     COMMENT="Dynamic course resolver rules">
+
+                     <FIELDS>
+
+                            <FIELD NAME="id"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   SEQUENCE="true"/>
+
+                            <FIELD NAME="productid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="companyid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="false"/>
+
+                            <FIELD NAME="courseid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="priority"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                     </FIELDS>
+
+                     <KEYS>
+
+                            <KEY NAME="primary"
+                            TYPE="primary"
+                            FIELDS="id"/>
+
+                     </KEYS>
+
+              </TABLE>
+
+              <TABLE NAME="local_lp_categories"
+                     COMMENT="Learning product categories">
+
+                     <FIELDS>
+
+                            <FIELD NAME="id"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   SEQUENCE="true"/>
+
+                            <FIELD NAME="name"
+                                   TYPE="char"
+                                   LENGTH="255"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="description"
+                                   TYPE="text"
+                                   NOTNULL="false"/>
+
+                            <FIELD NAME="sortorder"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                            <FIELD NAME="visible"
+                                   TYPE="int"
+                                   LENGTH="1"
+                                   NOTNULL="true"
+                                   DEFAULT="1"/>
+
+                            <FIELD NAME="timecreated"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                     </FIELDS>
+
+                     <KEYS>
+
+                            <KEY NAME="primary"
+                            TYPE="primary"
+                            FIELDS="id"/>
+
+                     </KEYS>
+
+              </TABLE>
+
+              <TABLE NAME="local_lp_purchase"
+                     COMMENT="Company product purchases">
+
+                     <FIELDS>
+
+                            <FIELD NAME="id"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   SEQUENCE="true"/>
+
+                            <FIELD NAME="companyid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="productid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD
+                                   NAME="price"
+                                   TYPE="number"
+                                   LENGTH="12"
+                                   DECIMALS="2"
+                                   NOTNULL="true"
+                                   DEFAULT="0"
+                                   SEQUENCE="false"/>
+
+                            <FIELD NAME="qty"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   DEFAULT="1"/>
+
+                            <FIELD NAME="status"
+                                   TYPE="char"
+                                   LENGTH="20"
+                                   NOTNULL="true"
+                                   DEFAULT="completed"/>
+
+                            <FIELD NAME="purchasedby"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="timecreated"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                     </FIELDS>
+
+                     <KEYS>
+
+                            <KEY NAME="primary"
+                            TYPE="primary"
+                            FIELDS="id"/>
+
+                     </KEYS>
+
+                     <INDEXES>
+
+                            <INDEX NAME="companyid"
+                                   UNIQUE="false"
+                                   FIELDS="companyid"/>
+
+                            <INDEX NAME="productid"
+                                   UNIQUE="false"
+                                   FIELDS="productid"/>
+
+                     </INDEXES>
+
+              </TABLE>
+       </TABLES>
+
+</XMLDB>

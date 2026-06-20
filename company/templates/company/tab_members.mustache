@@ -1,0 +1,90 @@
+<div class="card">
+
+    <div class="card-header d-flex justify-content-between">
+
+        <h5 class="mb-0">
+            Members
+        </h5>
+
+        <a
+            href="{{addmemberurl}}"
+            class="btn btn-primary"
+        >
+            Add Member
+        </a>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        <table class="table mb-0">
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Role</th>
+                    <th width="250">
+                        Actions
+                    </th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {{#members}}
+
+                <tr>
+
+                    <td>
+                        {{fullname}}
+                    </td>
+
+                    <td>
+                        {{department}}
+                    </td>
+
+                    <td>
+                        <span class="badge badge-info">
+                            {{role}}
+                        </span>
+                    </td>
+
+                    <td>
+
+                        <a
+                            href="{{assignurl}}"
+                            class="btn btn-sm btn-success"
+                        >
+                            Assign
+                        </a>
+
+                        <a
+                            href="{{editurl}}"
+                            class="btn btn-sm btn-secondary"
+                        >
+                            Edit
+                        </a>
+
+                        <a
+                            href="{{removeurl}}"
+                            class="btn btn-sm btn-danger"
+                        >
+                            Remove
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {{/members}}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
