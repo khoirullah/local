@@ -164,12 +164,23 @@ class member_manager {
                 u.firstname,
                 u.lastname,
                 u.email,
-                u.username
+                u.username,
+                u.department,
+                cu.role
 
             FROM {cohort_members} cm
 
             JOIN {user} u
                 ON u.id = cm.userid
+
+            JOIN {cohort} c
+                ON c.id = cm.cohortid
+
+            JOIN {local_company} com
+                ON com.cohortid = c.id
+
+            JOIN {local_company_user} cu
+                ON cu.userid = cm.userid AND cu.companyid = com.id
 
             WHERE cm.cohortid = ?
 

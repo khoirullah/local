@@ -6,13 +6,13 @@ defined('MOODLE_INTERNAL') || die();
 
 class company_manager {
 
-    public static function create( $data) {
-        global $DB;
+    public static function create($data) {
+        global $DB, $USER;
 
+        $userid = $USER->id;
         $description = '';
 
         if (!empty($data->description)) {
-
             if (is_array($data->description)) {
                 $description = $data->description['text'] ?? '';
             } else {
@@ -24,7 +24,6 @@ class company_manager {
         $record->name         = trim($data['name']);
         $record->shortname    = trim($data['shortname']);
         $record->description  = trim($description);
-        //$record->logo         = trim($data['logo']);
         $record->status       = 1;
         $record->timecreated  = time();
         $record->timemodified = time();
@@ -32,22 +31,62 @@ class company_manager {
         $companyid = $DB->insert_record('local_company', $record);
 
         // ==========================
-        // AUTO CREATE COHORT (SAFE)
+        // CREATE COHORT
         // ==========================
 
         $cohort = new \stdClass();
-        $cohort->name           = $record->name;
-        $cohort->idnumber       = $record->shortname;
-        $cohort->contextid      = \context_system::instance()->id;
-        $cohort->description    = $record->description;
+        $cohort->name              = $record->name;
+        $cohort->idnumber          = $record->shortname;
+        $cohort->contextid         = \context_system::instance()->id;
+        $cohort->description       = $record->description;
         $cohort->descriptionformat = FORMAT_HTML;
-        $cohort->visible        = 1;
-        $cohort->component      = 'local_company';
+        $cohort->visible           = 1;
+        $cohort->component         = 'local_company';
 
         $cohortid = cohort_add_cohort($cohort);
 
-        // OPTIONAL (recommended)
-        $DB->set_field('local_company', 'cohortid', $cohortid, ['id' => $companyid]);
+        $DB->set_field(
+            'local_company',
+            'cohortid',
+            $cohortid,
+            ['id' => $companyid]
+        );
+
+        // ==========================
+        // AUTO PIC
+        // ==========================
+        if (!is_siteadmin($userid)) {
+
+            $exists = $DB->record_exists(
+                'local_company_user',
+                [
+                    'companyid' => $companyid,
+                    'userid' => $userid
+                ]
+            );
+
+            if (!$exists) {
+
+                $companyuser = new \stdClass();
+                $companyuser->companyid   = $companyid;
+                $companyuser->userid      = $userid;
+                $companyuser->role        = 'pic';
+                $companyuser->timecreated = time();
+
+                $DB->insert_record(
+                    'local_company_user',
+                    $companyuser
+                );
+            }
+
+            // Add user to cohort if not already member.
+            if (!cohort_is_member($cohortid, $userid)) {
+                cohort_add_member(
+                    $cohortid,
+                    $userid
+                );
+            }
+        }
 
         return $companyid;
     }

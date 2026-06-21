@@ -74,9 +74,11 @@ $string['enttotal'] = 'Total';
 $string['entused'] = 'Used';
 $string['entavailable'] = 'Available';
 $string['entstatus'] = 'Status';
-$string['entdesc'] = 'View all purchased product licenses, monitor seat utilization, and manage employee access across your organization.';
-$string['ovwdesc'] = 'View all purchased product licenses, monitor seat utilization, and manage employee access across your organization.';
-$string['wltdesc'] = 'View all purchased product licenses, monitor seat utilization, and manage employee access across your organization.';
+$string['ovwdesc'] = 'Monitor key company learning metrics, subscription usage, enrollment activity, and completion performance.';
+$string['entdesc'] = 'Manage purchased entitlements and track license consumption across your organization.';
+$string['mmbdesc'] = 'View and manage employees associated with your company learning environment.';
+$string['asgdesc'] = 'Review and manage course assignments, product allocations, and member access permissions.';
+$string['wltdesc'] = 'Track wallet balances, transaction history, and corporate credit utilization.';
 
 // capabilities
 $string['company:manage'] = 'Manage Own Company';

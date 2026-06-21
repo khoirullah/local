@@ -33,21 +33,6 @@ class create_user_form extends \moodleform {
         $mform->addElement('passwordunmask', 'password', get_string('password'));
         $mform->addRule('password', null, 'required');
 
-        // ===== Enrollment =====
-        /* $mform->addElement('header', 'enrolinfo', get_string('indicator:nostudent'));
-
-        $courses = $this->get_course_options();
-        $mform->addElement(
-            'select',
-            'courseids',
-            get_string('course'),
-            $courses,
-            ['multiple' => 'multiple', 'size' => 5]
-        );
-        $mform->setType('courseids', PARAM_INT);
-        $mform->addRule('courseids', null, 'required');
- */
-
         // ===== Buttons =====
         $this->add_action_buttons(true, get_string('createuser'));
     }

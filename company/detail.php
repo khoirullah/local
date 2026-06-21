@@ -386,7 +386,7 @@ switch ($tab) {
 
         $templatecontext['members']
             = member_manager::get_company_members($id);
-
+        
         $tabcontent =
             $OUTPUT->render_from_template(
                 'local_company/company/tab_members',

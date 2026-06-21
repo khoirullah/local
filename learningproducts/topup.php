@@ -33,17 +33,6 @@ if ($action === 'createcompany' && confirm_sesskey()) {
     $companyid =
         \local_company\company_manager::create($data);
 
-    $membership = new stdClass();
-    $membership->companyid = $companyid;
-    $membership->userid = $USER->id;
-    $membership->role = 'pic';
-    $membership->timecreated = time();
-
-    $DB->insert_record(
-        'local_company_user',
-        $membership
-    );
-
     redirect(
         new moodle_url(
             '/local/corporatecredits/topup.php',
@@ -201,19 +190,19 @@ if ($existingcompany) {
     echo '
     <form method="post">
 
-        <input type="hidden"
+        <input type="text"
                name="action"
                value="createcompany">
 
-        <input type="hidden"
+        <input type="text"
                name="shortname"
                value="' . s($shortname) . '">
 
-        <input type="hidden"
+        <input type="text"
                name="name"
                value="' . s($institutioncompany) . '">
 
-        <input type="hidden"
+        <input type="text"
                 name="sesskey"
                 value="' . sesskey() . '">
 
@@ -222,4 +211,5 @@ if ($existingcompany) {
         </button>
 
     </form>';
+    die;
 }

@@ -7,7 +7,7 @@ $string['pluginname'] = 'User Management';
 
 $string['open_menu'] = 'Open';
 
-$string['menu_create_user'] = 'Create User';
+$string['menu_create_user'] = 'Create User Account';
 $string['menu_create_user_desc'] = 'Create individual participant accounts for your organization';
 
 $string['menu_bulk_upload'] = 'Bulk Upload & Enrollment';

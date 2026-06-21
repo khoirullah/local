@@ -164,4 +164,57 @@ class assignment_manager {
             ]
         );
     }
+
+    /**
+     * Get Company assignment.
+     */
+    public static function get_company_assignments(
+        int $companyid
+    ): array {
+
+        global $DB;
+
+        $sql = "
+            SELECT
+                a.*,
+
+                u.firstname,
+                u.lastname,
+                u.email,
+
+                e.productid,
+
+                p.name AS productname
+
+            FROM {local_company_assignment} a
+
+            JOIN {user} u
+                ON u.id = a.userid
+
+            JOIN {local_company_entitlement} e
+                ON e.id = a.entitlementid
+
+            JOIN {local_lp_products} p
+                ON p.id = e.productid
+
+            WHERE e.companyid = :companyid
+
+            AND a.status = 'active'
+
+            ORDER BY a.timecreated DESC
+        ";
+
+        $records = $DB->get_records_sql(
+            $sql,
+            [
+                'companyid' => $companyid
+            ]
+        );
+
+        foreach ($records as $record) {
+            $record->fullname = fullname($record);
+        }
+
+        return array_values($records);
+    }
 }
