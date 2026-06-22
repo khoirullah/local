@@ -94,37 +94,52 @@ $PAGE->set_title(
     )
 );
 
-/* $PAGE->set_heading(
-    get_string(
-        'topupwallet',
-        'local_corporatecredits'
-    )
-); */
 use local_corporatecredits\invoice_manager;
 
-if (
-    $_SERVER['REQUEST_METHOD']
-    === 'POST'
-) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     require_sesskey();
 
-    $coins =
-        required_param(
-            'coins',
-            PARAM_INT
-        );
+    $coins = required_param(
+        'coins',
+        PARAM_INT
+    );
 
-    $amount =
-        $coins * 1000;
+    $coinprice = (float)get_config(
+        'local_corporatecredits',
+        'coinprice'
+    );
+
+    $minimumtopup = (int)get_config(
+        'local_corporatecredits',
+        'minimumtopup'
+    );
+
+    $maximumtopup = (int)get_config(
+        'local_corporatecredits',
+        'maximumtopup'
+    );
+
+    if ($coins < $minimumtopup) {
+        throw new moodle_exception(
+            'Minimum topup is ' . $minimumtopup . ' coins.'
+        );
+    }
+
+    if ($coins > $maximumtopup) {
+        throw new moodle_exception(
+            'Maximum topup is ' . $maximumtopup . ' coins.'
+        );
+    }
+
+    $amount = $coins * $coinprice;
 
     $invoiceid =
-        invoice_manager
-            ::create_invoice(
-                $companyid,
-                $coins,
-                $amount
-            );
+        invoice_manager::create_invoice(
+            $companyid,
+            $coins,
+            $amount
+        );
 
     redirect(
         new moodle_url(
@@ -135,7 +150,43 @@ if (
         )
     );
 }
+
 echo $OUTPUT->header();
+
+$coinprice = (float)get_config(
+    'local_corporatecredits',
+    'coinprice'
+);
+
+$templatecontext['coinprice'] =
+    number_format($coinprice);
+
+$templatecontext['minimumtopup'] =
+    (int)get_config(
+        'local_corporatecredits',
+        'minimumtopup'
+    );
+
+$templatecontext['maximumtopup'] =
+    (int)get_config(
+        'local_corporatecredits',
+        'maximumtopup'
+    );
+
+$templatecontext['currency'] = get_config(
+    'local_corporatecredits',
+    'currency'
+) ?: 'IDR';
+
+$templatecontext['coinprice'] = (float)get_config(
+    'local_corporatecredits',
+    'coinprice'
+);
+
+$templatecontext['coinpriceformatted'] =
+    number_format(
+        $templatecontext['coinprice']
+    );
 
 echo $OUTPUT->render_from_template(
     'local_corporatecredits/topup',

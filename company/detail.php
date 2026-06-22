@@ -125,7 +125,7 @@ for ($i = 0; $i < 5; $i++) {
     ];
 }
 
-if ($subscriptions) {
+/* if ($subscriptions) {
 
     foreach ($subscriptions as $sub) {
 
@@ -163,7 +163,7 @@ if ($subscriptions) {
             'deleteurl' => $deleteurl->out(),
         ];
     }
-}
+} */
 
 /* =============================
    TEMPLATE
@@ -257,6 +257,15 @@ $templatecontext = [
     'completionlabels' => json_encode($completionlabels),
     'completiondata' => json_encode($completiondata),
 
+    /* 'editurl' => (
+        new moodle_url(
+            '/user/edit.php',
+            [
+                'id' => $id,
+                returnto=profile
+            ]
+        )
+    )->out(false), */
     'assignurl' => (
         new moodle_url(
             '/local/company/assignment/assign.php',
@@ -342,36 +351,6 @@ switch ($tab) {
 
     case 'entitlements':
 
-        /* $entitlements =
-            entitlement_manager::get_company_entitlements($id);
-
-        $templatecontext['entitlements'] = [];
-
-        foreach ($entitlements as $e) {
-
-            $product =
-                product_manager::get_product(
-                    $e->productid
-                );
-
-            $templatecontext['entitlements'][] = [
-
-                'productname' =>
-                    $product->name ?? '-',
-
-                'qty' =>
-                    $e->qty,
-
-                'usedqty' =>
-                    $e->usedqty,
-
-                'available' =>
-                    $e->qty - $e->usedqty,
-
-                'status' =>
-                    $e->status
-            ];
-        } */
         $templatecontext['entitlements']
             = entitlement_manager::get_company_entitlements($id);
 
@@ -387,7 +366,10 @@ switch ($tab) {
 
         $templatecontext['members']
             = member_manager::get_company_members($id);
-        
+        //$templatecontext['members']['userurl'] = new moodle_url('user/profile.php', ['id'=>$id]);
+        //$members = member_manager::get_company_members($id);
+        //var_dump($members->url);
+        //die;
         $tabcontent =
             $OUTPUT->render_from_template(
                 'local_company/company/tab_members',

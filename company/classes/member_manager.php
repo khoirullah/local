@@ -194,6 +194,15 @@ class member_manager {
 
         foreach ($records as $record) {
             $record->fullname = fullname($record);
+            $record->editurl = (
+                new \moodle_url(
+                    '/user/edit.php',
+                    [
+                        'id' => $record->id,
+                        'returnto' => 'profile'
+                    ]
+                )
+            )->out(false);
         }
 
         return array_values($records);

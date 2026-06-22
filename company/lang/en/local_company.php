@@ -69,7 +69,7 @@ $string['chartcompletion'] = 'Average Course Completion Rate';
 $string['chartcompletiondes'] = 'Averacge completion progress across all enrolled participants.';
 
 $string['filtercourse'] = 'Filter: Courses';
-
+$string['balance'] = 'Current Balance';
 $string['entproduct'] = 'Product';
 $string['enttotal'] = 'Total';
 $string['entused'] = 'Used';
