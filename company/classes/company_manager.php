@@ -77,6 +77,32 @@ class company_manager {
                     'local_company_user',
                     $companyuser
                 );
+
+                // Assign system role "pic".
+                $role = $DB->get_record(
+                    'role',
+                    ['shortname' => 'pic'],
+                    '*',
+                    IGNORE_MISSING
+                );
+
+                if ($role) {
+
+                    $systemcontext = \context_system::instance();
+
+                    if (!user_has_role_assignment(
+                        $userid,
+                        $role->id,
+                        $systemcontext->id
+                    )) {
+
+                        role_assign(
+                            $role->id,
+                            $userid,
+                            $systemcontext->id
+                        );
+                    }
+                }
             }
 
             // Add user to cohort if not already member.
@@ -107,11 +133,26 @@ class company_manager {
         return $id;
     }
 
-    public static function delete(int $id) {
+    /* public static function delete(int $id) {
         global $DB;
 
         $company = $DB->get_record('local_company', ['id' => $id], '*', MUST_EXIST);
 
+        // ==========================
+        // REMOVE COMPANY USERS
+        // ==========================
+        $companyusers = $DB->get_records(
+            'local_company_user',
+            ['companyid' => $id]
+        );
+        $role = $DB->get_record(
+            'role',
+            ['shortname' => 'pic'],
+            '*',
+            IGNORE_MISSING
+        );
+
+        $systemcontext = context_system::instance();
         // ==========================
         // DELETE COHORT (SAFE)
         // ==========================
@@ -134,6 +175,107 @@ class company_manager {
         $company->timemodified = time();
 
         return $DB->update_record('local_company', $company);
+    } */
+    public static function delete(int $id) {
+        global $DB;
+
+        $company = $DB->get_record(
+            'local_company',
+            ['id' => $id],
+            '*',
+            MUST_EXIST
+        );
+
+        // ==========================
+        // REMOVE COMPANY USERS
+        // ==========================
+        $companyusers = $DB->get_records(
+            'local_company_user',
+            ['companyid' => $id]
+        );
+
+        $role = $DB->get_record(
+            'role',
+            ['shortname' => 'pic'],
+            '*',
+            IGNORE_MISSING
+        );
+
+        $systemcontext = \context_system::instance();
+
+        foreach ($companyusers as $companyuser) {
+
+            // Remove cohort membership.
+            if (!empty($company->cohortid)
+                && cohort_is_member(
+                    $company->cohortid,
+                    $companyuser->userid
+                )) {
+
+                cohort_remove_member(
+                    $company->cohortid,
+                    $companyuser->userid
+                );
+            }
+
+            // Unassign PIC role only if user is not PIC elsewhere.
+            if ($role && $companyuser->role === 'pic') {
+
+                $othercompanies = $DB->count_records_select(
+                    'local_company_user',
+                    'userid = ? AND role = ? AND companyid <> ?',
+                    [
+                        $companyuser->userid,
+                        'pic',
+                        $id
+                    ]
+                );
+
+                if ($othercompanies == 0) {
+
+                    role_unassign(
+                        $role->id,
+                        $companyuser->userid,
+                        $systemcontext->id
+                    );
+                }
+            }
+        }
+
+        // Delete company-user mappings.
+        $DB->delete_records(
+            'local_company_user',
+            ['companyid' => $id]
+        );
+
+        // ==========================
+        // DELETE COHORT
+        // ==========================
+        if (!empty($company->cohortid)) {
+
+            $cohort = $DB->get_record(
+                'cohort',
+                [
+                    'id' => $company->cohortid,
+                    'component' => 'local_company'
+                ]
+            );
+
+            if ($cohort) {
+                cohort_delete_cohort($cohort);
+            }
+        }
+
+        // ==========================
+        // SOFT DELETE COMPANY
+        // ==========================
+        $company->status = 0;
+        $company->timemodified = time();
+
+        return $DB->update_record(
+            'local_company',
+            $company
+        );
     }
 
     public static function get_all($search = '', $status = '', $util = '', $page = 0, $perpage = 9) {

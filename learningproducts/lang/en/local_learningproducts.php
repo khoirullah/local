@@ -65,3 +65,4 @@ $string['enrolsuccess'] = 'Enrollment successful';
 $string['foundcompany'] = 'The company name was found on your profile but is not yet registered in the system.';
 $string['learningproducts:manage'] = 'Manage Learning Products';
 $string['learningproducts:view'] = 'View Learning Products';
+$string['companyvalidation'] = 'Company Validation';

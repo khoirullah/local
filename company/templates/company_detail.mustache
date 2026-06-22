@@ -1,75 +1,105 @@
-<h3>{{companyname}}</h3>
+<div class="company-header mb-4">
+    <div class="company-header position-relative">
+        <h1 class="company-title mb-3">
+            {{companyname}}
+        </h1>
+        <div class="wallet-summary card shadow-sm">
+            <div class="card-body">
 
-<ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item">
-        <a 
-            class="nav-link {{#overviewactive}}active{{/overviewactive}}"
-            href="{{overviewurl}}">
-            {{#str}} navoverview, local_company {{/str}}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a
-            class="nav-link {{#entitlementsactive}}active{{/entitlementsactive}}"
-            href="{{entitlementsurl}}">
-            {{#str}} naventitlements, local_company {{/str}}
-        </a>
-    </li>
+                <div class="d-flex justify-content-between align-items-center">
 
-    <li class="nav-item">
-        <a
-            class="nav-link {{#membersactive}}active{{/membersactive}}"
-            href="{{membersurl}}">
-            {{#str}} navmembers, local_company {{/str}}
-        </a>
-    </li>
+                    <div>
+                        <div class="wallet-label text-muted">
+                            Current Balance
+                        </div>
 
-    <li class="nav-item">
-        <a
-            class="nav-link {{#assignmentsactive}}active{{/assignmentsactive}}"
-            href="{{assignmentsurl}}">
-            {{#str}} navassignments, local_company {{/str}}
-        </a>
-    </li>
+                        <div class="wallet-balance">
+                            {{wallet.balance}} 🪙
+                        </div>
+                    </div>
 
-    <li class="nav-item">
-        <a
-            class="nav-link {{#walletactive}}active{{/walletactive}}"
-            href="{{walleturl}}">
-            {{#str}} navwallet, local_company {{/str}}
-        </a>
-    </li>
-</ul>
+                    <a href="{{topupurl}}" class="btn btn-success">
+                        <img
+                            src="{{topupicon}}"
+                            alt="Top Up"
+                            width="30"
+                            height="30"
+                            class="mr-1"
+                        >
+                    </a>
 
-<!-- Tab panes -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <ul class="nav company-nav mt-3">
+        <li class="nav-item">
+            <a class="nav-link {{#overviewactive}}active{{/overviewactive}}" href="{{overviewurl}}">
+                <i class="fa fa-home mr-1"></i>
+                {{#str}} navoverview, local_company {{/str}}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{#entitlementsactive}}active{{/entitlementsactive}}" href="{{entitlementsurl}}">
+                <i class="fa fa-tag mr-1"></i>
+                {{#str}} naventitlements, local_company {{/str}}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{#membersactive}}active{{/membersactive}}" href="{{membersurl}}">
+                <i class="fa fa-users mr-1"></i>
+                {{#str}} navmembers, local_company {{/str}}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{#assignmentsactive}}active{{/assignmentsactive}}" href="{{assignmentsurl}}">
+                <i class="fa fa-clipboard mr-1"></i>
+                {{#str}} navassignments, local_company {{/str}}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{#walletactive}}active{{/walletactive}}" href="{{walleturl}}">
+                <i class="fa fa-credit-card mr-1"></i>
+                {{#str}} navwallet, local_company {{/str}}
+            </a>
+        </li>
+    </ul>
+
+</div>
+
 {{{tabcontent}}}
+
 <style>
-    .company-profile{
-        border-radius:10px;
+   .company-title{
+        font-size: 2.2rem;
+        font-weight: 700;
     }
 
-    .company-logo img{
-        width:80px;
-        height:80px;
-        object-fit:cover;
+    .company-nav{
+        border-bottom: none;
     }
 
-    .logo-placeholder{
-        width:80px;
-        height:80px;
-        background:#e9ecef;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        text-align:center;
-        font-size:12px;
-        border-radius:10px;
-        color:#666;
+    .company-nav .nav-link{
+        border: 1px solid #dee2e6;
+        border-bottom: none;
+        border-radius: 12px 12px 0 0;
+        margin-right: 6px;
+        color: #495057;
+        background: #fff;
+        padding: .75rem 1.25rem;
+        font-weight: 500;
     }
 
-    .company-desc{
-        max-width:600px;
-        line-height:1.4;
+    .company-nav .nav-link.active{
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+    }
+
+    .company-header{
+        position: relative;
     }
 
     .stats-cards {
@@ -96,13 +126,127 @@
     #completions{
         height:300px;
     }
-    .subscription-card {
-        border-radius: 14px;
-        transition: all .25s ease;
+
+    /* =====================
+    DESKTOP
+    ===================== */
+    .wallet-summary{
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        width: 240px;
+
+        border: 0;
+        border-radius: 16px;
+        z-index: 10;
     }
-    .subscription-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+
+
+    /* =====================
+    TABLET
+    ===================== */
+    @media (max-width: 991.98px){
+        .company-nav{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:.5rem;
+            border:none;
+        }
+
+        .company-nav .nav-item{
+            width:100%;
+        }
+
+        .company-nav .nav-link{
+            border-radius:12px;
+            text-align:center;
+            padding:.75rem;
+            margin:0;
+            border:1px solid #dee2e6;
+        }
+        .wallet-summary{
+            width:100%;
+            margin:1rem 0;
+            position:static;
+        }
+
+        .company-title{
+            font-size:2.2rem;
+            line-height:1.2;
+            margin-bottom:1rem;
+        }
+
+        .wallet-balance{
+            font-size:2rem;
+            font-weight:700;
+        }
+        .company-content{
+            margin-top:1rem;
+        }
+    }
+
+    /* =====================
+    MOBILE
+    ===================== */
+    @media (max-width: 767.98px){
+        .company-nav{
+            display:flex;
+            flex-direction:column;
+            gap:.5rem;
+            border:none;
+        }
+
+        .company-nav .nav-item{
+            width:100%;
+        }
+
+        .company-nav .nav-link{
+            display:flex;
+            align-items:center;
+
+            width:100%;
+            padding:.85rem 1rem;
+
+            border:1px solid #dee2e6;
+            border-radius:12px;
+
+            margin:0;
+            background:#fff;
+
+            font-weight:500;
+        }
+
+        .company-nav .nav-link.active{
+            background:var(--primary);
+            border-color:var(--primary);
+            color:#fff;
+        }
+
+        .company-nav .nav-link i{
+            width:24px;
+            text-align:center;
+            margin-right:.75rem;
+        }
+        .wallet-summary{
+            width:100%;
+            margin:1rem 0;
+            position:static;
+        }
+
+        .company-title{
+            font-size:2.2rem;
+            line-height:1.2;
+            margin-bottom:1rem;
+        }
+
+        .wallet-balance{
+            font-size:2rem;
+            font-weight:700;
+        }
+        .company-content{
+            margin-top:1rem;
+        }
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -8,6 +8,7 @@ $string['created'] = 'Your Company has been created';
 $string['editcompany'] = 'Edit Company';
 $string['companyname'] = 'Company Name';
 $string['shortname'] = 'Shortname';
+$string['agree'] = 'I agree to create this company.';
 $string['searchcompany'] = 'Search company...';
 $string['edit'] = 'Edit';
 $string['detail'] = 'Detail';

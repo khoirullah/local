@@ -50,9 +50,7 @@ $PAGE->set_url(
 $PAGE->set_title(
     $company->name
 );
-/* $PAGE->set_heading(
-    $company->name
-); */
+
 if($canmanageall){
     $PAGE->navbar->add(
         get_string('pluginname', 'local_company'),
@@ -209,9 +207,6 @@ $files = $fs->get_area_files(
     false
 );
 
-//var_dump($files);
-//echo 'files: '.$files;
-
 $logo = '';
 
 if ($files) {
@@ -229,9 +224,15 @@ if ($files) {
 
     //echo $logo;
 }
-$company->logo = $logo;
+$company->logo = $logo; 
 
 $templatecontext = [
+    'wallet' => wallet_manager::get_summary($id),
+    'topupicon' => 
+        $OUTPUT->image_url(
+            'topup',
+            'local_company'
+        )->out(false),
     'company' => $company,
     'companyname' => $company->name,
     'description'  => $company->description,
@@ -413,9 +414,24 @@ switch ($tab) {
         $templatecontext['wallet']
             = wallet_manager::get_summary($id);
 
-        $templatecontext['transactions']
-            = transaction_manager::get_company_transactions($id);
+        $transactions = transaction_manager::get_company_transactions($id);
 
+        foreach ($transactions as &$t) {
+
+            $t->timecreated = userdate($t->timecreated);
+
+            // format amount display
+            if ($t->amount > 0) {
+                $t->amountclass = 'text-success font-weight-bold';
+                $t->amount = '+ ' . number_format($t->amount, 2);
+            } else {
+                $t->amountclass = 'text-danger font-weight-bold';
+                $t->amount = number_format($t->amount, 2);
+            }
+        }
+
+        $templatecontext['transactions'] = array_values($transactions);
+        $templatecontext['hastransactions'] = !empty($transactions);
         $tabcontent =
             $OUTPUT->render_from_template(
                 'local_company/company/tab_wallet',

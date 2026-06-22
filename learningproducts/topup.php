@@ -6,10 +6,18 @@ require_once($CFG->dirroot . '/user/profile/lib.php');
 require_login();
 
 global $USER, $DB, $OUTPUT, $PAGE;
+use local_company\company_manager;
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/corporatecredits/topup_validate.php');
-$PAGE->set_title('Company Validation');
+$PAGE->set_title(get_string('companyvalidation','local_learningproducts'));
+$PAGE->navbar->add(
+    get_string('pluginname', 'local_learningproducts'),
+    new moodle_url('/local/learningproducts/')
+);
+$PAGE->navbar->add(
+    get_string('companyvalidation','local_learningproducts')
+);
 
 $companyfield = profile_user_record($USER->id);
 
@@ -18,7 +26,7 @@ $institutioncompany = trim(
     ?: ($companyfield->company ?? '')
 );
 
-$company = \local_company\company_manager::get_user_company($USER->id);
+$company = company_manager::get_user_company($USER->id);
 
 $action = optional_param('action', '', PARAM_ALPHA);
 
@@ -174,6 +182,8 @@ if ($existingcompany) {
     ';
 }else {
 
+    echo '<h3 class="mx-3">'.get_string('companyvalidation','local_learningproducts').'</h3>';
+
     echo $OUTPUT->notification(
         get_string('foundcompany', 'local_learningproducts'),
         'warning'
@@ -188,28 +198,74 @@ if ($existingcompany) {
     }
 
     echo '
-    <form method="post">
+        <form method="post" class="card p-4 mx-auto" style="max-width:600px;">
 
-        <input type="text"
-               name="action"
-               value="createcompany">
+            <input type="hidden" name="action" value="createcompany">
+            <input type="hidden" name="sesskey" value="' . sesskey() . '">
 
-        <input type="text"
-               name="shortname"
-               value="' . s($shortname) . '">
+            <div class="form-group text-left">
+                <label for="id_name">
+                    <strong>' . get_string('companyname', 'local_company') . '</strong> 
+                    <i class="icon fa fa-circle-exclamation text-danger fa-fw " title="Required" role="img" aria-label="Required"></i>
+                </label>
+                <input type="text"
+                    id="id_name"
+                    name="name"
+                    class="form-control"
+                    value="' . s($institutioncompany) . '"
+                    required>
+            </div>
 
-        <input type="text"
-               name="name"
-               value="' . s($institutioncompany) . '">
+            <div class="form-group text-left">
+                <label for="id_shortname">
+                    <strong>' . get_string('shortname', 'local_company') . '</strong>
+                    <i class="icon fa fa-circle-exclamation text-danger fa-fw " title="Required" role="img" aria-label="Required"></i>
+                </label>
+                <input type="text"
+                    id="id_shortname"
+                    name="shortname"
+                    class="form-control"
+                    value="' . s($shortname) . '"
+                    required>
+            </div>
 
-        <input type="text"
-                name="sesskey"
-                value="' . sesskey() . '">
+            <div class="form-group form-check text-left">
+                <input type="checkbox"
+                    class="form-check-input"
+                    id="id_agree">
+                <label class="form-check-label" for="id_agree">
+                    ' . get_string('agree', 'local_company') . '
+                </label>
+            </div>
 
-        <button class="btn btn-primary">
-            Create Company
-        </button>
+            <button type="submit"
+                    id="id_submit"
+                    class="btn btn-primary"
+                    disabled>
+                ' . get_string('addcompany', 'local_company') . '
+            </button>
 
-    </form>';
-    die;
+        </form>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const checkbox = document.getElementById("id_agree");
+            const button = document.getElementById("id_submit");
+            const nameField = document.getElementById("id_name");
+            const shortnameField = document.getElementById("id_shortname");
+
+            checkbox.addEventListener("change", function() {
+                
+                button.disabled = !this.checked;
+
+                nameField.readOnly = this.checked;
+                shortnameField.readOnly = this.checked;
+
+            });
+
+        });
+        </script>';
 }
+
+echo $OUTPUT->footer();

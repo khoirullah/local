@@ -13,11 +13,11 @@ class company_form extends \moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $mform->addElement('text', 'name', 'Company Name');
+        $mform->addElement('text', 'name', get_string('companyname', 'local_company'));
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required');
 
-        $mform->addElement('text', 'shortname', 'Shortname');
+        $mform->addElement('text', 'shortname', get_string('shortname', 'local_company'));
         $mform->setType('shortname', PARAM_ALPHANUMEXT);
         $mform->addRule('shortname', null, 'required');
  
@@ -34,7 +34,7 @@ class company_form extends \moodleform {
         $mform->addElement(
             'filepicker',
             'logo',
-            'Company Logo',
+            'Logo',
             null,
             [
                 'accepted_types' => ['.png','.jpg','.jpeg','.svg'],

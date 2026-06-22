@@ -1,0 +1,11 @@
+# Ignore files
+upgrade.txt
+readme.txt
+
+# Ignore plugins
+adminer/
+auth/
+profilecohort/
+course_catalog/
+enrolkeyapi/
+company_visibility/
