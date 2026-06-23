@@ -20,17 +20,18 @@ class user_creator {
         $user->firstname  = $data->firstname;
         $user->lastname   = $data->lastname;
         $user->email      = $data->email;
+        $user->institution = $data->institution;
+        if (!empty($data->forcepasswordchange)) {
+            $user->forcepasswordchange = 1;
+        }
         $user->mnethostid = $CFG->mnet_localhost_id;
 
         // 🚀 THIS was crashing before
         $userid = user_create_user($user, false);
-
-        // Optional enrol
-        /* if (!empty($data->courseids) && is_array($data->courseids)) {
-            foreach ($data->courseids as $courseid) {
-                $this->safe_enrol_user($userid, (int)$courseid);
+        // Assign ke cohort.
+            if (!empty($data->cohort)) {
+                cohort_add_member($data->cohort, $userid);
             }
-        } */
 
         return $userid;
     }

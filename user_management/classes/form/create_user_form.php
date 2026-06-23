@@ -29,9 +29,22 @@ class create_user_form extends \moodleform {
         $mform->setType('email', PARAM_EMAIL);
         $mform->addRule('email', null, 'required');
 
+        // ===== Institution (hidden from PIC) =====
+        $mform->addElement('hidden', 'institution', $USER->institution);
+        $mform->setType('institution', PARAM_TEXT);
+
         // ===== Password =====
         $mform->addElement('passwordunmask', 'password', get_string('password'));
         $mform->addRule('password', null, 'required');
+
+        // ===== Force password change =====
+        $mform->addElement(
+            'advcheckbox',
+            'forcepasswordchange',
+            '',
+            get_string('forcepasswordchange')
+        );
+        $mform->setDefault('forcepasswordchange', 1);
 
         // ===== Buttons =====
         $this->add_action_buttons(true, get_string('createuser'));
@@ -81,7 +94,7 @@ class create_user_form extends \moodleform {
         return $errors;
     }
 
-    private function get_course_options(): array {
+    /* private function get_course_options(): array {
         global $DB,$USER;
 
         $options = [];
@@ -121,5 +134,5 @@ class create_user_form extends \moodleform {
         }
 
         return $options;
-    }
+    } */
 }
