@@ -14,7 +14,7 @@ class bulk_uploader {
 
         $lines = explode(PHP_EOL, trim($content));
         $header = str_getcsv(array_shift($lines));
-
+       
         $created = 0;
         $enrolled = 0;
 
@@ -66,7 +66,8 @@ class bulk_uploader {
             if (!is_siteadmin($userid)) {
                 \local_company\member_manager::add_member(
                     $company->id,
-                    $userid
+                    $userid,
+                    $row['role']
                 );
             }
         }

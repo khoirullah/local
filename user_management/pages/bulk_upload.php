@@ -14,7 +14,7 @@ $PAGE->set_url(new moodle_url('/local/user_management/pages/bulk_upload.php'));
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('menu_bulk_upload', 'local_user_management'));
 $PAGE->set_heading(get_string('menu_bulk_upload', 'local_user_management'));
-
+ 
 $mform = new \local_user_management\form\bulk_upload_form();
 
 if ($mform->is_cancelled()) {
@@ -23,7 +23,11 @@ if ($mform->is_cancelled()) {
 
 if ($data = $mform->get_data()) {
     require_once($CFG->dirroot . '/local/user_management/classes/service/bulk_uploader.php');
-
+    if (!is_siteadmin($USER->id)) {
+        $company = \local_company\company_manager::get_user_company($USER->id);
+        $data = new \stdClass();
+        $data->companyid = (int)$company->id;
+    }
     $uploader = new \local_user_management\service\bulk_uploader();
     $result = $uploader->process_csv($mform->get_file_content('userfile'), $data->companyid);
 

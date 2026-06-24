@@ -6,15 +6,22 @@ defined('MOODLE_INTERNAL') || die();
 class user_creator {
 
     public function create(\stdClass $data): int {
-        global $CFG;
+        global $CFG, $DB;
 
         require_once($CFG->dirroot . '/user/lib.php');
         require_once($CFG->dirroot . '/lib/moodlelib.php');
         require_once($CFG->dirroot . '/enrol/manual/locallib.php');
 
         $fullname = $data->fullname;
-
-        $company = \local_company\company_manager::get($data->companyid);
+        
+        if (!is_siteadmin($USER->id)) {
+            $companyid = $DB->get_field(
+                'local_company',
+                'id',
+                ['name' => $data->institution, 'status' => 1]
+            );
+        }
+        $company = \local_company\company_manager::get($companyid);
         
         $parts = explode(' ', trim($fullname), 2);
         $data->firstname = $parts[0];
@@ -30,7 +37,7 @@ class user_creator {
         $user->firstname  = $data->firstname;
         $user->lastname   = $data->lastname;
         $user->email      = $data->email;
-        $user->department = $data->department || '';
+        $user->department = $data->department ?? '';
         $user->institution = $company->name;
 
         if (!empty($data->forcepasswordchange)) {
@@ -38,6 +45,8 @@ class user_creator {
         }
         $user->mnethostid = $CFG->mnet_localhost_id;
 
+        /* var_dump($company);
+        die; */
         $userid = user_create_user($user, false);
 
         if (!is_siteadmin($userid)) {
