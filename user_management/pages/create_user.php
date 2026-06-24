@@ -8,13 +8,19 @@ require_login();
 
 $context = context_system::instance();
 require_capability('local/user_management:createuser', $context);
-use local_company\company_manager;
+
 $company = \local_company\company_manager::get_user_company($USER->id);
         
 $PAGE->set_context($context);
 $PAGE->set_url(new moodle_url('/local/user_management/pages/create_user.php'));
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title(get_string('menu_create_user', 'local_user_management'));
+
+if (!is_siteadmin()) {
+    $PAGE->set_title(get_string('menu_create_user', 'local_user_management') . ' - ' . $USER->institution);
+}else {
+    $PAGE->set_title(get_string('menu_create_user', 'local_user_management'));
+}
+
 $PAGE->set_heading(get_string('menu_create_user', 'local_user_management'));
 
 $mform = new \local_user_management\form\create_user_form();

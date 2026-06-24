@@ -1,31 +1,3 @@
-<div class="alert alert-info">
-
-    <strong>
-        {{#str}}coinprice, local_corporatecredits{{/str}}:
-    </strong>
-
-    {{currency}} {{coinpriceformatted}}
-
-    <br>
-
-    <strong>
-        {{#str}}minimumtopup, local_corporatecredits{{/str}}:
-    </strong>
-
-    {{minimumtopup}}
-    {{#str}}coins, local_corporatecredits{{/str}}
-
-    <br>
-
-    <strong>
-        {{#str}}maximumtopup, local_corporatecredits{{/str}}:
-    </strong>
-
-    {{maximumtopup}}
-    {{#str}}coins, local_corporatecredits{{/str}}
-
-</div>
-
 <form method="post">
 
     <input
@@ -40,9 +12,7 @@
         value="{{sesskey}}">
 
     <div class="wallet-topup-container">
-
         <div class="wallet-header">
-
             <div>
                 <h1>
                     {{#str}}topupwallet, local_corporatecredits{{/str}}
@@ -51,6 +21,7 @@
                 <p>
                     {{#str}}topupwallet_desc, local_corporatecredits{{/str}}
                 </p>
+                
             </div>
 
             <div class="balance-card">
@@ -75,164 +46,282 @@
             </div>
 
         </div>
+        
+        <div class="row">
 
-        <div class="section-card">
+            <!-- LEFT -->
+            <div class="col-12 col-md-7 col-lg-8">
+                
+                <div class="section-card">
+                    <div class="alert-info rounded p-3 mb-3">
 
-            <h3>
-                1.
-                {{#str}}chooseamount, local_corporatecredits{{/str}}
-            </h3>
+                        <strong>
+                            {{#str}}coinprice, local_corporatecredits{{/str}}:
+                        </strong>
 
-            <div class="amount-grid">
+                        {{currency}} {{coinpriceformatted}}
 
-                <div class="amount-card" data-coins="1000">
-                    <div class="coin-icon">🪙</div>
-                    <div class="amount">1,000</div>
-                    <div class="label">
+                        <br>
+
+                        <strong>
+                            {{#str}}minimumtopup, local_corporatecredits{{/str}}:
+                        </strong>
+
+                        {{minimumtopup}}
                         {{#str}}coins, local_corporatecredits{{/str}}
-                    </div>
-                </div>
 
-                <div class="amount-card" data-coins="5000">
-                    <div class="coin-icon">🪙</div>
-                    <div class="amount">5,000</div>
-                    <div class="label">
+                        <br>
+
+                        <strong>
+                            {{#str}}maximumtopup, local_corporatecredits{{/str}}:
+                        </strong>
+
+                        {{maximumtopup}}
                         {{#str}}coins, local_corporatecredits{{/str}}
+
                     </div>
-                </div>
+                    <h3>
+                        1. {{#str}}chooseamount, local_corporatecredits{{/str}}
+                    </h3>
 
-                <div class="amount-card active" data-coins="10000">
+                    <div class="amount-grid">
 
-                    <div class="checkmark">
-                        <i class="fa fa-check"></i>
-                    </div>
+                        <div class="amount-card" data-coins="1000">
+                            <div class="coin-icon">🪙</div>
+                            <div class="amount">1,000</div>
+                            <div class="label">
+                                {{#str}}coins, local_corporatecredits{{/str}}
+                            </div>
+                        </div>
 
-                    <div class="coin-icon">🪙</div>
-                    <div class="amount">10,000</div>
-                    <div class="label">
-                        {{#str}}coins, local_corporatecredits{{/str}}
-                    </div>
+                        <div class="amount-card" data-coins="5000">
+                            <div class="coin-icon">🪙</div>
+                            <div class="amount">5,000</div>
+                            <div class="label">
+                                {{#str}}coins, local_corporatecredits{{/str}}
+                            </div>
+                        </div>
 
-                </div>
+                        <div class="amount-card active" data-coins="10000">
 
-                <div class="amount-card" data-coins="25000">
-                    <div class="coin-icon">🪙</div>
-                    <div class="amount">25,000</div>
-                    <div class="label">
-                        {{#str}}coins, local_corporatecredits{{/str}}
-                    </div>
-                </div>
+                            <div class="checkmark">
+                                <i class="fa fa-check"></i>
+                            </div>
 
-                <div class="amount-card" data-coins="50000">
-                    <div class="coin-icon">🪙</div>
-                    <div class="amount">50,000</div>
-                    <div class="label">
-                        {{#str}}coins, local_corporatecredits{{/str}}
-                    </div>
-                </div>
+                            <div class="coin-icon">🪙</div>
+                            <div class="amount">10,000</div>
+                            <div class="label">
+                                {{#str}}coins, local_corporatecredits{{/str}}
+                            </div>
 
-                <div class="amount-card" data-coins="100000">
-                    <div class="coin-icon">🪙</div>
-                    <div class="amount">100,000</div>
-                    <div class="label">
-                        {{#str}}coins, local_corporatecredits{{/str}}
-                    </div>
-                </div>
+                        </div>
 
-                <div class="custom-card">
+                        <div class="amount-card" data-coins="25000">
+                            <div class="coin-icon">🪙</div>
+                            <div class="amount">25,000</div>
+                            <div class="label">
+                                {{#str}}coins, local_corporatecredits{{/str}}
+                            </div>
+                        </div>
 
-                    <label>
-                        {{#str}}customamount, local_corporatecredits{{/str}}
-                    </label>
+                        <div class="amount-card" data-coins="50000">
+                            <div class="coin-icon">🪙</div>
+                            <div class="amount">50,000</div>
+                            <div class="label">
+                                {{#str}}coins, local_corporatecredits{{/str}}
+                            </div>
+                        </div>
 
-                    <div class="custom-input">
-                        <input
-                            type="text"
-                            id="custom-amount"
-                            placeholder="{{#str}}enteramount, local_corporatecredits{{/str}}">
-                        <span>
-                            {{#str}}coins, local_corporatecredits{{/str}}
-                        </span>
+                        <div class="amount-card" data-coins="100000">
+                            <div class="coin-icon">🪙</div>
+                            <div class="amount">100,000</div>
+                            <div class="label">
+                                {{#str}}coins, local_corporatecredits{{/str}}
+                            </div>
+                        </div>
+
+                        <div class="custom-card">
+
+                            <label>
+                                {{#str}}customamount, local_corporatecredits{{/str}}
+                            </label>
+
+                            <div class="custom-input">
+                                <input
+                                    type="text"
+                                    id="custom-amount"
+                                    placeholder="{{#str}}enteramount, local_corporatecredits{{/str}}">
+                                <span>
+                                    {{#str}}coins, local_corporatecredits{{/str}}
+                                </span>
+                            </div>
+
+                            <div
+                                id="custom-validation"
+                                class="text-danger small mt-2"
+                                style="display:none;">
+                            </div>
+
+                            <div class="text-muted small mt-2">
+                                Min: {{minimumtopup}} {{#str}}coins, local_corporatecredits{{/str}}
+                                •
+                                Max: {{maximumtopup}} {{#str}}coins, local_corporatecredits{{/str}}
+                            </div>
+
+                        </div>
+
                     </div>
 
                 </div>
 
             </div>
 
-        </div>
+            <!-- RIGHT -->
+            <div class="col-12 col-md-5 col-lg-4">
 
-        <div class="section-card">
+                <!-- SUMMARY -->
+                <div class="section-card sticky-card">
 
-            <div class="summary-header">
+                    <div class="summary-header">
 
-                <h3>
-                    2.
-                    {{#str}}paymentsummary, local_corporatecredits{{/str}}
-                </h3>
+                        <h3>
+                            2. {{#str}}paymentsummary, local_corporatecredits{{/str}}
+                        </h3>
 
-                <span class="secure-badge">
-                    <i class="fa fa-shield-alt"></i>
-                    {{#str}}securetransaction, local_corporatecredits{{/str}}
-                </span>
-
-            </div>
-
-            <div class="summary-grid">
-
-                <div class="summary-item">
-
-                    <div class="summary-icon">
-                        <i class="fa fa-coins"></i>
                     </div>
 
-                    <div>
-                        <small>
-                            {{#str}}youwillreceive, local_corporatecredits{{/str}}
-                        </small>
+                    <div class="summary-sidebar">
 
-                        <h2 id="summary-coins">
-                            10,000
-                            {{#str}}coins, local_corporatecredits{{/str}}
-                        </h2>
+                        <div class="summary-row">
+                            <span>
+                                {{#str}}youwillreceive, local_corporatecredits{{/str}}
+                            </span>
+
+                            <strong id="summary-coins">
+                                10,000 Coins
+                            </strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>
+                                {{#str}}totalpayment, local_corporatecredits{{/str}}
+                            </span>
+                            <strong id="summary-payment" class="{{#is_admin}}text-muted{{/is_admin}} float-right" style="{{#is_admin}}text-decoration-line:line-through;{{/is_admin}}" >
+                                100,000
+                            </strong>
+                            {{#is_admin}}
+                            <strong>
+                                0
+                            </strong>
+                            {{/is_admin}}    
+                            <strong>
+                                {{currency}}
+                            </strong>
+                        </div>
+
+                        {{#is_admin}}
+                        <div class="summary-row text-secondary small bg-secondary w-100 text-center p-2 rounded" id="admin">
+                            <span>
+                                {{#str}}admindiscount, local_corporatecredits{{/str}}
+                            </span>
+                            <span class="font-weight-bold">
+                                {{#str}}applied, local_corporatecredits{{/str}}
+                            </span>
+                        </div>
+                        {{/is_admin}}
+
                     </div>
 
                 </div>
 
-                <div class="divider"></div>
+                <!-- PAYMENT METHOD -->
+                <div class="section-card sticky-card">
 
-                <div class="summary-item">
+                    <h3>
+                        3. {{#str}}paymentmethod, local_corporatecredits{{/str}}
+                    </h3>
 
-                    <div class="summary-icon">
-                        <i class="fa fa-file-invoice-dollar"></i>
+                    <div class="payment-methods">
+
+                        <label class="payment-option active">
+
+                            <input
+                                type="radio"
+                                name="paymentmethod"
+                                value="xendit"
+                                checked>
+
+                            <div>
+
+                                <strong>Xendit</strong>
+
+                                <small>
+                                    {{#str}}instant, local_corporatecredits{{/str}}
+                                </small>
+
+                            </div>
+
+                        </label>
+
+                        <label class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="paymentmethod"
+                                value="invoice">
+
+                            <div>
+
+                                <strong>{{#str}}invoice, local_corporatecredits{{/str}}</strong>
+
+                                <small>
+                                    {{#str}}invoicing, local_corporatecredits{{/str}}
+                                </small>
+
+                            </div>
+
+                        </label>
+
+                        {{#is_admin}}
+                        <label class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="paymentmethod"
+                                value="admin">
+
+                            <div>
+
+                                <strong>{{#str}}manual, local_corporatecredits{{/str}}</strong>
+                                <small>
+                                    {{#str}}manually, local_corporatecredits{{/str}}
+                                </small>
+                            </div>
+
+                        </label>
+                        {{/is_admin}}
+
                     </div>
 
-                    <div>
-                        <small>
-                            {{#str}}totalpayment, local_corporatecredits{{/str}}
-                        </small>
+                    <button
+                        type="submit"
+                        id="topup-btn"
+                        class="topup-btn mt-4">
 
-                        <h2 id="summary-payment">
-                            {{currency}} 10.000.000
-                        </h2>
+                        {{#str}}topupnow, local_corporatecredits{{/str}}
+
+                    </button>
+
+                    <a href="{{cancelurl}}" class="btn btn-secondary mt-4 w-100 p-3" >
+
+                        {{#str}}cancel{{/str}}
+
+                    </a>
 
                 </div>
 
             </div>
 
-        </div>
-
-        <button
-            type="submit"
-            class="topup-btn">
-
-            {{#str}}topupnow, local_corporatecredits{{/str}}
-            <i class="fa fa-arrow-right ml-2"></i>
-
-        </button>
-
-        <div class="payment-note">
-            🔒
-            {{#str}}paymentsecure, local_corporatecredits{{/str}}\
         </div>
 
     </div>
@@ -241,6 +330,16 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+
+    const IS_ADMIN = {{is_admin}};
+    //alert(IS_ADMIN);
+    const MIN_TOPUP = {{minimumtopup}};
+    const MAX_TOPUP = {{maximumtopup}};
+
+    const validationMessage =
+    document.getElementById(
+        'custom-validation'
+    );
 
     const RATE = {{coinprice}};
     const CURRENCY = '{{currency}}';
@@ -260,6 +359,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedCoinsInput =
         document.getElementById('selected-coins');
 
+    const submitButton =
+        document.getElementById('topup-btn');
+
+    function validateCoins(coins) {
+
+        if (!coins) {
+
+            validationMessage.style.display =
+                'none';
+            submitButton.disabled = true;
+
+            return false;
+        }
+
+        if (coins < MIN_TOPUP) {
+
+            validationMessage.style.display =
+                'block';
+
+            validationMessage.textContent =
+                'Minimum topup is ' +
+                format(MIN_TOPUP) +
+                ' coins';
+
+            submitButton.disabled = true;
+
+            return false;
+        }
+
+        if (coins > MAX_TOPUP) {
+
+            validationMessage.style.display =
+                'block';
+
+            validationMessage.textContent =
+                'Maximum topup is ' +
+                format(MAX_TOPUP) +
+                ' coins';
+
+            submitButton.disabled = true;
+
+            return false;
+        }
+        
+        validationMessage.style.display =
+            'none';
+
+        submitButton.disabled = false;
+
+        return true;
+    }
+
     function format(number) {
         return new Intl.NumberFormat('id-ID')
             .format(number);
@@ -275,7 +426,6 @@ document.addEventListener('DOMContentLoaded', () => {
             format(coins) + ' {{#str}}coins, local_corporatecredits{{/str}}';
 
         summaryPayment.textContent =
-            CURRENCY + ' ' +
             format(coins * RATE);
     }
 
@@ -337,8 +487,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         });
 
+        value = parseInt(value) || 0;
+
+        validateCoins(value);
+
         updateSummary(value);
 
+    });
+
+    document.querySelector('form')
+    .addEventListener('submit', function(e) {
+
+        const coins =
+            parseInt(
+                selectedCoinsInput.value
+            ) || 0;
+
+        if (!validateCoins(coins)) {
+
+            e.preventDefault();
+
+            customInput.focus();
+
+            return false;
+        }
     });
 
     updateSummary(10000);

@@ -40,7 +40,9 @@ $string['bulk_upload_success'] = 'Account has been created and enrolled';
 $string['user_created_success'] = 'Account has been created and enrolled';
 $string['menu'] = 'User Management Menu';
 $string['menu_certificate_verify'] = 'Varification Menu';
-
+$string['pic'] = 'Person In Charge';
+$string['employee'] = 'Employee';
+$string['hod'] = 'Head of Department';
 //Capabilities
 $string['user_management:bulkupload'] = 'Bulk Upload User';
 $string['user_management:createuser'] = 'Create New User';

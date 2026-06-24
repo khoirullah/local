@@ -8,26 +8,42 @@ require_once($GLOBALS['CFG']->libdir . '/formslib.php');
 class create_user_form extends \moodleform {
 
     public function definition() {
+        global $USER;
         $mform = $this->_form;
 
         // ===== Basic user info =====
         $mform->addElement('header', 'userinfo', get_string('general'));
 
-        $mform->addElement('text', 'firstname', get_string('firstname'));
-        $mform->setType('firstname', PARAM_NOTAGS);
-        $mform->addRule('firstname', null, 'required');
-
-        $mform->addElement('text', 'lastname', get_string('lastname'));
-        $mform->setType('lastname', PARAM_NOTAGS);
-        $mform->addRule('lastname', null, 'required');
-
-        $mform->addElement('text', 'username', get_string('username'));
-        $mform->setType('username', PARAM_USERNAME);
-        $mform->addRule('username', null, 'required');
+        $mform->addElement('text', 'fullname', get_string('fullname'));
+        $mform->setType('fullname', PARAM_NOTAGS);
+        $mform->addRule('fullname', null, 'required');
 
         $mform->addElement('text', 'email', get_string('email'));
         $mform->setType('email', PARAM_EMAIL);
         $mform->addRule('email', null, 'required');
+
+        $mform->addElement('text', 'department', get_string('department'));
+        
+        // ===== Role selection =====
+        $roleoptions = [
+            'employee' => get_string('employee', 'local_user_management'),
+            'hod'      => get_string('hod', 'local_user_management'),
+        ];
+
+        // PIC hanya bisa dipilih oleh siteadmin
+        if (is_siteadmin()) {
+            $roleoptions['pic'] = get_string('pic', 'local_user_management');
+        }
+
+        $mform->addElement(
+            'select',
+            'role',
+            get_string('role'),
+            $roleoptions
+        );
+
+        $mform->setDefault('role', 'employee');
+        $mform->addRule('role', null, 'required', null, 'client');
 
         // ===== Institution (hidden from PIC) =====
         $mform->addElement('hidden', 'institution', $USER->institution);
@@ -46,33 +62,45 @@ class create_user_form extends \moodleform {
         );
         $mform->setDefault('forcepasswordchange', 1);
 
+        // ===== Company selection =====
+        if (is_siteadmin()) {
+            $mform->addElement(
+                'select',
+                'companyid',
+                get_string('institution'),
+                $this->get_company_options()
+            );
+
+            $mform->addRule(
+                'companyid',
+                get_string('required'),
+                'required',
+                null,
+                'client'
+            );
+        }
+
         // ===== Buttons =====
         $this->add_action_buttons(true, get_string('createuser'));
     }
 
     public function validation($data, $files) {
-        global $DB;
+        global $DB,$CFG;
 
         $errors = parent::validation($data, $files);
 
-        // ===== Username validation =====
-        if (!empty($data['username'])) {
-
-            // duplicate check
-            if ($DB->record_exists('user', [
-                'username'   => $data['username'],
-                'mnethostid' => 1
-            ])) {
-                $errors['username'] = get_string('usernameexists');
-            }
-        }
-
-
         // ===== Email validation =====
         if (!empty($data['email'])) {
-            if ($DB->record_exists('user', [
+
+            // Format email.
+            if (!validate_email($data['email'])) {
+                $errors['email'] = get_string('invalidemail');
+            }
+
+            // Email sudah digunakan.
+            else if ($DB->record_exists('user', [
                 'email' => $data['email'],
-                'mnethostid' => 1
+                'mnethostid' => $CFG->mnet_localhost_id
             ])) {
                 $errors['email'] = get_string('emailexists');
             }
@@ -86,53 +114,27 @@ class create_user_form extends \moodleform {
             }
         }
 
-        // ===== Course selection =====
-        /* if (empty($data['courseids'])) {
-            $errors['courseids'] = get_string('required');
-        } */
-
         return $errors;
     }
 
-    /* private function get_course_options(): array {
-        global $DB,$USER;
+    private function get_company_options(): array {
+        global $DB;
 
-        $options = [];
-        if (is_siteadmin()) {
-            $courses = $DB->get_records_menu(
-                'course',
-                ['visible' => 1],
-                'fullname ASC',
-                'id, fullname'
-            );
-            unset($courses[SITEID]);
-        } else {
-            $sql = "
-                SELECT c.id, c.fullname
-                FROM {course} c
-                JOIN {enrol} e ON e.courseid = c.id
-                JOIN {user_enrolments} ue ON ue.enrolid = e.id
-                WHERE c.id <> :siteid
-                AND ue.userid = :userid
-                ORDER BY c.fullname ASC
-            ";
+        $options = [
+            '' => get_string('choose', 'moodle')
+        ];
 
-            $params = [
-                'siteid' => SITEID,
-                'userid' => $USER->id,
-            ];
+        $companies = $DB->get_records(
+            'local_company',
+            ['status'=> 1],
+            'name ASC',
+            'id, name'
+        );
 
-            $courses = $DB->get_records_sql_menu($sql, $params);
-        }
-
-
-        foreach ($courses as $id => $name) {
-            if ($id == SITEID) {
-                continue;
-            }
-            $options[$id] = $name;
+        foreach ($companies as $company) {
+            $options[$company->id] = $company->name;
         }
 
         return $options;
-    } */
+    }
 }

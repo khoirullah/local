@@ -41,57 +41,47 @@ class bulk_upload_form extends \moodleform {
         );
         $mform->addRule('userfile', null, 'required');
 
-        $mform->addElement('header', 'enrolinfo', get_string('indicator:nostudent'));
+        // ===== Company selection =====
+        if (is_siteadmin()) {
+            $mform->addElement(
+                'select',
+                'companyid',
+                get_string('institution'),
+                $this->get_company_options()
+            );
 
-        // ===== Course =====
-        $courses = $this->get_course_options();
-        $mform->addElement('select', 'courseid', get_string('course'), $courses);
-        $mform->setType('courseid', PARAM_INT);
-        $mform->addRule('courseid', null, 'required');
+            $mform->setType('companyid', PARAM_INT);
 
+            $mform->addRule(
+                'companyid',
+                get_string('required'),
+                'required',
+                null,
+                'client'
+            );
+        }
         
         // ===== Buttons =====
         $this->add_action_buttons(true, get_string('uploadusers', 'local_user_management'));
     }
 
 
-    private function get_course_options(): array {
-        global $DB,$USER;
+    private function get_company_options(): array {
+        global $DB;
 
-        $options = [];
-        if (is_siteadmin()) {
-            $courses = $DB->get_records_menu(
-                'course',
-                ['visible' => 1],
-                'fullname ASC',
-                'id, fullname'
-            );
-            unset($courses[SITEID]);
-        } else {
-            $sql = "
-                SELECT c.id, c.fullname
-                FROM {course} c
-                JOIN {enrol} e ON e.courseid = c.id
-                JOIN {user_enrolments} ue ON ue.enrolid = e.id
-                WHERE c.id <> :siteid
-                AND ue.userid = :userid
-                ORDER BY c.fullname ASC
-            ";
+        $options = [
+            '' => get_string('choose', 'moodle')
+        ];
 
-            $params = [
-                'siteid' => SITEID,
-                'userid' => $USER->id,
-            ];
+        $companies = $DB->get_records(
+            'local_company',
+            ['status'=> 1],
+            'name ASC',
+            'id, name'
+        );
 
-            $courses = $DB->get_records_sql_menu($sql, $params);
-        }
-
-
-        foreach ($courses as $id => $name) {
-            if ($id == SITEID) {
-                continue;
-            }
-            $options[$id] = $name;
+        foreach ($companies as $company) {
+            $options[$company->id] = $company->name;
         }
 
         return $options;

@@ -16,7 +16,7 @@ $companyid =
         PARAM_INT
     );
 
-$summary =
+$summary = 
     wallet_manager::get_summary(
         $companyid
     );
@@ -77,6 +77,8 @@ foreach ($transactions as $transaction) {
             $transaction->description
     ];
 }
+
+$cancelurl = get_local_referer();
 
 $PAGE->set_context($context);
 
@@ -153,40 +155,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 echo $OUTPUT->header();
 
-$coinprice = (float)get_config(
+$coinprice = get_config(
     'local_corporatecredits',
     'coinprice'
 );
 
-$templatecontext['coinprice'] =
-    number_format($coinprice);
+$coinprice = is_numeric($coinprice)
+    ? (float)$coinprice
+    : 1000;
 
+$templatecontext['coinprice'] = $coinprice;
+
+$templatecontext['cancelurl'] = (
+        new moodle_url(
+            '/local/company/detail.php',
+            [
+                'id' => $companyid
+            ]
+        )
+    )->out(false);
+    
 $templatecontext['minimumtopup'] =
     (int)get_config(
         'local_corporatecredits',
         'minimumtopup'
-    );
+    ) ?: 10;
 
 $templatecontext['maximumtopup'] =
     (int)get_config(
         'local_corporatecredits',
         'maximumtopup'
-    );
+    ) ?: 100000;
 
-$templatecontext['currency'] = get_config(
-    'local_corporatecredits',
-    'currency'
-) ?: 'IDR';
-
-$templatecontext['coinprice'] = (float)get_config(
-    'local_corporatecredits',
-    'coinprice'
-);
+$templatecontext['currency'] = 
+    get_config(
+        'local_corporatecredits',
+        'currency'
+    ) ?: 'IDR';
 
 $templatecontext['coinpriceformatted'] =
-    number_format(
-        $templatecontext['coinprice']
-    );
+    number_format($coinprice, 0);
+
+$templatecontext['is_admin'] =
+    is_siteadmin($USER->id);
 
 echo $OUTPUT->render_from_template(
     'local_corporatecredits/topup',

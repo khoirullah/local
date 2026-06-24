@@ -95,5 +95,59 @@ class suspend_user_form extends \moodleform {
         ]) ?: [];
     }
 
+}
+
+class suspend_userid_form extends \moodleform {
+
+    public function definition() {
+        $mform = $this->_form;
+
+        $userid = $this->_customdata['userid'];
+        $user = \core_user::get_user($userid);
+
+        $mform->addElement(
+            'static',
+            'targetuser',
+            get_string('user'),
+            fullname($user) . ' (' . $user->email . ')'
+        );
+
+        $mform->addElement(
+            'static',
+            'targetuserdepartment',
+            get_string('department'),
+            $user->department
+        );
+
+        $mform->addElement(
+            'hidden',
+            'userid',
+            $userid
+        );
+        $mform->setType('userid', PARAM_INT);
+
+        // BIG WARNING
+        $mform->addElement(
+            'static',
+            'warning',
+            '',
+            '<div class="alert alert-danger">
+                <strong>WARNING!</strong><br>
+                Suspended users <u>cannot</u> be reactivated again.<br>
+                This action is <strong>PERMANENT</strong>.
+            </div>'
+        );
+
+        // Confirmation
+        $mform->addElement(
+            'advcheckbox',
+            'confirm',
+            get_string('confirm_suspend', 'local_user_management'),
+            get_string('confirm_suspend_desc', 'local_user_management')
+        );
+        $mform->addRule('confirm', null, 'required');
+
+        $this->add_action_buttons(true, get_string('suspend_permanently', 'local_user_management'));
+    }
 
 }

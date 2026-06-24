@@ -9,42 +9,286 @@ class member_manager {
     public static function add_member(
         int $companyid,
         int $userid,
-        string $role = 'employee'
+        ?string $role = null
     ): int {
 
         global $DB;
 
-        $existing = $DB->get_record(
-            'local_company_member',
+        $exists = $DB->record_exists(
+            'local_company_user',
             [
                 'companyid' => $companyid,
                 'userid' => $userid
             ]
         );
 
-        if ($existing) {
-            return $existing->id;
+        if ($exists) {
+            return $userid;
         }
 
-        $record = new \stdClass();
-
-        $record->companyid = $companyid;
-        $record->userid = $userid;
-        $record->role = $role;
-        $record->status = 'active';
-        $record->timecreated = time();
-
-        \local_company\log_manager::add(
-            $companyid,
-            $userid,
-            'member_added',
-            'User added to company'
+        $company = $DB->get_record(
+            'local_company',
+            ['id' => $companyid],
+            'id, cohortid',
+            MUST_EXIST
         );
-        
-        return $DB->insert_record(
-            'local_company_member',
-            $record
+
+        // User pertama otomatis PIC.
+        if ($role === null) {
+
+            $haspic = $DB->record_exists(
+                'local_company_user',
+                [
+                    'companyid' => $companyid,
+                    'role' => 'pic'
+                ]
+            );
+
+            $role = $haspic
+                ? 'employee'
+                : 'pic';
+        }
+
+        $companyuser = new \stdClass();
+        $companyuser->companyid   = $companyid;
+        $companyuser->userid      = $userid;
+        $companyuser->role        = $role;
+        $companyuser->timecreated = time();
+
+        $DB->insert_record(
+            'local_company_user',
+            $companyuser
         );
+
+        // Cohort membership.
+        if (
+            !empty($company->cohortid)
+            && !cohort_is_member(
+                $company->cohortid,
+                $userid
+            )
+        ) {
+
+            cohort_add_member(
+                $company->cohortid,
+                $userid
+            );
+        }
+
+        // Moodle role assignment.
+        if ($role === 'pic') {
+
+            $picrole = $DB->get_record(
+                'role',
+                ['shortname' => 'pic'],
+                '*',
+                IGNORE_MISSING
+            );
+
+            if ($picrole) {
+
+                $systemcontext =
+                    \context_system::instance();
+
+                if (
+                    !user_has_role_assignment(
+                        $userid,
+                        $picrole->id,
+                        $systemcontext->id
+                    )
+                ) {
+
+                    role_assign(
+                        $picrole->id,
+                        $userid,
+                        $systemcontext->id
+                    );
+                }
+            }
+        }
+
+        return $userid;
+    }
+
+    public static function has_pic(
+        int $companyid
+    ): bool {
+
+        global $DB;
+
+        return $DB->record_exists(
+            'local_company_user',
+            [
+                'companyid' => $companyid,
+                'role' => 'pic'
+            ]
+        );
+    }
+
+    public static function promote_to_pic(
+        int $companyid,
+        int $userid
+    ): void {
+
+        global $DB;
+
+        $member = $DB->get_record(
+            'local_company_user',
+            [
+                'companyid' => $companyid,
+                'userid' => $userid
+            ],
+            '*',
+            MUST_EXIST
+        );
+
+        $member->role = 'pic';
+
+        $DB->update_record(
+            'local_company_user',
+            $member
+        );
+
+        $role = $DB->get_record(
+            'role',
+            ['shortname' => 'pic'],
+            '*',
+            IGNORE_MISSING
+        );
+
+        if ($role) {
+
+            $systemcontext =
+                \context_system::instance();
+
+            if (
+                !user_has_role_assignment(
+                    $userid,
+                    $role->id,
+                    $systemcontext->id
+                )
+            ) {
+
+                role_assign(
+                    $role->id,
+                    $userid,
+                    $systemcontext->id
+                );
+            }
+        }
+    }
+
+    public static function get_company_members(
+        int $companyid
+    ): array {
+
+        global $DB;
+
+        $company = $DB->get_record(
+            'local_company',
+            ['id' => $companyid],
+            'id, cohortid',
+            MUST_EXIST
+        );
+
+        if (empty($company->cohortid)) {
+            return [];
+        }
+
+        $sql = "
+            SELECT
+                u.id,
+                u.firstname,
+                u.lastname,
+                u.email,
+                u.username,
+                u.department,
+                cu.role
+
+            FROM {cohort_members} cm
+
+            JOIN {user} u
+                ON u.id = cm.userid
+
+            JOIN {cohort} c
+                ON c.id = cm.cohortid
+
+            JOIN {local_company} com
+                ON com.cohortid = c.id
+
+            JOIN {local_company_user} cu
+                ON cu.userid = cm.userid AND cu.companyid = com.id
+
+            WHERE cm.cohortid = ?
+
+            ORDER BY u.firstname, u.lastname
+        ";
+
+        $records = $DB->get_records_sql(
+            $sql,
+            [$company->cohortid]
+        );
+
+        foreach ($records as $record) {
+            $record->fullname = fullname($record);
+            $record->editurl = (
+                new \moodle_url(
+                    '/user/edit.php',
+                    [
+                        'id' => $record->id,
+                        'returnto' => 'profile'
+                    ]
+                )
+            )->out(false);
+            $record->suspendurl = (
+                new \moodle_url(
+                    '/local/company/suspend.php',
+                    [
+                        'id' => $record->id
+                    ]
+                )
+            )->out(false);
+        }
+
+        return array_values($records);
+    }
+    /* public static function add_member(
+        int $companyid,
+        int $userid,
+        string $role = 'employee'
+    ): int {
+
+        global $DB;
+
+        $exists = $DB->record_exists(
+            'local_company_user',
+            [
+                'companyid' => $companyid,
+                'userid' => $userid
+            ]
+        );
+
+        if (!$exists) {
+
+            $companyuser = new \stdClass();
+            $companyuser->companyid   = $companyid;
+            $companyuser->userid      = $userid;
+            $companyuser->role        = 'employee';
+            $companyuser->timecreated = time();
+
+            $DB->insert_record(
+                'local_company_user',
+                $companyuser
+            );
+
+            // Add user to cohort if not already member.
+            if (!cohort_is_member($cohortid, $userid)) {
+                cohort_add_member(
+                    $cohortid,
+                    $userid
+                );
+            }
+        }
     }
 
     public static function remove_member(
@@ -141,72 +385,7 @@ class member_manager {
         );
     }
 
-    public static function get_company_members(
-        int $companyid
-    ): array {
-
-        global $DB;
-
-        $company = $DB->get_record(
-            'local_company',
-            ['id' => $companyid],
-            'id, cohortid',
-            MUST_EXIST
-        );
-
-        if (empty($company->cohortid)) {
-            return [];
-        }
-
-        $sql = "
-            SELECT
-                u.id,
-                u.firstname,
-                u.lastname,
-                u.email,
-                u.username,
-                u.department,
-                cu.role
-
-            FROM {cohort_members} cm
-
-            JOIN {user} u
-                ON u.id = cm.userid
-
-            JOIN {cohort} c
-                ON c.id = cm.cohortid
-
-            JOIN {local_company} com
-                ON com.cohortid = c.id
-
-            JOIN {local_company_user} cu
-                ON cu.userid = cm.userid AND cu.companyid = com.id
-
-            WHERE cm.cohortid = ?
-
-            ORDER BY u.firstname, u.lastname
-        ";
-
-        $records = $DB->get_records_sql(
-            $sql,
-            [$company->cohortid]
-        );
-
-        foreach ($records as $record) {
-            $record->fullname = fullname($record);
-            $record->editurl = (
-                new \moodle_url(
-                    '/user/edit.php',
-                    [
-                        'id' => $record->id,
-                        'returnto' => 'profile'
-                    ]
-                )
-            )->out(false);
-        }
-
-        return array_values($records);
-    }
+    
 
     public static function get_user_products(
         int $userid
@@ -339,5 +518,5 @@ class member_manager {
             $companyid,
             $userid
         ) === 'employee';
-    }
+    } */
 }

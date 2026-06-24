@@ -211,7 +211,7 @@ class wallet_manager {
             return $wallet;
         }
 
-        $record = new stdClass();
+        $record = new \stdClass();
 
         $record->companyid = $companyid;
         $record->balance = 0;

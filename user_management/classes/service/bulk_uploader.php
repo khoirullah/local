@@ -5,7 +5,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class bulk_uploader {
 
-    public function process_csv(string $content, int $courseid): string {
+    public function process_csv(string $content, int $companyid): string {
         global $DB, $CFG;
 
         require_once($CFG->dirroot . '/user/lib.php');
@@ -18,6 +18,8 @@ class bulk_uploader {
         $created = 0;
         $enrolled = 0;
 
+        $company = \local_company\company_manager::get($companyid);
+        
         foreach ($lines as $line) {
             if (empty(trim($line))) {
                 continue;
@@ -25,23 +27,35 @@ class bulk_uploader {
 
             $row = array_combine($header, str_getcsv($line));
 
-            if (empty($row['username']) || empty($row['email'])) {
+            if (empty($row['fullname']) || empty($row['email'])) {
                 continue;
             }
 
+            $fullname = $row['fullname'];
+
+            $parts = explode(' ', trim($fullname), 2);
+            $row['firstname'] = $parts[0];
+            $row['lastname']  = $parts[1] ?? '';
+            $row['cohort'] = $company->cohortid;
+            $row['username'] = $row['email'];
             // Check user exists.
-            $user = $DB->get_record('user', ['username' => $row['username']]);
+            $user = $DB->get_record('user', ['username' => $row['email']]);
 
             if (!$user) {
                 $user = new \stdClass();
-                $user->auth       = 'manual';
-                $user->confirmed  = 1;
-                $user->username   = $row['username'];
-                $user->password   = !empty($row['password']) ? $row['password'] : generate_password();
-                $user->firstname  = $row['firstname'] ?? '';
-                $user->lastname   = $row['lastname'] ?? '';
-                $user->email      = $row['email'];
+                $user->auth         = 'manual';
+                $user->confirmed    = 1;
+                $user->username     = $row['username'];
+                $user->password     = hash_internal_user_password($row['password']);
+                $user->firstname    = $row['firstname'];
+                $user->lastname     = $row['lastname'];
+                $user->email        = $row['email'];
+                $user->department   = $row['department'];
+                $user->institution  = $company->name;
+                $user->forcepasswordchange = 1;
                 $user->mnethostid = 1;
+
+                $user->mnethostid = $CFG->mnet_localhost_id;
 
                 $userid = user_create_user($user, false);
                 $created++;
@@ -49,41 +63,14 @@ class bulk_uploader {
                 $userid = $user->id;
             }
 
-            // Enrol user.
-            if (!$this->is_enrolled($userid, $courseid)) {
-                $this->enrol_user($userid, $courseid);
-                $enrolled++;
+            if (!is_siteadmin($userid)) {
+                \local_company\member_manager::add_member(
+                    $company->id,
+                    $userid
+                );
             }
         }
 
         return "{$created} users created, {$enrolled} users enrolled.";
-    }
- 
-    private function enrol_user(int $userid, int $courseid): void {
-        global $DB;
-
-        $enrol = $DB->get_record('enrol', [
-            'courseid' => $courseid,
-            'enrol'    => 'manual',
-            'status'   => ENROL_INSTANCE_ENABLED,
-        ], '*', MUST_EXIST);
-
-        $plugin = enrol_get_plugin('manual');
-        $plugin->enrol_user($enrol, $userid, 5);
-    }
-
-    private function is_enrolled(int $userid, int $courseid): bool {
-        global $DB;
-
-        return $DB->record_exists_sql(
-            "SELECT 1
-             FROM {user_enrolments} ue
-             JOIN {enrol} e ON e.id = ue.enrolid
-             WHERE ue.userid = :userid AND e.courseid = :courseid",
-            [
-                'userid'   => $userid,
-                'courseid' => $courseid,
-            ]
-        );
     }
 }

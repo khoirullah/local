@@ -102,7 +102,7 @@
 }
 
 .amount {
-    font-size: 42px;
+    font-size: 30px;
     font-weight: 700;
 }
 
@@ -172,8 +172,6 @@
 
 .summary-grid {
     display: flex;
-    align-items: center;
-    margin-top: 25px;
 }
 
 .summary-item {
@@ -205,14 +203,14 @@
     width: 100%;
     border: none;
     border-radius: 18px;
-    padding: 22px;
-    font-size: 24px;
+    padding: 15px;
+    font-size: 18px;
     font-weight: 600;
     color: white;
     background: linear-gradient(
         135deg,
-        #2563eb,
-        #0052cc
+        var(--primary),
+        var(--secondary)
     );
 }
 
@@ -221,27 +219,325 @@
     margin-top: 15px;
     color: #667085;
 }
+/* optional spacing biar nggak dempet */
+.section-card {
+    margin-bottom: 24px;
+}
+
+/* biar sidebar enak nempel kalau desktop */
+@media (min-width: 992px) {
+    .sticky-card {
+        position: sticky;
+        top: 20px;
+    }
+}
 
 @media (max-width: 992px) {
 
-    .wallet-header {
-        flex-direction: column;
+    .wallet-topup-container {
+        padding: 20px;
+    }
+
+    .summary-sidebar {
+        width: 100%;
     }
 
     .amount-grid {
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .custom-card {
         grid-column: span 2;
     }
 
-    .summary-grid {
+    .wallet-header {
         flex-direction: column;
-        gap: 20px;
+        align-items: stretch;
     }
 
-    .divider {
-        display: none;
+    .balance-card {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .summary-grid {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .summary-item {
+        justify-content: flex-start;
+    }
+
+    /* PAYMENT SUMMARY JADI VERTICAL */
+
+    .summary-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .summary-row strong {
+        text-align: left;
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .wallet-topup-container {
+        padding: 15px;
+    }
+
+    .wallet-header h1 {
+        font-size: 28px;
+    }
+
+    .wallet-header p {
+        font-size: 14px;
+    }
+
+    .balance-card {
+        padding: 16px;
+    }
+
+    .balance-card h2 {
+        font-size: 24px;
+    }
+
+    .balance-card h2 span {
+        font-size: 16px;
+    }
+
+    .amount-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .custom-card {
+        grid-column: span 1;
+    }
+
+    .amount-card {
+        padding: 24px;
+    }
+
+    .amount {
+        font-size: 32px;
+    }
+
+    .section-card {
+        padding: 18px;
+    }
+
+    .section-card h3 {
+        font-size: 24px;
+        margin-bottom: 18px;
+    }
+
+    .summary-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .summary-row strong {
+        font-size: 24px;
+    }
+
+    .payment-option {
+        padding: 14px;
+    }
+
+    .topup-btn {
+        font-size: 16px;
+        padding: 14px;
+    }
+}
+
+.summary-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.summary-row span {
+    color: #667085;
+}
+
+.summary-row strong {
+    font-size: 24px;
+    text-align: right;
+}
+
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid #d0d5dd;
+    border-radius: 16px;
+    padding: 16px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.payment-option:hover {
+    border-color: #2563eb;
+}
+
+.payment-option input {
+    margin-top: 2px;
+}
+
+.payment-option strong {
+    display: block;
+}
+
+.payment-option small {
+    color: #667085;
+}
+
+.amount-grid > * {
+    min-width: 0;
+}
+
+.payment-total {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.payment-total .original-price {
+    text-decoration: line-through;
+    color: #98a2b3;
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.payment-total .final-price {
+    font-size: 22px;
+    font-weight: 700;
+    color: #101828;
+}
+
+.payment-total.discounted .final-price {
+    color: #16a34a;
+}
+
+@media (max-width: 900px) {
+
+    /* GLOBAL SCALE DOWN */
+    .wallet-topup-container {
+        padding: 18px;
+    }
+
+    /* HEADER */
+    .wallet-header h1 {
+        font-size: 28px;
+        line-height: 1.2;
+    }
+
+    .wallet-header p {
+        font-size: 13px;
+    }
+
+    /* BALANCE CARD */
+    .balance-card {
+        padding: 14px 16px;
+        gap: 12px;
+    }
+
+    .balance-card h2 {
+        font-size: 26px;
+    }
+
+    .balance-card h2 span {
+        font-size: 16px;
+    }
+
+    .balance-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+    }
+
+    /* SECTION TITLE */
+    .section-card {
+        padding: 18px;
+    }
+
+    .section-card h3 {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    /* AMOUNT CARDS */
+    .amount-card {
+        padding: 18px;
+    }
+
+    .amount {
+        font-size: 26px;
+    }
+
+    .coin-icon {
+        font-size: 28px;
+    }
+
+    .label {
+        font-size: 12px;
+    }
+
+    /* CUSTOM INPUT */
+    .custom-card {
+        padding: 16px;
+    }
+
+    .custom-card label {
+        font-size: 14px;
+    }
+
+    .custom-input input {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    /* SUMMARY */
+    .summary-row span {
+        font-size: 13px;
+    }
+
+    .summary-row strong {
+        font-size: 18px;
+    }
+
+    /* PAYMENT */
+    .payment-option {
+        padding: 12px;
+    }
+
+    .payment-option strong {
+        font-size: 14px;
+    }
+
+    .payment-option small {
+        font-size: 12px;
+    }
+
+    /* BUTTON */
+    .topup-btn {
+        font-size: 15px;
+        padding: 12px;
     }
 }

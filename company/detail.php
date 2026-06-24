@@ -257,12 +257,11 @@ $templatecontext = [
     'completionlabels' => json_encode($completionlabels),
     'completiondata' => json_encode($completiondata),
 
-    /* 'editurl' => (
+    /* 'suspendurl' => (
         new moodle_url(
-            '/user/edit.php',
+            '/local/company/suspend.php',
             [
-                'id' => $id,
-                returnto=profile
+                'id' => $id
             ]
         )
     )->out(false), */

@@ -25,7 +25,7 @@ if ($data = $mform->get_data()) {
     require_once($CFG->dirroot . '/local/user_management/classes/service/bulk_uploader.php');
 
     $uploader = new \local_user_management\service\bulk_uploader();
-    $result = $uploader->process_csv($mform->get_file_content('userfile'), $data->courseid);
+    $result = $uploader->process_csv($mform->get_file_content('userfile'), $data->companyid);
 
     redirect(
         new moodle_url('/local/user_management/index.php'),
