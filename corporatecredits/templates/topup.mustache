@@ -5,7 +5,19 @@
         name="coins"
         id="selected-coins"
         value="10000">
-        
+
+    <input
+        type="hidden"
+        name="companyid"
+        id="companyid"
+        value="{{companyid}}">
+
+    <input
+        type="hidden"
+        name="amount"
+        id="amount"
+        value="100000"> 
+
     <input
         type="hidden"
         name="sesskey"
@@ -348,7 +360,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const RATE = {{coinprice}};
     const CURRENCY = '{{currency}}';
-    
+    const amountInput =
+        document.getElementById('amount');
     const cards =
         document.querySelectorAll('.amount-card');
 
@@ -425,13 +438,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         coins = parseInt(coins) || 0;
 
+        const amount = coins * RATE;
+
         selectedCoinsInput.value = coins;
+        amountInput.value = amount;
 
         summaryCoins.textContent =
             format(coins) + ' 🪙';
 
         summaryPayment.textContent =
-            format(coins * RATE);
+            format(amount);
     }
 
     cards.forEach(card => {

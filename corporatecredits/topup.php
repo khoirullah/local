@@ -154,9 +154,8 @@ $coinprice = get_config(
 $coinprice = is_numeric($coinprice)
     ? (float)$coinprice
     : 1000;
-
+$templatecontext['companyid'] = $companyid;
 $templatecontext['coinprice'] = $coinprice;
-
 $templatecontext['cancelurl'] = (
         new moodle_url(
             '/local/company/detail.php',
@@ -187,7 +186,7 @@ $templatecontext['currency'] =
 $templatecontext['coinpriceformatted'] =
     number_format($coinprice, 0);
 
-$templatecontext['is_admin'] =
+$templatecontext['is_admin'] = 
     is_siteadmin($USER->id);
 
 echo $OUTPUT->render_from_template(

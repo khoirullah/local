@@ -45,7 +45,7 @@ $string['lowbalance_desc'] = 'Balance level that triggers low balance warnings.'
 
 $string['welcomecoins'] = 'Welcome coins';
 $string['welcomecoins_desc'] = 'Initial coins granted when a company wallet is created.';
-
+$string['secretkey'] = 'Xendit secret key not configured';
 $string['coins'] = 'Coins';
 $string['currentbalance'] = 'Current Balance';
 $string['chooseamount'] = 'Choose Amount';
