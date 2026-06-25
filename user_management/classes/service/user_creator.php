@@ -45,8 +45,6 @@ class user_creator {
         }
         $user->mnethostid = $CFG->mnet_localhost_id;
 
-        /* var_dump($company);
-        die; */
         $userid = user_create_user($user, false);
 
         if (!is_siteadmin($userid)) {

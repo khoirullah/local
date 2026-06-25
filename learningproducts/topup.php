@@ -14,7 +14,7 @@ $PAGE->set_title(get_string('companyvalidation','local_learningproducts'));
 $PAGE->navbar->add(
     get_string('pluginname', 'local_learningproducts'),
     new moodle_url('/local/learningproducts/')
-);
+); 
 $PAGE->navbar->add(
     get_string('companyvalidation','local_learningproducts')
 );

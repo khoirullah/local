@@ -5,7 +5,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class bulk_uploader {
 
-    public function process_csv(string $content, int $companyid): string {
+    public function process_csv(string $content, int $companyid): array {
         global $DB, $CFG;
 
         require_once($CFG->dirroot . '/user/lib.php');
@@ -20,7 +20,11 @@ class bulk_uploader {
 
         $company = \local_company\company_manager::get($companyid);
         
+        $errors = [];
+        $lineno = 1;
+
         foreach ($lines as $line) {
+            $lineno++;
             if (empty(trim($line))) {
                 continue;
             }
@@ -31,37 +35,35 @@ class bulk_uploader {
                 continue;
             }
 
+            // Validasi email sudah ada.
+            if ($DB->record_exists('user', ['email' => trim($row['email'])])) {
+                $errors[] = $row['email'] . ' sudah pernah dibuat';
+                continue;
+            }
+
             $fullname = $row['fullname'];
 
             $parts = explode(' ', trim($fullname), 2);
             $row['firstname'] = $parts[0];
             $row['lastname']  = $parts[1] ?? '';
-            $row['cohort'] = $company->cohortid;
-            $row['username'] = $row['email'];
-            // Check user exists.
-            $user = $DB->get_record('user', ['username' => $row['email']]);
+            $row['cohort']    = $company->cohortid;
+            $row['username']  = $row['email'];
 
-            if (!$user) {
-                $user = new \stdClass();
-                $user->auth         = 'manual';
-                $user->confirmed    = 1;
-                $user->username     = $row['username'];
-                $user->password     = hash_internal_user_password($row['password']);
-                $user->firstname    = $row['firstname'];
-                $user->lastname     = $row['lastname'];
-                $user->email        = $row['email'];
-                $user->department   = $row['department'];
-                $user->institution  = $company->name;
-                $user->forcepasswordchange = 1;
-                $user->mnethostid = 1;
+            $user = new \stdClass();
+            $user->auth         = 'manual';
+            $user->confirmed    = 1;
+            $user->username     = $row['username'];
+            $user->password     = hash_internal_user_password($row['password']);
+            $user->firstname    = $row['firstname'];
+            $user->lastname     = $row['lastname'];
+            $user->email        = $row['email'];
+            $user->department   = $row['department'];
+            $user->institution  = $company->name;
+            $user->forcepasswordchange = 1;
+            $user->mnethostid   = $CFG->mnet_localhost_id;
 
-                $user->mnethostid = $CFG->mnet_localhost_id;
-
-                $userid = user_create_user($user, false);
-                $created++;
-            } else {
-                $userid = $user->id;
-            }
+            $userid = user_create_user($user, false);
+            $created++;
 
             if (!is_siteadmin($userid)) {
                 \local_company\member_manager::add_member(
@@ -70,8 +72,19 @@ class bulk_uploader {
                     $row['role']
                 );
             }
+             
         }
 
-        return "{$created} users created, {$enrolled} users enrolled.";
+        if (!empty($errors)) {
+            return [
+                'success' => false,
+                'message' => implode('<br>', $errors)
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => "{$created} users created, {$enrolled} users enrolled."
+        ];
     }
 }

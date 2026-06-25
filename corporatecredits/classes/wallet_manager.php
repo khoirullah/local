@@ -18,7 +18,7 @@ class wallet_manager {
         ];
 
         return $DB->insert_record('local_corpcredits_wallet', $record);
-    }
+    } 
 
     public static function get_wallet(int $companyid) {
         global $DB;
@@ -169,7 +169,7 @@ class wallet_manager {
             SELECT COALESCE(
                 SUM(amount),
                 0
-            )
+            ) AS 'creditin'
             FROM {local_corpcredits_txn}
             WHERE companyid = ?
             AND type = 'credit'
@@ -182,7 +182,7 @@ class wallet_manager {
             SELECT COALESCE(
                 SUM(amount),
                 0
-            )
+            ) AS 'creditout'
             FROM {local_corpcredits_txn}
             WHERE companyid = ?
             AND type = 'debit'
@@ -191,9 +191,9 @@ class wallet_manager {
         );
 
         return [
-            'balance' => $balance,
-            'creditin' => $creditin,
-            'creditout' => $creditout
+            'balance'   => number_format((float)$balance, 0, ',', '.'),
+            'creditin'  => number_format((float)$creditin, 0, ',', '.'),
+            'creditout' => number_format((float)$creditout, 0, ',', '.'),
         ];
     }
     
@@ -224,5 +224,26 @@ class wallet_manager {
         );
 
         return $record;
+    }
+
+    public static function delete_wallet(int $companyid): bool {
+        global $DB;
+
+        $wallet = $DB->get_record(
+            'local_corpcredits_wallet',
+            ['companyid' => $companyid]
+        );
+
+        if (!$wallet) {
+            return true;
+        }
+
+        $wallet->status = 'deleted';
+        $wallet->timemodified = time();
+
+        return $DB->update_record(
+            'local_corpcredits_wallet',
+            $wallet
+        );
     }
 }

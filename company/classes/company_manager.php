@@ -30,6 +30,7 @@ class company_manager {
 
         $companyid = $DB->insert_record('local_company', $record);
 
+        $wallet = \local_corporatecredits\wallet_manager::create_wallet($companyid);
         // ==========================
         // CREATE COHORT
         // ==========================
@@ -187,6 +188,11 @@ class company_manager {
         );
 
         // ==========================
+        // REMOVE COMPANY WALLET
+        // ==========================
+        \local_corporatecredits\wallet_manager::delete_wallet($company->id);
+
+        // ==========================
         // REMOVE COMPANY USERS
         // ==========================
         $companyusers = $DB->get_records(
@@ -248,6 +254,44 @@ class company_manager {
             ['companyid' => $id]
         );
 
+        // Suspend user jika tidak tergabung di company lain.
+        $othermemberships = $DB->count_records_select(
+            'local_company_user',
+            'userid = ? AND companyid <> ?',
+            [
+                $companyuser->userid,
+                $id
+            ]
+        );
+
+        if ($othermemberships == 0) {
+
+            $user = $DB->get_record(
+                'user',
+                ['id' => $companyuser->userid],
+                '*',
+                IGNORE_MISSING
+            );
+
+            if ($user && !is_siteadmin($user)) {
+
+                $originalemail = $user->email;
+
+                $user->suspended = 1;
+
+                $user->email =
+                    'deleted_' .
+                    $user->id . '_' .
+                    time() . '_' .
+                    random_int(1000, 9999) .
+                    '@deleted.local';
+
+                $user->timemodified = time();
+
+                $DB->update_record('user', $user);
+            }
+        }
+        
         // ==========================
         // DELETE COHORT
         // ==========================
@@ -416,20 +460,6 @@ class company_manager {
         return $DB->get_record(
             'local_company',
             ['id' => $companyuser->companyid]
-        );
-    }
-
-    public static function get_company_users(
-        int $companyid
-    ): array {
-
-        global $DB;
-
-        return $DB->get_records(
-            'local_company_member',
-            [
-                'companyid' => $companyid
-            ]
         );
     }
 

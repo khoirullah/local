@@ -18,6 +18,14 @@ $string['confirmdelete'] = 'Delete company "{$a}"?';
 
 $string['substart'] = 'Subscription Start';
 $string['subend'] = 'Subscription End';
+$string['creditin'] = 'Total Credit In';
+$string['creditout'] = 'Total Credit Out';
+$string['recenttxn'] = 'Recent Transactions';
+$string['notxn'] = 'No transactions found';
+$string['txnhistory'] = 'Transaction History';
+$string['amount'] = 'Amount';
+$string['balanceafter'] = 'Balance After';
+$string['type'] = 'Type';
 
 $string['manage'] = 'Manage companies';
 $string['apply'] = 'Apply';

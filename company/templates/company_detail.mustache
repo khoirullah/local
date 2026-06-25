@@ -1,322 +1,361 @@
 <div class="company-header mb-4">
-    <div class="company-header position-relative">
-        <h1 class="company-title mb-3">
-            {{companyname}}
-        </h1>
-        <div class="wallet-summary card shadow">
+
+    <div class="company-header-top">
+
+        <div class="company-header-info">
+            <h1 class="company-title">
+                {{companyname}}
+            </h1>
+        </div>
+
+        <div class="wallet-summary card shadow-sm">
+
             <div class="card-body">
 
+                <div class="wallet-label">
+                    {{#str}}balance, local_company{{/str}}
+                </div>
+
+                {{#is_siteadmin}}
+
+                <form method="post" class="wallet-topup-form">
+
+                    <input type="hidden" name="action" value="topup">
+                    <input type="hidden" name="companyid" value="{{companyid}}">
+                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+
+                    <div class="wallet-topup-inline">
+
+                        <div class="wallet-input-group">
+
+                            <span class="wallet-coin">
+                                🪙
+                            </span>
+
+                            <input
+                                type="number"
+                                name="amount"
+                                value="{{wallet.balance}}"
+                                class="wallet-balance-input"
+                                readonly>
+
+                            <button
+                                type="button"
+                                class="wallet-edit-btn"
+                                title="Edit">
+                                ✏️
+                            </button>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="wallet-send-btn btn btn-success"
+                            disabled>
+
+                            <img
+                                src="{{topupicon}}"
+                                alt="Top Up"
+                                width="22"
+                                height="22">
+
+                        </button>
+
+                    </div>
+
+                    <small class="text-muted d-block mt-2">
+                        Click edit to manually add credits to this wallet.
+                    </small>
+
+                </form>
+
+                {{/is_siteadmin}}
+
+                {{^is_siteadmin}}
                 <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-                        <div class="wallet-label text-muted">
-                            {{#str}}balance, local_company{{/str}}
-                        </div>
-
-                        <div class="wallet-balance">
-                            {{wallet.balance}} 🪙
-                        </div>
+                    <div class="wallet-balance">
+                        {{wallet.balance}} 🪙
                     </div>
 
                     <a href="{{topupurl}}" class="btn btn-success">
                         <img
                             src="{{topupicon}}"
                             alt="Top Up"
-                            width="30"
-                            height="30"
-                            class="mr-1" 
-                        >
+                            width="22"
+                            height="22"
+                            class="mr-1">
                     </a>
-
                 </div>
+                {{/is_siteadmin}}
 
             </div>
+
         </div>
+
     </div>
 
     <ul class="nav company-nav mt-3">
+
         <li class="nav-item">
-            <a class="nav-link {{#overviewactive}}active{{/overviewactive}}" href="{{overviewurl}}">
+            <a
+                class="nav-link {{#overviewactive}}active{{/overviewactive}}"
+                href="{{overviewurl}}">
                 <i class="fa fa-home mr-1"></i>
-                {{#str}} navoverview, local_company {{/str}}
+                {{#str}}navoverview, local_company{{/str}}
             </a>
         </li>
+
         <li class="nav-item">
-            <a class="nav-link {{#entitlementsactive}}active{{/entitlementsactive}}" href="{{entitlementsurl}}">
+            <a
+                class="nav-link {{#entitlementsactive}}active{{/entitlementsactive}}"
+                href="{{entitlementsurl}}">
                 <i class="fa fa-tag mr-1"></i>
-                {{#str}} naventitlements, local_company {{/str}}
+                {{#str}}naventitlements, local_company{{/str}}
             </a>
         </li>
+
         <li class="nav-item">
-            <a class="nav-link {{#membersactive}}active{{/membersactive}}" href="{{membersurl}}">
+            <a
+                class="nav-link {{#membersactive}}active{{/membersactive}}"
+                href="{{membersurl}}">
                 <i class="fa fa-users mr-1"></i>
-                {{#str}} navmembers, local_company {{/str}}
+                {{#str}}navmembers, local_company{{/str}}
             </a>
         </li>
+
         <li class="nav-item">
-            <a class="nav-link {{#assignmentsactive}}active{{/assignmentsactive}}" href="{{assignmentsurl}}">
+            <a
+                class="nav-link {{#assignmentsactive}}active{{/assignmentsactive}}"
+                href="{{assignmentsurl}}">
                 <i class="fa fa-clipboard mr-1"></i>
-                {{#str}} navassignments, local_company {{/str}}
+                {{#str}}navassignments, local_company{{/str}}
             </a>
         </li>
+
         <li class="nav-item">
-            <a class="nav-link {{#walletactive}}active{{/walletactive}}" href="{{walleturl}}">
+            <a
+                class="nav-link {{#walletactive}}active{{/walletactive}}"
+                href="{{walleturl}}">
                 <i class="fa fa-credit-card mr-1"></i>
-                {{#str}} navwallet, local_company {{/str}}
+                {{#str}}navwallet, local_company{{/str}}
             </a>
         </li>
+
     </ul>
 
 </div>
 
-{{{tabcontent}}}
+<div class="company-content">
+    {{{tabcontent}}}
+</div>
 
 <style>
-   .company-title{
-        font-size: 2.2rem;
-        font-weight: 700;
+.stats-cards {
+    gap: 10px;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 180px;
+}
+
+.stat-card .card {
+    border-radius: 8px;
+}
+
+.stat-card small {
+    font-size: 12px;
+    opacity: .9;
+}
+.stat-card h5{
+    font-size: 22px;
+    letter-spacing: .5px;
+}
+#completions{
+    height:300px;
+}
+.subscription-card {
+    border-radius: 14px;
+    transition: all .25s ease;
+}
+.subscription-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+.company-nav {
+    gap: 8px;
+    border-bottom: 1px solid var(--primary);
+}
+
+.company-nav .nav-link {
+    color: #6b7280;
+    font-weight: 500;
+    border-radius: 10px 10px 0 0;
+    padding: 10px 16px;
+    transition: all .2s ease;
+    border: 1px solid transparent;
+}
+
+.company-nav .nav-link:hover {
+    background: #f8f9fa;
+    color: #212529;
+}
+
+.company-nav .nav-link.active {
+    background: var(--primary);
+    color: #fff !important;
+    border-color: var(--primary);
+}
+
+.company-nav .nav-link.active i {
+    color: #fff;
+}
+.company-header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:1.5rem;
+    margin-bottom:1.5rem;
+}
+
+.company-title{
+    font-size:2.25rem;
+    font-weight:700;
+    margin:0;
+}
+
+.wallet-summary{
+    min-width:320px;
+    border:0;
+    border-radius:16px;
+}
+
+.wallet-label{
+    color:#6c757d;
+    font-size:.875rem;
+    margin-bottom:.5rem;
+}
+
+.wallet-balance{
+    font-size:2rem;
+    font-weight:700;
+}
+
+.wallet-topup-inline{
+    display:flex;
+    align-items:center;
+    gap:.75rem;
+}
+
+.wallet-input-group{
+    position:relative;
+    flex:1;
+}
+
+.wallet-coin{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+.wallet-balance-input{
+    width:100%;
+    height:52px;
+    padding:0 48px;
+    border-radius:14px;
+    font-weight:600;
+}
+
+.wallet-edit-btn{
+    position:absolute;
+    top:50%;
+    right:12px;
+    transform:translateY(-50%);
+    border:0;
+    background:none;
+}
+
+.wallet-send-btn{
+    width:52px;
+    height:52px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+@media (max-width: 991px){
+
+    .company-header-top{
+        flex-direction:column;
+    }
+
+    .wallet-summary{
+        width:100%;
+        min-width:auto;
+    }
+}
+
+@media (max-width: 768px){
+
+    .wallet-topup-inline{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .wallet-send-btn{
+        width:100%;
     }
 
     .company-nav{
-        border-bottom: none;
+        display:flex;
+        flex-direction:column;
+        gap:.5rem;
     }
 
     .company-nav .nav-link{
-        border: 1px solid #dee2e6;
-        border-bottom: none;
-        border-radius: 12px 12px 0 0;
-        margin-right: 6px;
-        color: #495057;
-        background: #fff;
-        padding: .75rem 1.25rem;
-        font-weight: 500;
+        border-radius:12px;
+        margin:0;
     }
-
-    .company-nav .nav-link.active{
-        background: var(--primary);
-        color: #fff;
-        border-color: var(--primary);
-    }
-
-    .company-header{
-        position: relative;
-    }
-
-    .stats-cards {
-        gap: 10px;
-    }
-
-    .stat-card {
-        flex: 1;
-        min-width: 180px;
-    }
-
-    .stat-card .card {
-        border-radius: 8px;
-    }
-
-    .stat-card small {
-        font-size: 12px;
-        opacity: .9;
-    }
-    .stat-card h5{
-        font-size: 22px;
-        letter-spacing: .5px;
-    }
-    #completions{
-        height:300px;
-    }
-
-    /* =====================
-    DESKTOP
-    ===================== */
-    .wallet-summary{
-        position: absolute;
-        top: 0;
-        right: 0;
-
-        width: 240px;
-
-        border: 0;
-        border-radius: 16px;
-        z-index: 10;
-    }
-
-
-    /* =====================
-    TABLET
-    ===================== */
-    @media (max-width: 991.98px){
-        .company-nav{
-            display:grid;
-            grid-template-columns:repeat(2,1fr);
-            gap:.5rem;
-            border:none;
-        }
-
-        .company-nav .nav-item{
-            width:100%;
-        }
-
-        .company-nav .nav-link{
-            border-radius:12px;
-            text-align:center;
-            padding:.75rem;
-            margin:0;
-            border:1px solid #dee2e6;
-        }
-        .wallet-summary{
-            width:100%;
-            margin:1rem 0;
-            position:static;
-        }
-
-        .company-title{
-            font-size:2.2rem;
-            line-height:1.2;
-            margin-bottom:1rem;
-        }
-
-        .wallet-balance{
-            font-size:2rem;
-            font-weight:700;
-        }
-        .company-content{
-            margin-top:1rem;
-        }
-    }
-
-    /* =====================
-    MOBILE
-    ===================== */
-    @media (max-width: 767.98px){
-        .company-nav{
-            display:flex;
-            flex-direction:column;
-            gap:.5rem;
-            border:none;
-        }
-
-        .company-nav .nav-item{
-            width:100%;
-        }
-
-        .company-nav .nav-link{
-            display:flex;
-            align-items:center;
-
-            width:100%;
-            padding:.85rem 1rem;
-
-            border:1px solid #dee2e6;
-            border-radius:12px;
-
-            margin:0;
-            background:#fff;
-
-            font-weight:500;
-        }
-
-        .company-nav .nav-link.active{
-            background:var(--primary);
-            border-color:var(--primary);
-            color:#fff;
-        }
-
-        .company-nav .nav-link i{
-            width:24px;
-            text-align:center;
-            margin-right:.75rem;
-        }
-        .wallet-summary{
-            width:100%;
-            margin:1rem 0;
-            position:static;
-        }
-
-        .company-title{
-            font-size:2.2rem;
-            line-height:1.2;
-            margin-bottom:1rem;
-        }
-
-        .wallet-balance{
-            font-size:2rem;
-            font-weight:700;
-        }
-        .company-content{
-            margin-top:1rem;
-        }
-    }
+}   
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 
     const ctx = document.getElementById('enrollments');
 
-    if (!ctx) return;
-
-    const chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{{enrollmentlabels}}},
-            datasets: [{
-                label: 'Enrollments',
-                data: {{{enrollmentdata}}},
-                borderWidth: 2,
-                fill: false,
-                tension: 0.2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{{enrollmentlabels}}},
+                datasets: [{
+                    label: 'Enrollments',
+                    data: {{{enrollmentdata}}},
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.2
                 }]
             }
-        }
-    });
+        });
+    }
 
-});
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
+    const completion = document.getElementById('completions');
 
-        const ctxCompletion = document.getElementById('completions');
-
-        if (!ctxCompletion) return;
-
-        new Chart(ctxCompletion, {
+    if (completion) {
+        new Chart(completion, {
             type: 'bar',
             data: {
                 labels: {{{completionlabels}}},
                 datasets: [{
-                    //label: {{#str}} clientcompletion, local_company {{/str}},
-                    label: 'Completion %',
                     data: {{{completiondata}}},
                     borderWidth: 1
                 }]
             },
             options: {
-                indexAxis: 'y', // 🔥 horizontal bar
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        min: 0,
-                        max: 100,
-                        ticks: {
-                            callback: function(value) {
-                                return value + '%';
-                            }
-                        }
-                    }
-                },
+                indexAxis: 'y',
                 plugins: {
                     legend: {
                         display: false
@@ -324,6 +363,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         });
+    }
 
-    });
+    const editBtn = document.querySelector('.wallet-edit-btn');
+    const input = document.querySelector('.wallet-balance-input');
+    const sendBtn = document.querySelector('.wallet-send-btn');
+
+    if (editBtn && input && sendBtn) {
+
+        editBtn.addEventListener('click', function() {
+
+            const readonly = input.hasAttribute('readonly');
+
+            if (readonly) {
+
+                input.removeAttribute('readonly');
+                input.focus();
+
+                sendBtn.disabled = false;
+
+                this.innerHTML = '✓';
+
+            } else {
+
+                input.setAttribute('readonly', true);
+
+                sendBtn.disabled = true;
+
+                this.innerHTML = '✏️';
+            }
+        });
+    }
+});
 </script>

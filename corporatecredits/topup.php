@@ -31,20 +31,11 @@ $templatecontext = [
 
     'sesskey' => sesskey(),
 
-    'balance' =>
-        number_format(
-            $summary['balance']
-        ),
+    'balance' =>  $summary['balance'],
 
-    'creditin' =>
-        number_format(
-            $summary['creditin']
-        ),
+    'creditin' => $summary['creditin'],
 
-    'creditout' =>
-        number_format(
-            $summary['creditout']
-        ),
+    'creditout' => $summary['creditout'],
 
     'transactions' => []
 ];
@@ -158,7 +149,7 @@ echo $OUTPUT->header();
 $coinprice = get_config(
     'local_corporatecredits',
     'coinprice'
-);
+); 
 
 $coinprice = is_numeric($coinprice)
     ? (float)$coinprice

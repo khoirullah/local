@@ -25,6 +25,36 @@ $tab = optional_param(
 
 require_login();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
+    is_siteadmin() &&
+    optional_param('action', '', PARAM_ALPHA) === 'topup'
+) {
+    require_sesskey();
+    
+    $companyid = required_param(
+        'companyid',
+        PARAM_INT
+    );
+
+    $amount = required_param(
+        'amount',
+        PARAM_FLOAT
+    );
+
+    \local_corporatecredits\wallet_manager::add_credit(
+        $companyid,
+        $amount,
+        'admin_topup',
+        0,
+        'Manual topup by site administrator'
+    );
+
+    redirect(
+        $PAGE->url,
+        'Wallet berhasil ditopup'
+    );
+}
+
 $context = context_system::instance();
 
 require_capability('local/company:manage', $context);
@@ -125,46 +155,6 @@ for ($i = 0; $i < 5; $i++) {
     ];
 }
 
-/* if ($subscriptions) {
-
-    foreach ($subscriptions as $sub) {
-
-        $used = subscription_manager::get_used_count($id, $sub->courseid);
-
-        $percent = $sub->quota > 0
-            ? round(($used/$sub->quota)*100)
-            : 0;
-
-        $substatus = (time() > $sub->enddate)
-            ? 'Expired'
-            : 'Active';
-
-        $deleteurl = new moodle_url('/local/company/detail.php', [
-            'id' => $id,
-            'deletesub' => $sub->id,
-            'sesskey' => sesskey()
-        ]);
-
-        $subs[] = [
-            'courseid' => $sub->courseid,
-            'courseurl' => $CFG->wwwroot.'/course/view.php?id='.$sub->courseid,
-            'course' => $sub->fullname,
-            'category' => $sub->category,
-            'quota' => $sub->quota,
-            'used' => $used,
-            'total' => $total,
-            'left' => $sub->quota - $used,
-            'startdate' => userdate($sub->startdate, '%d %b %Y'),
-            'enddate' => userdate($sub->enddate, '%d %b %Y'),
-            'utilization' => $percent.'%',
-            'completion' => round($sub->completionrate) . '%',
-            'progress' => round($sub->completionrate),
-            'status' => $substatus,
-            'deleteurl' => $deleteurl->out(),
-        ];
-    }
-} */
-
 /* =============================
    TEMPLATE
 ============================= */
@@ -225,15 +215,20 @@ if ($files) {
     //echo $logo;
 }
 $company->logo = $logo; 
-
+/* $wallet = wallet_manager::get_summary($company->id);
+var_dump($wallet);
+die; */
 $templatecontext = [
-    'wallet' => wallet_manager::get_summary($id),
+    'sesskey' => sesskey(),
+    'is_siteadmin' => is_siteadmin($USER->id),
+    'wallet' => wallet_manager::get_summary($company->id),
     'topupicon' => 
         $OUTPUT->image_url(
             'topup',
             'local_company'
         )->out(false),
     'company' => $company,
+    'companyid' => $company->id,
     'companyname' => $company->name,
     'description'  => $company->description,
     'subscriptions' => $subs,
@@ -257,14 +252,6 @@ $templatecontext = [
     'completionlabels' => json_encode($completionlabels),
     'completiondata' => json_encode($completiondata),
 
-    /* 'suspendurl' => (
-        new moodle_url(
-            '/local/company/suspend.php',
-            [
-                'id' => $id
-            ]
-        )
-    )->out(false), */
     'assignurl' => (
         new moodle_url(
             '/local/company/assignment/assign.php',

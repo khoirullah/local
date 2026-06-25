@@ -29,14 +29,21 @@ if ($data = $mform->get_data()) {
         $data->companyid = (int)$company->id;
     }
     $uploader = new \local_user_management\service\bulk_uploader();
-    $result = $uploader->process_csv($mform->get_file_content('userfile'), $data->companyid);
-
-    redirect(
-        new moodle_url('/local/user_management/index.php'),
-        get_string('bulk_upload_success', 'local_user_management', $result),
-        null,
-        \core\output\notification::NOTIFY_SUCCESS
+    $result = $uploader->process_csv(
+        $mform->get_file_content('userfile'),
+        $data->companyid
     );
+
+    if (!$result['success']) {
+        \core\notification::error($result['message']);
+    } else {
+        redirect(
+            new moodle_url('/local/user_management/index.php'),
+            $result['message'],
+            null,
+            \core\output\notification::NOTIFY_SUCCESS
+        );
+    }
 }
 
 echo $OUTPUT->header();
