@@ -111,7 +111,7 @@ class wallet_manager {
         int $referenceid = 0,
         string $description = ''
     ): void {
-
+ 
         global $DB;
 
         $transaction = $DB->start_delegated_transaction();
@@ -191,9 +191,14 @@ class wallet_manager {
         );
 
         return [
-            'balance'   => number_format((float)$balance, 0, ',', '.'),
-            'creditin'  => number_format((float)$creditin, 0, ',', '.'),
-            'creditout' => number_format((float)$creditout, 0, ',', '.'),
+            'balance'        => number_format($balance, 0, ',', '.'),
+            'balance_raw'    => $balance,
+
+            'creditin'       => number_format($creditin, 0, ',', '.'),
+            'creditin_raw'   => $creditin,
+
+            'creditout'      => number_format($creditout, 0, ',', '.'),
+            'creditout_raw'  => $creditout,
         ];
     }
     

@@ -1,0 +1,185 @@
+<div class="container py-4">
+
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex">
+
+                        {{#product.image}}
+                        <img src="{{product.image}}"
+                             class="rounded mr-3"
+                             width="90"
+                             height="90">
+                        {{/product.image}}
+
+                        <div class="flex-grow-1">
+
+                            <h2 class="mb-1">
+                                {{product.name}}
+                            </h2>
+
+                            <span class="badge badge-light">
+                                {{product.categoryname}}
+                            </span>
+
+                            <span class="badge badge-primary">
+                                {{product.type}}
+                            </span>
+
+                            <p class="text-muted mb-0">
+                                {{#str}}shortdesc, local_learningproducts{{/str}}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card shadow-sm border-0 my-4">
+
+                <div class="card-header bg-white">
+                    <strong>{{#str}}about, local_learningproducts{{/str}}</strong>
+                </div>
+
+                <div class="card-body">
+
+                    {{{product.description}}}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="wallet-summary border-0 card shadow-sm p-2">
+
+                <div class="card-body">
+
+                    <div class="wallet-label text-muted">
+                        {{#str}}balance, local_company{{/str}}
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="wallet-balance">
+                           <h2> {{wallet.balance}} 🪙</h2>
+                        </div>
+
+                        <a href="{{topupurl}}" class="btn btn-success p-2">
+                            <img
+                                src="{{topupicon}}"
+                                alt="Top Up"
+                                width="30"
+                                height="30">
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card shadow-sm border-0 sticky-top my-4">
+
+                <div class="card-body">
+
+                    <h5 class="mb-4">
+                        {{#str}}summary, local_learningproducts{{/str}}
+                    </h5>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">{{#str}}company, local_corporatecredits{{/str}}</span>
+                        <strong>{{company.name}}</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">{{#str}}currentbalance, local_corporatecredits{{/str}}</span>
+                        <strong>{{wallet.balance}} 🪙</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">{{#str}}price, local_learningproducts{{/str}}</span>
+                        <strong>{{product.price}} 🪙</strong>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+
+                         <span class="text-muted">{{#str}}remaining, local_learningproducts{{/str}}</span>
+
+                        <strong class="{{remainingclass}}">
+                            {{remainingbalance}} 🪙
+                        </strong>
+
+                    </div>
+
+                    {{#notenoughcredit}}
+
+                    <div class="alert alert-danger mt-4 mb-0">
+                        {{#str}}insufficient, local_learningproducts{{/str}}
+                    </div>
+
+                    {{/notenoughcredit}}
+
+                    {{^notenoughcredit}}
+
+                    <form method="post" class="mt-4" action="{{purchaseurl}}">
+
+                        <input type="hidden" name="id" value="{{product.id}}">
+                        <input type="hidden" name="purchase" value="1">
+                        <input type="hidden" name="price" value="{{product.price}}">
+                        <input type="hidden" name="sesskey" value="{{sesskey}}">
+
+                        <div class="form-group">
+
+                            <!--<label for="seat" class="font-weight-bold">
+                                {{#str}}seat, local_learningproducts{{/str}}
+                            </label>
+
+                            <input
+                                type="number"
+                                name="seat"
+                                id="seat"
+                                class="form-control"
+                                min="1"
+                                value="1"
+                                required>
+
+                            <small class="text-muted">
+                                {{#str}}numseat, local_learningproducts{{/str}}
+                            </small>
+
+                        </div>
+
+                        <hr class="my-4">-->
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-lg btn-block">
+
+                            {{#str}}purchase, local_learningproducts{{/str}}
+
+                        </button>
+
+                    </form>
+
+                    {{/notenoughcredit}}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

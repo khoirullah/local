@@ -215,9 +215,6 @@ if ($files) {
     //echo $logo;
 }
 $company->logo = $logo; 
-/* $wallet = wallet_manager::get_summary($company->id);
-var_dump($wallet);
-die; */
 $templatecontext = [
     'sesskey' => sesskey(),
     'is_siteadmin' => is_siteadmin($USER->id),
@@ -398,6 +395,7 @@ switch ($tab) {
             }
         }
 
+        $templatecontext['recenttransactions'] = array_slice($transactions, 0, 5);
         $templatecontext['transactions'] = array_values($transactions);
         $templatecontext['hastransactions'] = !empty($transactions);
         $tabcontent =

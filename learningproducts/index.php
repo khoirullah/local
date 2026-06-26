@@ -31,7 +31,7 @@ echo $OUTPUT->header();
 
 $products = \local_learningproducts\product_manager::get_products();
 
-foreach ($products as $product) {
+foreach ($products as $product) { 
 
     $imageurl =
         \local_learningproducts\product_manager
@@ -97,10 +97,9 @@ foreach ($products as $product) {
 
     $product->actionurl = (
         new moodle_url(
-            '/local/learningproducts/view.php',
+            '/local/learningproducts/order.php',
             [
-                'id' => $product->id,
-                'enrol' => 1
+                'id' => $product->id
             ]
         )
     )->out(false);

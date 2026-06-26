@@ -57,7 +57,8 @@ class invoice_manager {
     }
 
     public static function mark_paid(
-        int $invoiceid
+        int $invoiceid,
+        string $source
     ) {
 
         global $DB;
@@ -75,14 +76,17 @@ class invoice_manager {
 
         $DB->update_record(
             'local_corpcredits_invoice',
-            $invoice
+            $invoice 
         );
 
-        wallet_manager::credit(
+        wallet_manager::add_credit(
             $invoice->companyid,
             $invoice->coins,
-            'Topup invoice ' .
-            $invoice->invoicecode
+            $source.'_topup',
+            0,
+            'Topup invoice ' 
+            .$invoice->invoicecode.
+            ' via '.$source.' payment gateway.'
         );
     }
 }

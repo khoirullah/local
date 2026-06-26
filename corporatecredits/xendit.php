@@ -37,9 +37,7 @@ if ($amount <= 0) {
 // =========================
 // GET XENDIT CONFIG
 // =========================
-
 $records = $DB->get_records('payment_gateways');
-
 $paygw = [];
 
 foreach ($records as $record) {
@@ -59,7 +57,7 @@ foreach ($records as $record) {
 
 if (empty($paygw)) {
     throw new moodle_exception(
-        'Xendit configuration not found'
+        get_string('xenditnotfound', 'local_corporatecredits')
     );
 }
 
@@ -72,7 +70,7 @@ $secret = $config['secret'] ?? '';
 
 if (empty($secret)) {
     throw new moodle_exception(
-        'Xendit secret key not configured'
+        get_string('xenditsecretnotfound', 'local_corporatecredits')
     );
 }
 
@@ -96,6 +94,7 @@ $invoiceid = $DB->insert_record(
     $invoice
 );
 
+
 // =========================
 // CREATE XENDIT INVOICE
 // =========================
@@ -108,13 +107,15 @@ $externalid =
     '-' .
     time();
 
-$description =
-    'Top up Corporate Credits untuk perusahaan ' .
-    $company->name .
-    ' sebanyak ' .
-    number_format($coins, 0, ',', '.') .
-    ' credits dengan nilai pembayaran Rp ' .
-    number_format($amount, 0, ',', '.');
+$description = get_string(
+    'topupdescription',
+    'local_corporatecredits',
+    (object) [
+        'company' => $company->name,
+        'credits' => number_format($coins, 0, ',', '.'),
+        'amount'  => number_format($amount, 0, ',', '.'),
+    ]
+);
 
 $payload = [
 
