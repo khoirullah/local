@@ -318,8 +318,7 @@
                                    LENGTH="10"
                                    NOTNULL="true"/>
 
-                            <FIELD
-                                   NAME="price"
+                            <FIELD NAME="price"
                                    TYPE="number"
                                    LENGTH="12"
                                    DECIMALS="2"

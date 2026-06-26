@@ -64,6 +64,13 @@ if (!$product) {
  * Get company
  */
 $company = company_manager::get_user_company($USER->id);
+if (!$company) {
+    redirect(
+        new moodle_url(
+            '/local/learningproducts/topup.php'
+        )
+    );
+}
 $wallet = wallet_manager::get_summary($company->id);
 $imageurl =
         \local_learningproducts\product_manager

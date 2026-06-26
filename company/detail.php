@@ -381,17 +381,19 @@ switch ($tab) {
 
         $transactions = transaction_manager::get_company_transactions($id);
 
+        //var_dump($transactions);
+        //die;
         foreach ($transactions as &$t) {
 
             $t->timecreated = userdate($t->timecreated);
 
             // format amount display
-            if ($t->amount > 0) {
+            if ($t->type === 'credit') {
                 $t->amountclass = 'text-success font-weight-bold';
                 $t->amount = '+ ' . number_format($t->amount, 2);
             } else {
                 $t->amountclass = 'text-danger font-weight-bold';
-                $t->amount = number_format($t->amount, 2);
+                $t->amount = '- '.number_format($t->amount, 2);
             }
         }
 

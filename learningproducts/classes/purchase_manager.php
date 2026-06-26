@@ -24,19 +24,19 @@ class purchase_manager {
         $record->price = $price;
         $record->qty = $qty;
 
-        $record->status = 'completed';
+        $record->status = 'paid';
 
         $record->purchasedby = $userid;
 
         $record->timecreated = time();
 
-        \local_company\log_manager::add(
+        /* \local_company\log_manager::add(
             $companyid,
             $userid,
             'product_purchased',
             'Product #' . $productid .
             ' Qty ' . $qty
-        );
+        ); */
         
         return $DB->insert_record(
             'local_lp_purchase',

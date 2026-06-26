@@ -15,6 +15,7 @@ $string['mappingcourse'] = 'Mapping Course';
 $string['shortname'] = 'Short name';
 $string['type'] = 'Type'; 
 $string['noproduct'] = 'No products available.';
+$string['productnotfound'] = 'Product not found.';
 $string['price'] = 'Price';
 $string['productsperpage'] = 'Product per pages';
 $string['productsperpage_desc'] = 'displays the number of products shown per slide';
