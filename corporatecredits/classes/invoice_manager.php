@@ -9,6 +9,7 @@ class invoice_manager {
     public static function create_invoice(
         int $companyid,
         int $coins,
+        string $payment,
         float $amount
     ) {
 
@@ -25,6 +26,8 @@ class invoice_manager {
             );
 
         $record->coins = $coins;
+
+        $record->paymentmethod = $payment;
 
         $record->amount = $amount;
 
@@ -87,6 +90,27 @@ class invoice_manager {
             'Topup invoice ' 
             .$invoice->invoicecode.
             ' via '.$source.' payment gateway.'
+        );
+    }
+
+    public static function mark_failed(
+        int $invoiceid
+    ) {
+
+        global $DB;
+
+        $invoice =
+            self::get_invoice(
+                $invoiceid
+            );
+
+        $invoice->status = 'failed';
+
+        $invoice->timemodified = time();
+
+        $DB->update_record(
+            'local_corpcredits_invoice',
+            $invoice 
         );
     }
 }

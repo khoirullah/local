@@ -42,7 +42,7 @@
         <FIELDS>
             <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
             <FIELD NAME="companyid" TYPE="int" LENGTH="10" NOTNULL="true"/>
-            <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="productid" TYPE="int" LENGTH="10" NOTNULL="true"/>
             <FIELD NAME="quota" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
             <FIELD NAME="startdate" TYPE="int" LENGTH="10" NOTNULL="true"/>
             <FIELD NAME="enddate" TYPE="int" LENGTH="10" NOTNULL="true"/>
@@ -54,7 +54,7 @@
             <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         </KEYS>
         <INDEXES>
-            <INDEX NAME="company_course_idx" UNIQUE="true" FIELDS="companyid, courseid"/>
+            <INDEX NAME="company_product_idx" UNIQUE="true" FIELDS="companyid, productid"/>
         </INDEXES>
     </TABLE>
 

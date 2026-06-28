@@ -71,7 +71,7 @@ class subscription_manager {
     }
 
     public static function create(array $data) {
-        global $DB;
+        global $DB; 
 
         $record = new \stdClass();
         $record->companyid   = $data['companyid'];

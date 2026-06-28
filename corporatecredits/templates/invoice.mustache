@@ -1,62 +1,163 @@
 <div class="invoice-wrapper">
 
-    <div class="invoice-card">
+    <div class="invoice-card shadow">
 
-        <h2>Invoice Generated</h2>
+        <div class="invoice-header">
 
-        <div class="invoice-row">
-            <span>Invoice</span>
-            <strong>{{invoicecode}}</strong>
+            <div class="invoice-icon">
+                <i class="fa fa-file-invoice-dollar"></i>
+            </div>
+
+            <h2>
+                Invoice Created
+            </h2>
+
+            <p>
+                Complete your payment to receive your coins automatically.
+            </p>
+
         </div>
 
-        <div class="invoice-row">
-            <span>Coins</span>
-            <strong>{{coins}}</strong>
-        </div>
+        <div class="status-box">
 
-        <div class="invoice-row">
-            <span>Amount</span>
-            <strong>Rp {{amount}}</strong>
-        </div>
+            <span class="status-label">
+                Payment Status
+            </span>
 
-        <div class="invoice-row">
-            <span>Status</span>
-            <span class="badge badge-warning">
+            <span class="badge badge-warning px-3 py-2">
                 {{status}}
             </span>
+
         </div>
 
-        <hr>
+        <div class="alert alert-warning mt-3">
 
-        <h4>
-            Payment Instructions
-        </h4>
+            Checking payment status...
 
-        <p>
-            Transfer to:
-        </p>
+            <strong id="countdown">{{invoiceexpiry}}</strong>s
 
-        <div class="va-box">
-            BCA Virtual Account
-            <br>
-            <strong>
-                88081234567890
-            </strong>
         </div>
 
-        <p>
-            Coins will be credited
-            automatically after payment.
-        </p>
+        <div class="invoice-details">
 
-        <a
-            href="{{producturl}}"
-            class="btn btn-primary">
+            <div class="invoice-row">
+                <span>Invoice Number</span>
+                <strong>{{invoicecode}}</strong>
+            </div>
 
-            Browse Products
+            <div class="invoice-row">
+                <span>Coins</span>
+                <strong>🪙 {{coins}}</strong>
+            </div>
 
-        </a>
+            <div class="invoice-row total">
+                <span>Total Payment</span>
+                <strong class="amount">
+                    Rp {{amount}}
+                </strong>
+            </div>
+
+        </div>
+
+        <div class="instruction-card">
+
+            <h4>
+                <i class="fa fa-university mr-2"></i>
+                Payment Instructions
+            </h4>
+
+            <p class="mb-2">
+                Please transfer the exact amount to:
+            </p>
+
+            <div class="va-box">
+
+                <small>BCA Virtual Account</small>
+
+                <div class="va-number">
+                    88081234567890
+                </div>
+
+            </div>
+
+            <div class="alert alert-info mt-3 mb-0">
+
+                <i class="fa fa-info-circle"></i>
+
+                Your balance will be updated automatically once the payment has been confirmed.
+
+            </div>
+
+        </div>
+
+        <div class="invoice-actions">
+
+            <a
+                href="{{producturl}}"
+                class="btn btn-primary btn-lg btn-block">
+
+                <i class="fa fa-shopping-cart mr-2"></i>
+
+                Browse Products
+
+            </a>
+
+        </div>
 
     </div>
 
 </div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const invoiceid = {{invoiceid}};
+    let remaining = {{invoiceexpiry}};
+
+    const countdown =
+        document.getElementById('countdown');
+
+    const timer = setInterval(function() {
+
+        remaining--;
+
+        countdown.textContent = remaining;
+
+        fetch(
+            M.cfg.wwwroot +
+            '/local/corporatecredits/check_invoice.php?id=' +
+            invoiceid
+        )
+        .then(response => response.json())
+        .then(data => {
+
+            if (data.status === 'paid') {
+
+                clearInterval(timer);
+
+                window.location =
+                    M.cfg.wwwroot +
+                    '/local/corporatecredits/payment_success.php?id=' +
+                    invoiceid;
+
+            }
+
+        });
+
+        if (remaining <= 0) {
+
+            clearInterval(timer);
+
+            window.location =
+                M.cfg.wwwroot +
+                '/local/corporatecredits/payment_failed.php?id=' +
+                invoiceid;
+
+        }
+
+    }, 1000);
+
+});
+
+</script>

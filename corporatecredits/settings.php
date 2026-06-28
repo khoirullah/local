@@ -63,13 +63,13 @@ if ($hassiteconfig) {
         )
     );
 
-    // Invoice expiry (hours).
+    // Invoice expiry (second).
     $settings->add(
         new admin_setting_configtext(
             'local_corporatecredits/invoiceexpiry',
             get_string('invoiceexpiry', 'local_corporatecredits'),
             get_string('invoiceexpiry_desc', 'local_corporatecredits'),
-            '24',
+            '86400',
             PARAM_INT
         )
     );

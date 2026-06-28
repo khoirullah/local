@@ -134,49 +134,6 @@ class company_manager {
         return $id;
     }
 
-    /* public static function delete(int $id) {
-        global $DB;
-
-        $company = $DB->get_record('local_company', ['id' => $id], '*', MUST_EXIST);
-
-        // ==========================
-        // REMOVE COMPANY USERS
-        // ==========================
-        $companyusers = $DB->get_records(
-            'local_company_user',
-            ['companyid' => $id]
-        );
-        $role = $DB->get_record(
-            'role',
-            ['shortname' => 'pic'],
-            '*',
-            IGNORE_MISSING
-        );
-
-        $systemcontext = context_system::instance();
-        // ==========================
-        // DELETE COHORT (SAFE)
-        // ==========================
-        if (!empty($company->cohortid)) {
-
-            $cohort = $DB->get_record('cohort', [
-                'id' => $company->cohortid,
-                'component' => 'local_company'
-            ]);
-
-            if ($cohort) {
-                cohort_delete_cohort($cohort);
-            }
-        }
-
-        // ==========================
-        // SOFT DELETE COMPANY
-        // ==========================
-        $company->status = 0;
-        $company->timemodified = time();
-
-        return $DB->update_record('local_company', $company);
-    } */
     public static function delete(int $id) {
         global $DB;
 
@@ -497,7 +454,7 @@ class company_manager {
             $data->data = $companyname;
             $DB->update_record('user_info_data', $data);
         } else {
-            $data = new stdClass();
+            $data = new \stdClass();
             $data->userid = $userid;
             $data->fieldid = $field->id;
             $data->data = $companyname;

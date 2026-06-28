@@ -4,6 +4,7 @@ require('../../config.php');
 
 use local_corporatecredits\wallet_manager;
 use local_corporatecredits\transaction_manager;
+use local_corporatecredits\invoice_manager;
 
 require_login();
 
@@ -87,11 +88,11 @@ $PAGE->set_title(
     )
 );
 
-use local_corporatecredits\invoice_manager;
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     require_sesskey();
+
+    $paymentmethod = $_REQUEST['paymentmethod'];
 
     $coins = required_param(
         'coins',
@@ -125,14 +126,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
     }
 
+    echo 'coins: '.$coins.
+        '<br> Minimum: '.$minimumtopup.
+        '<br> Maximum: '.$maximumtopup;
+
     $amount = $coins * $coinprice;
 
     $invoiceid =
         invoice_manager::create_invoice(
             $companyid,
             $coins,
-            $amount
+            $paymentmethod,
+            $amount,
         );
+
 
     redirect(
         new moodle_url(

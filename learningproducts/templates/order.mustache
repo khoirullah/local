@@ -141,7 +141,7 @@
 
                         <div class="form-group">
 
-                            <!--<label for="seat" class="font-weight-bold">
+                            <label for="seat" class="font-weight-bold">
                                 {{#str}}seat, local_learningproducts{{/str}}
                             </label>
 
@@ -160,7 +160,28 @@
 
                         </div>
 
-                        <hr class="my-4">-->
+                        <div class="form-group">
+
+                            <label for="subscribe" class="font-weight-bold">
+                                {{#str}}subscribe, local_learningproducts{{/str}}
+                            </label>
+
+                            <input
+                                type="number"
+                                name="subscribe"
+                                id="seat"
+                                class="form-control"
+                                min="1"
+                                value="1"
+                                required>
+
+                            <small class="text-muted">
+                                {{#str}}subscriber, local_learningproducts{{/str}}
+                            </small>
+
+                        </div>
+
+                        <hr class="my-4">
 
                         <button
                             type="submit"

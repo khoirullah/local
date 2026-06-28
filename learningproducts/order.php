@@ -65,7 +65,7 @@ if (!$product) {
  */
 $company = company_manager::get_user_company($USER->id);
 if (!$company) {
-    redirect(
+    redirect( 
         new moodle_url(
             '/local/learningproducts/topup.php'
         )

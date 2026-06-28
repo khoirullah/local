@@ -29,34 +29,32 @@ $PAGE->set_url(
     ]
 );
 
+$invoiceexpiry = get_config(
+        'local_corporatecredits',
+        'invoiceexpiry'
+    );
+
 echo $OUTPUT->header();
 
 echo $OUTPUT->render_from_template(
     'local_corporatecredits/invoice',
     [
 
-        'invoicecode' =>
-            $invoice->invoicecode,
+        'invoiceid'   => $invoice->id,
 
-        'coins' =>
-            number_format(
-                $invoice->coins
-            ),
+        'invoicecode' => $invoice->invoicecode,
 
-        'amount' =>
-            number_format(
-                $invoice->amount
-            ),
+        'coins'       => number_format($invoice->coins),
 
-        'status' =>
-            ucfirst(
-                $invoice->status
-            ),
+        'amount'      => number_format($invoice->amount),
 
-        'producturl' =>
-            (new moodle_url(
-                '/local/learningproducts/index.php'
-            ))->out(false)
+        'status'      => ucfirst($invoice->status),
+
+        'invoiceexpiry' => $invoiceexpiry,
+
+        'producturl'  => (new moodle_url(
+            '/local/learningproducts/index.php'
+        ))->out(false)
 
     ]
 );
