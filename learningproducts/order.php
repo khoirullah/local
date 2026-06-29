@@ -107,7 +107,7 @@ if ($imageurl) {
 
     </svg>';
 
-    $item->imageurl =
+    $item->imageurl = 
         'data:image/svg+xml;base64,' .
         base64_encode($svg);
 }
@@ -117,7 +117,7 @@ $templatecontext = [
         new moodle_url(
             '/local/learningproducts/purchase.php',
             [
-                'companyid' => $id
+                'companyid' => $company->id
             ]
         )
     )->out(false),
@@ -125,7 +125,7 @@ $templatecontext = [
         new moodle_url(
             '/local/corporatecredits/topup.php',
             [
-                'companyid' => $id
+                'companyid' => $company->id
             ]
         )
     )->out(false),
@@ -146,11 +146,13 @@ $templatecontext = [
         'name' => $product->name,
         'description' => format_text($product->description),
         'price' => number_format($product->price),
+        'priceraw' => $product->price,
         'categoryname' => $product->categoryname,
         'type' => ucfirst($product->type),
         'image' => $imageurl
 
     ],
+    'walletbalance' => $wallet['balance_raw'],
 
     'remainingbalance' => $wallet['balance_raw'] - $product->price,
 

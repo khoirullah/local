@@ -49,6 +49,13 @@
                                    NOTNULL="true"
                                    DEFAULT="0"/>
 
+                            <FIELD NAME="priceperuser"
+                                   TYPE="number"
+                                   LENGTH="10"
+                                   DECIMALS="2"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
                             <FIELD NAME="image"
                                    TYPE="char"
                                    LENGTH="255"
@@ -332,6 +339,31 @@
                                    NOTNULL="true"
                                    DEFAULT="1"/>
 
+                            <FIELD NAME="pricingid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="false"/>
+
+                            <FIELD NAME="durationmonths"
+                                   TYPE="int"
+                                   LENGTH="3"
+                                   NOTNULL="true"
+                                   DEFAULT="1"/>
+
+                            <FIELD NAME="unitprice"
+                                   TYPE="number"
+                                   LENGTH="12"
+                                   DECIMALS="2"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                            <FIELD NAME="discountpercent"
+                                   TYPE="number"
+                                   LENGTH="5"
+                                   DECIMALS="2"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+                                   
                             <FIELD NAME="status"
                                    TYPE="char"
                                    LENGTH="20"
@@ -369,6 +401,223 @@
                                    FIELDS="productid"/>
 
                      </INDEXES>
+
+              </TABLE>
+
+              <TABLE NAME="local_lp_product_pricing"
+                     COMMENT="Learning product pricing plans">
+
+                     <FIELDS>
+
+                            <FIELD NAME="id"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   SEQUENCE="true"/>
+
+                            <FIELD NAME="productid"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="name"
+                                   TYPE="char"
+                                   LENGTH="100"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="durationmonths"
+                                   TYPE="int"
+                                   LENGTH="3"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="price"
+                                   TYPE="number"
+                                   LENGTH="12"
+                                   DECIMALS="2"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                            <FIELD NAME="discountpercent"
+                                   TYPE="number"
+                                   LENGTH="5"
+                                   DECIMALS="2"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                            <FIELD NAME="visible"
+                                   TYPE="int"
+                                   LENGTH="1"
+                                   NOTNULL="true"
+                                   DEFAULT="1"/>
+
+                            <FIELD NAME="sortorder"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"
+                                   DEFAULT="0"/>
+
+                            <FIELD NAME="timecreated"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                            <FIELD NAME="timemodified"
+                                   TYPE="int"
+                                   LENGTH="10"
+                                   NOTNULL="true"/>
+
+                     </FIELDS>
+
+                     <KEYS>
+
+                            <KEY NAME="primary"
+                            TYPE="primary"
+                            FIELDS="id"/>
+
+                            <KEY NAME="product_fk"
+                            TYPE="foreign"
+                            FIELDS="productid"
+                            REFTABLE="local_lp_products"
+                            REFFIELDS="id"/>
+
+                     </KEYS>
+
+                     <INDEXES>
+
+                            <INDEX NAME="product_duration_uix"
+                                   UNIQUE="true"
+                                   FIELDS="productid,durationmonths"/>
+
+                            <INDEX NAME="product_visible_idx"
+                                   UNIQUE="false"
+                                   FIELDS="productid,visible"/>
+
+                     </INDEXES>
+
+              </TABLE>
+
+              <TABLE NAME="local_company_provision"
+                     COMMENT="Course provisioning requests">
+
+              <FIELDS>
+
+                     <FIELD NAME="id"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            SEQUENCE="true"/>
+
+                     <FIELD NAME="purchaseid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"/>
+
+                     <FIELD NAME="companyid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"/>
+
+                     <FIELD NAME="productid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"/>
+
+                     <FIELD NAME="templatecourseid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"/>
+
+                     <FIELD NAME="courseid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="false"
+                            DEFAULT="0"/>
+
+                     <FIELD NAME="quota"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"
+                            DEFAULT="1"/>
+
+                     <FIELD NAME="startdate"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"/>
+
+                     <FIELD NAME="enddate"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"/>
+
+                     <FIELD NAME="status"
+                            TYPE="char"
+                            LENGTH="20"
+                            NOTNULL="true"
+                            DEFAULT="pending"/>
+
+                     <FIELD NAME="subscriptionid"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="false"
+                            DEFAULT="0"/>
+                            
+                     <FIELD NAME="requestedby"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"/>
+
+                     <FIELD NAME="processedby"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="false"/>
+
+                     <FIELD NAME="notes"
+                            TYPE="text"
+                            NOTNULL="false"/>
+
+                     <FIELD NAME="timecreated"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"/>
+
+                     <FIELD NAME="timemodified"
+                            TYPE="int"
+                            LENGTH="10"
+                            NOTNULL="true"/>
+
+              </FIELDS>
+
+              <KEYS>
+
+                     <KEY NAME="primary"
+                     TYPE="primary"
+                     FIELDS="id"/>
+
+              </KEYS>
+
+              <INDEXES>
+
+                     <INDEX NAME="purchaseid"
+                            UNIQUE="false"
+                            FIELDS="purchaseid"/>
+
+                     <INDEX NAME="companyid"
+                            UNIQUE="false"
+                            FIELDS="companyid"/>
+
+                     <INDEX NAME="productid"
+                            UNIQUE="false"
+                            FIELDS="productid"/>
+
+                     <INDEX NAME="status"
+                            UNIQUE="false"
+                            FIELDS="status"/>
+
+                     <INDEX NAME="templatecourseid"
+                            UNIQUE="false"
+                            FIELDS="templatecourseid"/>
+
+              </INDEXES>
 
               </TABLE>
        </TABLES>

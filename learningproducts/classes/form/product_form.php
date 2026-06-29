@@ -93,6 +93,14 @@ class product_form extends \moodleform {
 
         $mform->setType('price', PARAM_FLOAT);
 
+        /* $mform->addElement(
+            'text',
+            'priceperuser',
+            get_string('priceperuser', 'local_learningproducts')
+        );
+
+        $mform->setType('priceperuser', PARAM_FLOAT); */
+
         $mform->addElement(
             'advcheckbox',
             'visible',

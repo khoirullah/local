@@ -46,6 +46,7 @@
             <FIELD NAME="quota" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
             <FIELD NAME="startdate" TYPE="int" LENGTH="10" NOTNULL="true"/>
             <FIELD NAME="enddate" TYPE="int" LENGTH="10" NOTNULL="true"/>
+            <FIELD NAME="durationmonths" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1"/>
             <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
             <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
             <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true"/>

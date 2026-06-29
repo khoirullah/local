@@ -298,4 +298,18 @@ class product_manager {
             ]
         );
     }
+
+    public static function get_product_bundle_items(
+        int $productid
+    ): array {
+
+        global $DB;
+
+        return $DB->get_records(
+            'local_lp_bundle_items',
+            [
+                'bundleid' => $productid
+            ]
+        );
+    }
 }

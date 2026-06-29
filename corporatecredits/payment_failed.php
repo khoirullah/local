@@ -25,5 +25,6 @@ redirect(
         'id' => $invoice->companyid,
     ]),
     get_string('paymentfailed', 'local_corporatecredits'),
+    0,
     \core\output\notification::NOTIFY_ERROR
 );

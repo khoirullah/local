@@ -1,0 +1,255 @@
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3 class="mb-1">
+                {{#str}}provisionqueue, local_learningproducts{{/str}}
+            </h3>
+
+            <div class="text-muted">
+                Pending course provisioning requests
+            </div>
+
+        </div>
+
+    </div>
+
+    {{#hasrecords}}
+
+    <div class="card shadow-sm border-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover mb-0">
+
+                <thead class="thead-light">
+
+                    <tr>
+
+                        <th width="70">
+                            #
+                        </th>
+
+                        <th>
+                            {{#str}}company, local_company{{/str}}
+                        </th>
+
+                        <th>
+                            {{#str}}product, local_learningproducts{{/str}}
+                        </th>
+
+                        <th>
+                            Template Course
+                        </th>
+
+                        <th class="text-center">
+                            Seats
+                        </th>
+
+                        <th>
+                            Subscription
+                        </th>
+
+                        <th>
+                            Requested By
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th class="text-right">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {{#items}}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>#{{purchaseid}}</strong>
+
+                        </td>
+
+                        <td>
+
+                            <strong>{{companyname}}</strong>
+
+                        </td>
+
+                        <td>
+
+                            {{productname}}
+
+                        </td>
+
+                        <td>
+
+                            {{templatecourse}}
+
+                        </td>
+
+                        <td class="text-center">
+
+                            <span class="badge badge-primary">
+
+                                <i class="fa fa-users mr-1"></i>
+
+                                {{quota}}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <small>
+
+                                <i class="fa fa-calendar mr-1"></i>
+
+                                {{startdate}}
+
+                                <br>
+
+                                <i class="fa fa-arrow-right mx-1"></i>
+
+                                {{enddate}}
+
+                            </small>
+
+                        </td>
+
+                        <td>
+
+                            {{requestedby}}
+
+                        </td>
+
+                        <td>
+
+                            {{#statuspending}}
+
+                            <span class="badge badge-warning">
+
+                                Pending
+
+                            </span>
+
+                            {{/statuspending}}
+
+                            {{#statusprocessing}}
+
+                            <span class="badge badge-info">
+
+                                Processing
+
+                            </span>
+
+                            {{/statusprocessing}}
+
+                            {{#statuscompleted}}
+
+                            <span class="badge badge-success">
+
+                                Completed
+
+                            </span>
+
+                            {{/statuscompleted}}
+
+                            {{#statusfailed}}
+
+                            <span class="badge badge-danger">
+
+                                Failed
+
+                            </span>
+
+                            {{/statusfailed}}
+
+                        </td>
+
+                        <td class="text-right">
+
+                            {{#statuspending}}
+
+                            <a
+                                href="{{processurl}}"
+                                class="btn btn-success btn-sm">
+
+                                <i class="fa fa-cogs mr-1"></i>
+
+                                Process
+
+                            </a>
+
+                            {{/statuspending}}
+
+                            {{#statusprocessing}}
+
+                            <span class="text-muted">
+
+                                <i class="fa fa-spinner fa-spin mr-1"></i>
+
+                                Working
+
+                            </span>
+
+                            {{/statusprocessing}}
+
+                        </td>
+
+                    </tr>
+
+                    {{/items}}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {{/hasrecords}}
+
+    {{^hasrecords}}
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body text-center py-5">
+
+            <div class="display-4 mb-3">
+
+                <i class="fa fa-check-circle text-success"></i>
+
+            </div>
+
+            <h4>
+
+                Queue is empty
+
+            </h4>
+
+            <p class="text-muted mb-0">
+
+                There are no pending provisioning requests.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    {{/hasrecords}}
+
+</div>

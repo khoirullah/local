@@ -89,103 +89,180 @@
 
             <div class="card shadow-sm border-0 sticky-top my-4">
 
-                <div class="card-body">
+                <div class="card-header bg-white border-bottom">
 
-                    <h5 class="mb-4">
+                    <h5 class="mb-1">
                         {{#str}}summary, local_learningproducts{{/str}}
                     </h5>
 
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">{{#str}}company, local_corporatecredits{{/str}}</span>
-                        <strong>{{company.name}}</strong>
-                    </div>
+                    <small class="text-muted">
+                        {{company.name}}
+                    </small>
 
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">{{#str}}currentbalance, local_corporatecredits{{/str}}</span>
-                        <strong>{{wallet.balance}} 🪙</strong>
-                    </div>
+                </div>
 
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">{{#str}}price, local_learningproducts{{/str}}</span>
-                        <strong>{{product.price}} 🪙</strong>
-                    </div>
+                <div class="card-body">
 
-                    <hr>
-
-                    <div class="d-flex justify-content-between">
-
-                        <strong>{{#str}}remaining, local_learningproducts{{/str}}</strong>
-
-                        <strong class="{{remainingclass}}">
-                            {{remainingbalance}} 🪙
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted">
+                            {{#str}}priceperuser, local_learningproducts{{/str}}
+                        </span>
+                        <strong id="unit-price">
+                            {{product.price}} 🪙
                         </strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted">
+                            {{#str}}seat, local_learningproducts{{/str}}
+                        </span>
+                        <strong id="seat-count">
+                            <i class="fa fa-users"></i> 1
+                        </strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted">
+                            {{#str}}totalprice, local_learningproducts{{/str}}
+                        </span>
+
+                        <strong
+                            id="total-price"
+                            class="text-primary">
+
+                            {{product.price}} 🪙
+
+                        </strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted">
+                            {{#str}}billing, local_learningproducts{{/str}}
+                        </span>
+
+                        <strong id="billing-period">
+                            1 × 30 days
+                        </strong>
+                    </div>
+
+                    <div class="alert alert-light border mt-3 mb-0">
+
+                        <div class="d-flex justify-content-between">
+
+                            <span class="font-weight-bold">
+                                {{#str}}remaining, local_learningproducts{{/str}}
+                            </span>
+
+                            <strong
+                                id="remaining-balance"
+                                class="{{remainingclass}}">
+
+                                {{remainingbalance}} 🪙
+
+                            </strong>
+
+                        </div>
 
                     </div>
+
+                </div>
+
+                <div class="card-body border-top">
 
                     {{#notenoughcredit}}
 
-                    <div class="alert alert-danger mt-4 mb-0">
+                    <div class="alert alert-danger">
+
                         {{#str}}insufficient, local_learningproducts{{/str}}
+
                     </div>
 
                     {{/notenoughcredit}}
 
                     {{^notenoughcredit}}
 
-                    <form method="post" class="mt-4" action="{{purchaseurl}}">
+                    <form method="post" action="{{purchaseurl}}">
 
-                        <input type="hidden" name="id" value="{{product.id}}">
+                        <input type="hidden" name="productid" value="{{product.id}}">
                         <input type="hidden" name="purchase" value="1">
-                        <input type="hidden" name="price" value="{{product.price}}">
+                        <input type="hidden" name="total" id="total-price-field">
                         <input type="hidden" name="sesskey" value="{{sesskey}}">
+                        <input type="hidden" id="unit-price-raw" value="{{product.priceraw}}">
 
                         <div class="form-group">
 
                             <label for="seat" class="font-weight-bold">
+
                                 {{#str}}seat, local_learningproducts{{/str}}
+
                             </label>
 
                             <input
                                 type="number"
-                                name="seat"
-                                id="seat"
                                 class="form-control"
-                                min="1"
+                                id="seat"
+                                name="seat"
                                 value="1"
+                                min="1"
                                 required>
 
                             <small class="text-muted">
+
                                 {{#str}}numseat, local_learningproducts{{/str}}
+
                             </small>
 
                         </div>
 
                         <div class="form-group">
 
-                            <label for="subscribe" class="font-weight-bold">
-                                {{#str}}subscribe, local_learningproducts{{/str}}
+                            <label class="font-weight-bold">
+
+                                {{#str}}subscriptionperiod, local_learningproducts{{/str}}
+
                             </label>
 
-                            <input
-                                type="number"
-                                name="subscribe"
-                                id="seat"
-                                class="form-control"
-                                min="1"
-                                value="1"
-                                required>
+                            <div class="row">
+
+                                <div class="col-6">
+
+                                    <input
+                                        type="date"
+                                        class="form-control"
+                                        id="startdate"
+                                        name="startdate"
+                                        value="{{startdate}}"
+                                        required>
+
+                                </div>
+
+                                <div class="col-6">
+
+                                    <input
+                                        type="date"
+                                        class="form-control"
+                                        id="enddate"
+                                        name="enddate"
+                                        value="{{enddate}}"
+                                        required>
+
+                                </div>
+
+                            </div>
 
                             <small class="text-muted">
-                                {{#str}}subscriber, local_learningproducts{{/str}}
+
+                                {{#str}}subscriptionperiod_desc, local_learningproducts{{/str}}
+
                             </small>
 
                         </div>
 
-                        <hr class="my-4">
-
                         <button
                             type="submit"
-                            class="btn btn-primary btn-lg btn-block">
+                            class="btn btn-primary btn-lg btn-block mt-4">
+
+                            <i class="fa fa-shopping-cart mr-2"></i>
 
                             {{#str}}purchase, local_learningproducts{{/str}}
 
@@ -204,3 +281,97 @@
     </div>
 
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const seatInput = document.getElementById('seat');
+
+    const unitPrice = parseFloat(
+        document.getElementById('unit-price-raw').value
+    );
+
+    const walletBalance = {{walletbalance}};
+
+    const seatCount = document.getElementById('seat-count');
+    const totalPrice = document.getElementById('total-price');
+    const totalfield = document.getElementById('total-price-field');
+    const remainingBalance = document.getElementById('remaining-balance');
+
+    function formatNumber(value) {
+        return value.toLocaleString('en-US');
+    }
+
+    function refreshSummary() {
+
+        let seat = parseInt(seatInput.value, 10);
+
+        if (isNaN(seat) || seat < 1) {
+            seat = 1;
+            seatInput.value = 1;
+        }
+
+        const start = new Date(document.getElementById('startdate').value);
+        const end   = new Date(document.getElementById('enddate').value);
+
+        let multiplier = 1;
+
+        if (!isNaN(start) && !isNaN(end) && end >= start) {
+
+            const diffDays = Math.ceil(
+                (end - start) / (1000 * 60 * 60 * 24)
+            ) + 1;
+
+            multiplier = Math.max(
+                1,
+                Math.ceil(diffDays / 30)
+            );
+
+            const billing = document.getElementById('billing-period');
+
+            if (billing) {
+                billing.textContent =
+                    multiplier + ' × 30 days';
+                    //multiplier + ' × 30 days (' + diffDays + ' days)';
+            }
+        }
+
+        const total = seat * unitPrice * multiplier;
+
+        const remaining = walletBalance - total;
+
+        seatCount.innerHTML =
+            seat+' 👥';
+
+        totalPrice.textContent =
+            formatNumber(total) + ' 🪙';
+
+        totalfield.value = formatNumber(total);
+
+        remainingBalance.textContent =
+            formatNumber(remaining) + ' 🪙';
+
+        remainingBalance.classList.remove(
+            'text-success',
+            'text-danger'
+        );
+
+        remainingBalance.classList.add(
+            remaining >= 0
+                ? 'text-success'
+                : 'text-danger'
+        );
+    }
+
+    document.getElementById('startdate')
+    .addEventListener('change', refreshSummary);
+
+    document.getElementById('enddate')
+        .addEventListener('change', refreshSummary);
+
+    seatInput.addEventListener('input', refreshSummary);
+
+    refreshSummary();
+
+
+});
+</script>
