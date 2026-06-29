@@ -81,3 +81,4 @@ $string['subscriptionperiod_desc'] = 'Define how long this subscription will rem
 $string['totalprice'] = 'Total';
 $string['priceperuser'] = 'Cost per seat';
 $string['billing'] = 'Billing Period';
+$string['provisionqueue'] = 'Provision Queue';

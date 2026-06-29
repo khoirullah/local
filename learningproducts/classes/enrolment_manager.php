@@ -336,26 +336,6 @@ class enrolment_manager {
         );
     }
 
-    /* public static function enrol_user_to_product(
-        int $userid,
-        int $productid
-    ): bool {
-
-        $product =
-            product_manager::get_product(
-                $productid
-            );
-
-        if (!$product->courseid) {
-            return false;
-        }
-
-        return self::enrol_user_to_course(
-            $userid,
-            $product->courseid
-        );
-    } */
-
     public static function unenrol_product(
         int $productid,
         int $userid
@@ -421,7 +401,97 @@ class enrolment_manager {
     protected static function unenrol_user_from_course(
         int $userid,
         int $courseid
-    ): bool {
+        ): bool {
+
+            $instances = enrol_get_instances(
+                $courseid,
+                true
+            );
+
+            foreach ($instances as $instance) {
+
+                if ($instance->enrol !== 'manual') {
+                    continue;
+                }
+
+                $plugin = enrol_get_plugin(
+                    'manual'
+                );
+
+                $plugin->unenrol_user(
+                    $instance,
+                    $userid
+                );
+
+                return true;
+            }
+
+            return false;
+        }
+
+
+    /**
+     * Generate enrol key.
+     *
+     * @param int $length
+     * @return string
+     */
+    public static function generate_enrol_key(
+        int $length = 10
+    ): string {
+
+        return substr(
+            strtoupper(bin2hex(random_bytes(16))),
+            0,
+            $length
+        );
+    }
+
+    public static function create_self_enrol(
+        int $courseid,
+        string $password
+    ): int {
+
+        global $DB;
+
+        require_once($GLOBALS['CFG']->dirroot . '/enrol/self/lib.php');
+
+        if ($instance = $DB->get_record('enrol', [
+            'courseid' => $courseid,
+            'enrol' => 'self'
+        ])) {
+
+            $instance->status = ENROL_INSTANCE_ENABLED;
+            $instance->password = $password;
+            $instance->customint3 = 1;
+
+            $DB->update_record('enrol', $instance);
+
+            return $instance->id;
+        }
+
+        $plugin = enrol_get_plugin('self');
+
+        return $plugin->add_instance(
+            get_course($courseid),
+            [
+                'status' => ENROL_INSTANCE_ENABLED,
+                'password' => $password,
+                'customint3' => 1,
+            ]
+        );
+    }
+
+    /**
+     * Enrol user manually.
+     *
+     * @param int $userid
+     * @param int $courseid
+     */
+    public static function enrol_manual(
+        int $userid,
+        int $courseid
+    ): void {
 
         $instances = enrol_get_instances(
             $courseid,
@@ -434,18 +504,13 @@ class enrolment_manager {
                 continue;
             }
 
-            $plugin = enrol_get_plugin(
-                'manual'
-            );
-
-            $plugin->unenrol_user(
+            enrol_get_plugin('manual')->enrol_user(
                 $instance,
-                $userid
+                $userid,
+                self::get_student_roleid()
             );
 
-            return true;
+            return;
         }
-
-        return false;
     }
 }

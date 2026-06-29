@@ -490,4 +490,19 @@ class company_manager {
 
         return $DB->get_record_sql($sql, [$userid]);
     }
+
+    public static function get_company_admins(int $companyid) {
+        global $DB;
+
+        $sql = "
+            SELECT c.*
+            FROM {local_company} c
+            JOIN {local_company_user} cu
+                ON cu.companyid = c.id
+            WHERE c.id = ?
+            AND cu.role = 'pic'
+        ";
+
+        return $DB->get_record_sql($sql, [$companyid]);
+    }
 }

@@ -43,6 +43,22 @@ class invoice_manager {
         );
     }
 
+    public static function get_all_invoice(): array {
+        global $DB;
+
+        $sql = "
+            SELECT
+                i.*,
+                c.name AS companyname
+            FROM {local_corpcredits_invoice} i
+            INNER JOIN {local_company} c
+                ON c.id = i.companyid
+            ORDER BY i.timecreated DESC
+        ";
+
+        return $DB->get_records_sql($sql);
+    }
+
     public static function get_invoice(
         int $id
     ) {

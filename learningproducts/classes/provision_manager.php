@@ -269,4 +269,191 @@ class provision_manager {
             message_send($message);
         }
     }
+
+    /**
+     * Process provisioning request.
+     *
+     * Workflow:
+     * 1. Duplicate template course.
+     * 2. Rename course.
+     * 3. Move course to company category.
+     * 4. Create self enrol instance.
+     * 5. Generate enrolment key.
+     * 6. Create company subscription.
+     * 7. Enrol company PIC.
+     * 8. Send notification.
+     * 9. Mark completed.
+     *
+     * @param int $id
+     * @throws \Throwable
+     */
+    public static function process(int $id): void {
+
+        global $DB, $USER;
+
+        $transaction = $DB->start_delegated_transaction();
+
+        try {
+
+            $provision = self::get($id);
+
+            if (!$provision) {
+                throw new \moodle_exception('invalidprovision');
+            }
+
+            self::set_status(
+                $id,
+                'processing',
+                $USER->id
+            );
+
+            //--------------------------------------------------
+            // Load data.
+            //--------------------------------------------------
+
+            $company = company_manager::get_company(
+                $provision->companyid
+            );
+
+            $product = product_manager::get_product(
+                $provision->productid
+            );
+
+            $templatecourse = get_course(
+                $provision->templatecourseid
+            );
+
+            //--------------------------------------------------
+            // Duplicate template course.
+            //--------------------------------------------------
+
+            $newcourseid = course_manager::duplicate_course(
+                $templatecourse->id
+            );
+
+            //--------------------------------------------------
+            // Rename course.
+            //--------------------------------------------------
+
+            course_manager::rename_course(
+                $newcourseid,
+                $templatecourse->fullname .
+                    ' - ' .
+                    $company->name
+            );
+
+            //--------------------------------------------------
+            // Move course into company category.
+            //--------------------------------------------------
+
+            $companycategoryid =
+                company_manager::get_course_category(
+                    $company->id
+                );
+
+            course_manager::move_course(
+                $newcourseid,
+                $companycategoryid
+            );
+
+            //--------------------------------------------------
+            // Create self enrol instance.
+            //--------------------------------------------------
+
+            $enrolid =
+                enrol_manager::create_self_enrol_instance(
+                    $newcourseid
+                );
+
+            //--------------------------------------------------
+            // Generate enrolment key.
+            //--------------------------------------------------
+
+            $enrolkey =
+                enrol_manager::generate_key();
+
+            enrol_manager::set_enrol_key(
+                $enrolid,
+                $enrolkey
+            );
+
+            //--------------------------------------------------
+            // Create subscription.
+            //--------------------------------------------------
+
+            $subscriptionid =
+                subscription_manager::create([
+                    'companyid'  => $company->id,
+                    'courseid'   => $newcourseid,
+                    'quota'      => $provision->quota,
+                    'startdate'  => $provision->startdate,
+                    'enddate'    => $provision->enddate,
+                ]);
+
+            //--------------------------------------------------
+            // Enrol PIC.
+            //--------------------------------------------------
+
+            company_manager::enrol_pic(
+                $company->id,
+                $newcourseid
+            );
+
+            //--------------------------------------------------
+            // Update provision record.
+            //--------------------------------------------------
+
+            self::set_course(
+                $id,
+                $newcourseid
+            );
+
+            self::set_subscription(
+                $id,
+                $subscriptionid
+            );
+
+            //--------------------------------------------------
+            // Notify PIC.
+            //--------------------------------------------------
+
+            notification_manager::send_ready_email([
+                'companyid'   => $company->id,
+                'courseid'    => $newcourseid,
+                'course'      => $templatecourse->fullname,
+                'enrolkey'    => $enrolkey,
+                'startdate'   => $provision->startdate,
+                'enddate'     => $provision->enddate,
+            ]);
+
+            //--------------------------------------------------
+            // Completed.
+            //--------------------------------------------------
+
+            self::set_status(
+                $id,
+                'completed',
+                $USER->id
+            );
+
+            $transaction->allow_commit();
+
+        } catch (\Throwable $e) {
+
+            $transaction->rollback($e);
+
+            self::set_notes(
+                $id,
+                $e->getMessage()
+            );
+
+            self::set_status(
+                $id,
+                'failed',
+                $USER->id
+            );
+
+            throw $e;
+        }
+    }
 }

@@ -19,7 +19,7 @@ require_capability(
 );
 
 $PAGE->set_context($context);
-$PAGE->set_pagelayout('admin');
+//$PAGE->set_pagelayout('admin');
 
 $PAGE->set_url(
     new moodle_url(
@@ -27,18 +27,27 @@ $PAGE->set_url(
     )
 );
 
-$PAGE->set_title(
+$PAGE->set_title( 
     get_string(
         'provisionqueue',
         'local_learningproducts'
     )
 );
 
-$PAGE->set_heading(
-    get_string(
-        'provisionqueue',
-        'local_learningproducts'
+$PAGE->navbar->add(
+    get_string('home'),
+    new moodle_url(
+        '/my'
     )
+);
+$PAGE->navbar->add(
+    get_string('pluginname', 'local_learningproducts'),
+    new moodle_url(
+        '/local/learningproducts/admin/index.php'
+    )
+);
+$PAGE->navbar->add(
+    get_string('provisionqueue', 'local_learningproducts')
 );
 
 global $DB;
