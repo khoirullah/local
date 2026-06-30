@@ -1,6 +1,8 @@
 <?php
 namespace local_learningproducts;
 
+use local_company\company_manager;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -26,6 +28,8 @@ class enrolment_manager {
         int $productid,
         int $userid
     ): bool {
+
+        
 
         $product =
             product_manager::get_product(

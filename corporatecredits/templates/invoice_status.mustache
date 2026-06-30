@@ -26,11 +26,10 @@
                 <thead class="table-light">
 
                     <tr>
-                        <th>#</th>
-                        <th>{{#str}}company, local_company{{/str}}</th>
-                        <th>{{#str}}invoice{{/str}}</th>
+                        <th>{{#str}}institution{{/str}}</th>
+                        <th>{{#str}}invoice, local_corporatecredits{{/str}}</th>
                         <th>{{#str}}coins, local_corporatecredits{{/str}}</th>
-                        <th>{{#str}}amount{{/str}}</th>
+                        <th>{{#str}}amount, local_corporatecredits{{/str}}</th>
                         <th>{{#str}}paymentmethod, local_corporatecredits{{/str}}</th>
                         <th>{{#str}}status{{/str}}</th>
                         <th class="text-end">
@@ -47,10 +46,6 @@
                     <tr>
 
                         <td>
-                            <strong>#{{id}}</strong>
-                        </td>
-
-                        <td>
 
                             <strong>{{companyname}}</strong>
 
@@ -64,11 +59,7 @@
 
                         <td>
 
-                            <span class="badge bg-primary">
-
-                                {{coins}} Coins
-
-                            </span>
+                            {{coins}} 🪙
 
                         </td>
 
@@ -76,7 +67,7 @@
 
                             <strong>
 
-                                Rp {{amount}}
+                                {{amount}}
 
                             </strong>
 
@@ -97,19 +88,19 @@
                             {{/statuspending}}
 
                             {{#statusprocessing}}
-                                <span class="badge bg-info">
+                                <span class="badge bg-info text-white">
                                     Processing
                                 </span>
                             {{/statusprocessing}}
 
                             {{#statuscompleted}}
-                                <span class="badge bg-success">
+                                <span class="badge bg-success text-white">
                                     Completed
                                 </span>
                             {{/statuscompleted}}
 
                             {{#statusfailed}}
-                                <span class="badge bg-danger">
+                                <span class="badge bg-danger text-white">
                                     Failed
                                 </span>
                             {{/statusfailed}}

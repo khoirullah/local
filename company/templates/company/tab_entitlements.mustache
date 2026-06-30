@@ -1,40 +1,90 @@
 <div class="d-flex flex-wrap mt-2 text-muted">
     {{#str}} entdesc, local_company {{/str}}
 </div>
-<div class="d-flex flex-wrap my-3 stats-cards">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>{{#str}} entproduct, local_company {{/str}}</th>
-                <th>{{#str}} enttotal, local_company {{/str}}</th>
-                <th>{{#str}} entused, local_company {{/str}}</th>
-                <th>{{#str}} entavailable, local_company {{/str}}</th>
-                <th>{{#str}} entstatus, local_company {{/str}}</th>
-            </tr>
-        </thead>
 
-        <tbody>
+<div class="card mt-3">
+    <div class="card-body p-0">
 
-            {{#entitlements}}
+        <table class="table table-hover mb-0">
 
-            <tr>
-                <td>{{productname}}</td>
-                <td>{{qty}}</td>
-                <td>{{usedqty}}</td>
-                <td>{{available}}</td>
-                <td>{{status}}</td>
-            </tr>
+            <thead>
 
-            {{/entitlements}}
-            {{^entitlements}}
+                <tr>
+                    <th>{{#str}} entproduct, local_company {{/str}}</th>
+                    <th>{{#str}} entcourse, local_company {{/str}}</th>
+                    <th>{{#str}} enttotal, local_company {{/str}}</th>
+                    <th>{{#str}} entused, local_company {{/str}}</th>
+                    <th>{{#str}} entavailable, local_company {{/str}}</th>
+                    <th>{{#str}} entperiod, local_company {{/str}}</th>
+                    <th>{{#str}} entstatus, local_company {{/str}}</th>
+                </tr>
 
-            <tr>
-                <td colspan="5" class="alert-info text-center">{{#str}} nosub, local_company {{/str}}</td>
-            </tr>
+            </thead>
 
-            {{/entitlements}}
+            <tbody>
 
-        </tbody>
+                {{#entitlements}}
 
-    </table>
+                <tr>
+
+                    <td>
+                        <strong>{{productname}}</strong>
+                    </td>
+
+                    <td>
+                        {{coursename}}
+                    </td>
+
+                    <td>
+                        {{quota}}
+                    </td>
+
+                    <td>
+                        {{used}}
+                    </td>
+
+                    <td>
+                        {{remaining}}
+                    </td>
+
+                    <td>
+                        {{startdate}}<br>
+                        <small class="text-muted">
+                            {{enddate}}
+                        </small>
+                    </td>
+
+                    <td>
+
+                        <span class="badge badge-success">
+                            {{status}}
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                {{/entitlements}}
+
+                {{^entitlements}}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="text-center text-muted py-4">
+
+                        {{#str}} nosub, local_company {{/str}}
+
+                    </td>
+
+                </tr>
+
+                {{/entitlements}}
+
+            </tbody>
+
+        </table>
+
+    </div>
 </div>

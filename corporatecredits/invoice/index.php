@@ -64,11 +64,9 @@ foreach ($invoices as $invoice) {
 
         'invoicecode' => $invoice->invoicecode,
 
-        'coins' => $invoice->coins,
+        'coins' => number_format($invoice->coins, 0, '.', ','),
 
-        'amount' => $invoice->amount,
-
-        'paymentmethod' => $invoice->paymentmethod,
+        'amount' => 'Rp '.number_format($invoice->amount, 0, '.', ','),
 
         'paymentmethod' => $invoice->paymentmethod,
 
@@ -83,7 +81,7 @@ foreach ($invoices as $invoice) {
             $invoice->status === 'processing',
 
         'statuscompleted' =>
-            $invoice->status === 'completed',
+            $invoice->status === 'completed' || $invoice->status === 'paid',
 
         'statusfailed' =>
             $invoice->status === 'failed',

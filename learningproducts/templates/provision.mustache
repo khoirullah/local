@@ -184,11 +184,22 @@
 
                             <a
                                 href="{{processurl}}"
-                                class="btn btn-success btn-sm">
+                                class="btn btn-success btn-sm js-process-provision">
 
                                 <i class="fa fa-cogs mr-1"></i>
 
                                 Process
+
+                            </a>
+
+                            <a
+                                href="{{duplicateurl}}"
+                                class="btn btn-primary btn-sm ml-2"
+                                target="_blank">
+
+                                <i class="fa fa-copy mr-1"></i>
+
+                                Duplicate
 
                             </a>
 
@@ -253,3 +264,42 @@
     {{/hasrecords}}
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.querySelectorAll('.js-process-provision').forEach(function(button) {
+
+        button.addEventListener('click', function(e) {
+
+            e.preventDefault();
+
+            const courseid = prompt(
+                'Enter the duplicated Course ID:'
+            );
+
+            if (courseid === null) {
+                return;
+            }
+
+            const value = courseid.trim();
+
+            if (!/^\d+$/.test(value)) {
+                alert('Course ID must be a valid number.');
+                return;
+            }
+
+            const separator = this.href.includes('?') ? '&' : '?';
+
+            window.location.href =
+                this.href +
+                separator +
+                'copy=' +
+                encodeURIComponent(value);
+
+        });
+
+    });
+
+});
+</script>

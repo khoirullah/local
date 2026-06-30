@@ -112,7 +112,7 @@ class wallet_manager {
         string $description = ''
     ): void {
  
-        global $DB;
+        global $DB, $USER;
 
         $transaction = $DB->start_delegated_transaction();
 

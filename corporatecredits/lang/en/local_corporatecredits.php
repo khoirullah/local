@@ -71,3 +71,7 @@ $string['xenditsecretnotfound'] = 'Xendit secret key not configured';
 $string['topupdescription'] = 'Top up Corporate Credits for the company {$a->company} by {$a->credits} credits, with a payment amount of Rp {$a->amount}.';
 $string['paymentsuccess'] = 'Your Corporate Credits top-up has been successfully processed. Your credits have been added to your company wallet.';
 $string['paymentfailed'] = 'Your Corporate Credits top-up could not be completed. Please try again or contact support if the issue persists.';
+$string['invoicequeue'] = 'Invoice Queue';
+$string['manageincominginvoice'] = 'Manage Incoming Invoice Queue';
+$string['invoicealreadyprocessed'] = 'This invoice has already been processed.';
+$string['invoiceapproved'] = 'Invoice has been approved successfully.';

@@ -495,7 +495,7 @@ class company_manager {
         global $DB;
 
         $sql = "
-            SELECT c.*
+            SELECT c.*, cu.*
             FROM {local_company} c
             JOIN {local_company_user} cu
                 ON cu.companyid = c.id

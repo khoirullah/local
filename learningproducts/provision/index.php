@@ -8,6 +8,9 @@
 require('../../../config.php');
 
 use local_learningproducts\provision_manager;
+use local_learningproducts\purchase_manager;
+use local_company\company_manager;
+use local_learningproducts\product_manager;
 
 require_login();
 
@@ -19,7 +22,6 @@ require_capability(
 );
 
 $PAGE->set_context($context);
-//$PAGE->set_pagelayout('admin');
 
 $PAGE->set_url(
     new moodle_url(
@@ -52,7 +54,7 @@ $PAGE->navbar->add(
 
 global $DB;
 
-$sql = "
+/* $sql = "
 SELECT
     p.*,
     c.name AS companyname,
@@ -80,11 +82,18 @@ WHERE p.status IN ('pending', 'processing')
 ORDER BY p.timecreated ASC
 ";
 
-$records = $DB->get_records_sql($sql);
+$records = $DB->get_records_sql($sql); */
+$records = provision_manager::get_pending();
+
 
 $items = [];
 
 foreach ($records as $record) {
+    $course = get_course($record->templatecourseid);
+    $company = company_manager::get($record->companyid);
+    $product = product_manager::get_product($record->productid);
+    $purchase = purchase_manager::get_purchase($record->purchaseid);
+    $user = $DB->get_record('user', ['id'=> $record->requestedby]); 
 
     $items[] = [
 
@@ -93,18 +102,18 @@ foreach ($records as $record) {
         'purchaseid' => $record->purchaseid,
 
         'companyname' => format_string(
-            $record->companyname
+            $company->name
         ),
 
         'productname' => format_string(
-            $record->productname
+            $product->name
         ),
 
         'templatecourse' => format_string(
-            $record->templatecoursename
+            $course->fullname
         ),
 
-        'requestedby' => fullname($record),
+        'requestedby' => fullname($user),
 
         'quota' => $record->quota,
 
@@ -137,6 +146,15 @@ foreach ($records as $record) {
                 '/local/learningproducts/provision/process.php',
                 [
                     'id' => $record->id,
+                    'sesskey' => sesskey()
+                ]
+            )
+        )->out(false),
+        'duplicateurl' => (
+            new moodle_url(
+                '/backup/copy.php',
+                [
+                    'id' => $course->id,
                     'sesskey' => sesskey()
                 ]
             )

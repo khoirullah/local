@@ -1,6 +1,13 @@
 <?php
 namespace local_learningproducts;
 
+use local_learningproducts\purchase_manager;
+use local_learningproducts\product_manager;
+use local_learningproducts\course_mapper;
+use local_learningproducts\enrolment_manager;
+use local_company\subscription_manager;
+use local_company\company_manager;
+
 defined('MOODLE_INTERNAL') || die();
 
 class provision_manager {
@@ -274,31 +281,42 @@ class provision_manager {
      * Process provisioning request.
      *
      * Workflow:
-     * 1. Duplicate template course.
-     * 2. Rename course.
-     * 3. Move course to company category.
-     * 4. Create self enrol instance.
-     * 5. Generate enrolment key.
-     * 6. Create company subscription.
-     * 7. Enrol company PIC.
-     * 8. Send notification.
-     * 9. Mark completed.
+     * 1. Create company subscription.
+     * 2. Enrol company PIC.
+     * 3. Send notification.
+     * 4. Mark completed.
      *
      * @param int $id
      * @throws \Throwable
      */
-    public static function process(int $id): void {
-
+    public static function process(int $id, int $newcourseid): void {
+        
         global $DB, $USER;
 
         $transaction = $DB->start_delegated_transaction();
+        $returnurl = new \moodle_url(
+            '/local/learningproducts/provision/index.php'
+        );
 
         try {
-
             $provision = self::get($id);
-
+            
             if (!$provision) {
-                throw new \moodle_exception('invalidprovision');
+                redirect(
+                    $returnurl,
+                    'Provision request not found.',
+                    null,
+                    \core\output\notification::NOTIFY_ERROR
+                );
+            }
+
+            if ($provision->status !== 'pending') {
+                redirect(
+                    $returnurl,
+                    'Provision has already been processed.',
+                    null,
+                    \core\output\notification::NOTIFY_ERROR
+                );
             }
 
             self::set_status(
@@ -311,76 +329,37 @@ class provision_manager {
             // Load data.
             //--------------------------------------------------
 
-            $company = company_manager::get_company(
-                $provision->companyid
-            );
+            $company = company_manager::get($provision->companyid);
 
             $product = product_manager::get_product(
                 $provision->productid
             );
 
-            $templatecourse = get_course(
-                $provision->templatecourseid
-            );
-
-            //--------------------------------------------------
-            // Duplicate template course.
-            //--------------------------------------------------
-
-            $newcourseid = course_manager::duplicate_course(
-                $templatecourse->id
-            );
-
-            //--------------------------------------------------
-            // Rename course.
-            //--------------------------------------------------
-
-            course_manager::rename_course(
-                $newcourseid,
-                $templatecourse->fullname .
-                    ' - ' .
-                    $company->name
-            );
-
-            //--------------------------------------------------
-            // Move course into company category.
-            //--------------------------------------------------
-
-            $companycategoryid =
-                company_manager::get_course_category(
-                    $company->id
+            try {
+                $newcourse = get_course($newcourseid);
+            } catch (\Exception $e) {
+                redirect(
+                    $returnurl,
+                    'The selected course does not exist.',
+                    null,
+                    \core\output\notification::NOTIFY_ERROR
                 );
-
-            course_manager::move_course(
-                $newcourseid,
-                $companycategoryid
-            );
+            }
 
             //--------------------------------------------------
-            // Create self enrol instance.
+            // Add New Course to product
             //--------------------------------------------------
 
-            $enrolid =
-                enrol_manager::create_self_enrol_instance(
-                    $newcourseid
-                );
-
+            course_mapper::add_course($product->id, $newcourse->id);
+            
             //--------------------------------------------------
-            // Generate enrolment key.
+            // Enroll User to Product and course automatically
             //--------------------------------------------------
-
-            $enrolkey =
-                enrol_manager::generate_key();
-
-            enrol_manager::set_enrol_key(
-                $enrolid,
-                $enrolkey
-            );
-
+            enrolment_manager::enrol_product($product->id, $provision->requestedby);
+                
             //--------------------------------------------------
             // Create subscription.
             //--------------------------------------------------
-
             $subscriptionid =
                 subscription_manager::create([
                     'companyid'  => $company->id,
@@ -389,15 +368,6 @@ class provision_manager {
                     'startdate'  => $provision->startdate,
                     'enddate'    => $provision->enddate,
                 ]);
-
-            //--------------------------------------------------
-            // Enrol PIC.
-            //--------------------------------------------------
-
-            company_manager::enrol_pic(
-                $company->id,
-                $newcourseid
-            );
 
             //--------------------------------------------------
             // Update provision record.
@@ -416,14 +386,12 @@ class provision_manager {
             //--------------------------------------------------
             // Notify PIC.
             //--------------------------------------------------
-
-            notification_manager::send_ready_email([
+            self::send_email_to_pic($provision->requestedby,[
                 'companyid'   => $company->id,
                 'courseid'    => $newcourseid,
-                'course'      => $templatecourse->fullname,
-                'enrolkey'    => $enrolkey,
+                'course'      => $newcourse->fullname,
                 'startdate'   => $provision->startdate,
-                'enddate'     => $provision->enddate,
+                'enddate'     => $provision->enddate
             ]);
 
             //--------------------------------------------------
@@ -455,5 +423,65 @@ class provision_manager {
 
             throw $e;
         }
+    }
+
+    /**
+     * Send provisioning completed email to company PIC.
+     *
+     * @param array $data
+     */
+    public static function send_email_to_pic(int $userid, array $data): void {
+
+        global $DB;
+
+        $companyid = $data['companyid'];
+        $courseid  = $data['courseid'];
+
+        $course = get_course($courseid);
+
+        $company = company_manager::get($companyid);
+
+        $user = $DB->get_record(
+            'user',
+            ['id' => $userid],
+            '*',
+            MUST_EXIST
+        );
+
+        $message = new \core\message\message();
+
+        $message->component = 'local_learningproducts';
+        $message->name      = 'provisionready';
+
+        $message->userfrom = \core_user::get_noreply_user();
+        $message->userto   = $user;
+
+        $message->subject =
+            'Your learning product is ready';
+
+        $courseurl = new \moodle_url(
+            '/course/view.php',
+            ['id' => $courseid]
+        );
+
+        $message->fullmessage =
+            "Hello {$user->firstname},\n\n" .
+            "Your company's learning product has been provisioned successfully.\n\n" .
+            "Company : {$company->name}\n" .
+            "Course : {$course->fullname}\n" .
+            "Start : " . userdate($data['startdate']) . "\n" .
+            "End : " . userdate($data['enddate']) . "\n\n" .
+            "Course URL:\n" .
+            $courseurl->out(false);
+
+        $message->fullmessageformat = FORMAT_PLAIN;
+
+        $message->fullmessagehtml =
+            nl2br($message->fullmessage);
+
+        $message->smallmessage =
+            'Learning product is ready';
+
+        message_send($message);
     }
 }

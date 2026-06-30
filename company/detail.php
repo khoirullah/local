@@ -122,7 +122,7 @@ if ($data = $mform->get_data()) {
 }
 
 $chart = subscription_manager::get_enrolment_chart_data(
-    $companyid,
+    $id,
     $courseid,
     $year
 );
@@ -132,17 +132,57 @@ $templatecontext['chartdata']   = json_encode($chart['data']);
 
 $templatecontext['years'] = subscription_manager::get_year_list();
 
-$subscriptions = subscription_manager::get_by_company($id, $search, $status);
+$subscriptions = subscription_manager::get_by_company(
+    $id,
+    $search,
+    $status
+);
 
-$subs = [];
+$seatspurchased = 0;
+$seatsused = 0;
+$completionlabels = [];
+$completiondata = [];
+
+foreach ($subscriptions as $sub) {
+    
+    $course = get_course($sub->courseid);
+
+    $sub->course = $course->fullname;
+
+    $sub->selected = ($courseid == $sub->courseid);
+
+    $sub->used = subscription_manager::get_used_count(
+        $id,
+        $sub->courseid
+    );
+
+    $sub->remaining = max(
+        0,
+        $sub->quota - $sub->used
+    );
+   
+    $seatspurchased += $sub->quota;
+    $seatsused += $sub->used;
+
+    if (!empty($sub->completion)) {
+        $completionlabels[] = $sub->course;
+        $completiondata[] = (int) str_replace(
+            '%',
+            '',
+            $sub->completion
+        );
+    }
+}
+
+$seatsremaining = $seatspurchased - $seatsused;
+$totalcourses = count($subscriptions);
+
 $total = count($subscriptions);
 $years = [];
 $labels = [];
 $data = [];
 $completionlabels = [];
 $completiondata = [];
-
-//$chart = subscription_manager::get_enrollment_chart_data($id, optional_param('course', 0, PARAM_INT), optional_param('year', date('Y'), PARAM_INT));
 
 $labels = $chart['labels'];
 $data = $chart['data'];
@@ -175,15 +215,11 @@ $seatsused = 0;
 foreach ($subscriptions as $sub) {
     $seatspurchased += $sub->quota;
     $seatsused += subscription_manager::get_used_count($id, $sub->courseid);
+
 }
 
 $seatsremaining = $seatspurchased - $seatsused;
 
-foreach ($subs as $s) {
-
-    $completionlabels[] = $s['course'];
-    $completiondata[] = (int) str_replace('%','',$s['completion']);
-}
 
 $fs = get_file_storage();
 $context = context_system::instance();
@@ -214,8 +250,61 @@ if ($files) {
 
     //echo $logo;
 }
+
+$overview = [
+    'description' => $company->description,
+    'subscriptions' => array_values($subscriptions),
+    'hassubscriptions' => !empty($subscriptions),
+    'search' => $search,
+    'status' => $status,
+    'stats' => [
+        'status' => $company->status,
+        'totalcourses' => $totalcourses,
+        'seatspurchased' => $seatspurchased,
+        'seatsused' => $seatsused,
+        'seatsremaining' => $seatsremaining
+    ],
+    'years' => $years,
+    'statusactive' => $status === '1',
+    'statussuspend' => $status === '0',
+    'enrollmentlabels' => json_encode($labels),
+    'enrollmentdata' => json_encode($data),
+    'completionlabels' => json_encode($completionlabels),
+    'completiondata' => json_encode($completiondata),
+];
+
+$entitlements = entitlement_manager::get_company_entitlements($id);
+
+foreach ($entitlements as $entitlement) {
+
+    $entitlement->remaining = max(
+        0,
+        $entitlement->quota - $entitlement->used
+    );
+
+    $entitlement->status = $entitlement->status
+        ? get_string('active')
+        : get_string('inactive');
+
+    $entitlement->startdate = userdate(
+        $entitlement->startdate
+    );
+
+    $entitlement->enddate = userdate(
+        $entitlement->enddate
+    );
+}
+
+$templatecontext['entitlements'] = [
+    'entitlements' => $entitlements,
+    'hasentitlements' => !empty($entitlements)
+];
+
+$templatecontext['overview'] = $overview;
+
 $company->logo = $logo; 
 $templatecontext = [
+    'overview' => $overview,
     'sesskey' => sesskey(),
     'is_siteadmin' => is_siteadmin($USER->id),
     'wallet' => wallet_manager::get_summary($company->id),
@@ -228,8 +317,8 @@ $templatecontext = [
     'companyid' => $company->id,
     'companyname' => $company->name,
     'description'  => $company->description,
-    'subscriptions' => $subs,
-    'hassubscriptions' => !empty($subs),
+    'subscriptions' => $subscriptions,
+    'hassubscriptions' => !empty($subscriptions),
     'search' => $search,
     'status' => $status,
     'stats' => [
@@ -265,7 +354,6 @@ $templatecontext = [
             ]
         )
     )->out(false),
-
     'overviewurl' =>(
         new moodle_url(
             '/local/company/detail.php',
@@ -334,9 +422,6 @@ switch ($tab) {
 
     case 'entitlements':
 
-        $templatecontext['entitlements']
-            = entitlement_manager::get_company_entitlements($id);
-
         $tabcontent =
             $OUTPUT->render_from_template(
                 'local_company/company/tab_entitlements',
@@ -365,7 +450,7 @@ switch ($tab) {
 
         $templatecontext['assignments']
             = assignment_manager::get_company_assignments($id);
-
+        
         $tabcontent =
             $OUTPUT->render_from_template(
                 'local_company/company/tab_assignments',
@@ -381,8 +466,6 @@ switch ($tab) {
 
         $transactions = transaction_manager::get_company_transactions($id);
 
-        //var_dump($transactions);
-        //die;
         foreach ($transactions as &$t) {
 
             $t->timecreated = userdate($t->timecreated);
@@ -408,65 +491,17 @@ switch ($tab) {
 
         break;
     case 'overview':
-        $templatecontext['overview'] = [
-            'description'  => $company->description,
-            'subscriptions' => $subs,
-            'hassubscriptions' => !empty($subs),
-            'search' => $search,
-            'status' => $status,
-            'stats' => [
-                'status' => $company->status,
-                'totalcourses' => $totalcourses,
-                'seatspurchased' => $seatspurchased,
-                'seatsused' => $seatsused,
-                'seatsremaining' => $seatsremaining
-            ],
-            'years' => $years,
-            'statusactive' => $status === '1',
-            'statussuspend' => $status === '0',
-
-            'enrollmentlabels' => json_encode($labels),
-            'enrollmentdata' => json_encode($data),
-            'completionlabels' => json_encode($completionlabels),
-            'completiondata' => json_encode($completiondata),
-        ];
-
-        $tabcontent =
-            $OUTPUT->render_from_template(
-                'local_company/company/tab_overview',
-                $templatecontext
-            );
+        $tabcontent = $OUTPUT->render_from_template(
+            'local_company/company/tab_overview',
+            $templatecontext
+        );
         break;
     default:
-
-        $templatecontext['overview'] = [
-            'description'  => $company->description,
-            'subscriptions' => $subs,
-            'hassubscriptions' => !empty($subs),
-            'search' => $search,
-            'status' => $status,
-            'stats' => [
-                'status' => $company->status,
-                'totalcourses' => $totalcourses,
-                'seatspurchased' => $seatspurchased,
-                'seatsused' => $seatsused,
-                'seatsremaining' => $seatsremaining
-            ],
-            'years' => $years,
-            'statusactive' => $status === '1',
-            'statussuspend' => $status === '0',
-
-            'enrollmentlabels' => json_encode($labels),
-            'enrollmentdata' => json_encode($data),
-            'completionlabels' => json_encode($completionlabels),
-            'completiondata' => json_encode($completiondata),
-        ];
-
-        $tabcontent =
-            $OUTPUT->render_from_template(
-                'local_company/company/tab_overview',
-                $templatecontext
-            );
+        
+        $tabcontent = $OUTPUT->render_from_template(
+            'local_company/company/tab_overview',
+            $templatecontext
+        );
 }
 
 $templatecontext['tabcontent'] = $tabcontent;
