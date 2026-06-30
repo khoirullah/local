@@ -93,7 +93,7 @@ class entitlement_manager {
                 'companyid' => $companyid
             ]
         );
-
+        
         foreach ($records as $record) {
 
             $record->remaining = max(
@@ -111,4 +111,4 @@ class entitlement_manager {
 
         return array_values($records);
     }
-}
+} 

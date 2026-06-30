@@ -88,6 +88,8 @@ $string['entdesc'] = 'Manage purchased entitlements and track license consumptio
 $string['mmbdesc'] = 'View and manage employees associated with your company learning environment.';
 $string['asgdesc'] = 'Review and manage course assignments, product allocations, and member access permissions.';
 $string['wltdesc'] = 'Track wallet balances, transaction history, and corporate credit utilization.';
+$string['entcourse']= 'Course';
+$string['entperiod']= 'Period';
 
 // capabilities
 $string['company:manage'] = 'Manage Own Company';

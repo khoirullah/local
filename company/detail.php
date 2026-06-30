@@ -271,9 +271,11 @@ $overview = [
     'enrollmentdata' => json_encode($data),
     'completionlabels' => json_encode($completionlabels),
     'completiondata' => json_encode($completiondata),
-];
+]; 
 
 $entitlements = entitlement_manager::get_company_entitlements($id);
+//$entitlements = subscription_manager::get_by_company($id);
+
 
 foreach ($entitlements as $entitlement) {
 
@@ -295,7 +297,7 @@ foreach ($entitlements as $entitlement) {
     );
 }
 
-$templatecontext['entitlements'] = [
+$entitlements = [
     'entitlements' => $entitlements,
     'hasentitlements' => !empty($entitlements)
 ];
@@ -305,6 +307,7 @@ $templatecontext['overview'] = $overview;
 $company->logo = $logo; 
 $templatecontext = [
     'overview' => $overview,
+    'entitlements' => $entitlements,
     'sesskey' => sesskey(),
     'is_siteadmin' => is_siteadmin($USER->id),
     'wallet' => wallet_manager::get_summary($company->id),
@@ -421,11 +424,13 @@ $templatecontext = [
 switch ($tab) {
 
     case 'entitlements':
-
+        //echo '<pre>';
+        //var_dump($templatecontext['entitlements']);
+        //die;
         $tabcontent =
             $OUTPUT->render_from_template(
                 'local_company/company/tab_entitlements',
-                $templatecontext
+                $templatecontext['entitlements']
             );
 
         break;
