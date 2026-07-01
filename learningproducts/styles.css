@@ -713,3 +713,83 @@
     font-size: 65px;
     color: #d6d6d6;
 }
+
+.subscription-options{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+}
+
+.subscription-card{
+    cursor:pointer;
+    margin:0;
+}
+
+.subscription-card input{
+    display:none;
+}
+
+.subscription-content{
+
+    border:2px solid #dee2e6;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    transition:.2s;
+
+    height:100%;
+}
+
+.subscription-card input:checked + .subscription-content{
+
+    border-color:#0d6efd;
+
+    background:#eef5ff;
+
+    box-shadow:0 0 0 4px rgba(13,110,253,.15);
+
+}
+
+.subscription-title{
+
+    font-size:18px;
+
+    font-weight:600;
+
+}
+
+.subscription-duration{
+
+    color:#6c757d;
+
+    margin-top:6px;
+
+}
+
+.subscription-price{
+
+    margin-top:15px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+}
+
+.seat-selector{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.seat-selector input{
+
+    width:90px;
+
+}

@@ -233,19 +233,26 @@ if (!$canmanageall) {
                         class="form-control"
                         value="' . s($institutioncompany) . '"
                         required>
-                </div>
-
-                <div class="form-group text-left">
-                    <label for="id_shortname">
-                        <strong>' . get_string('shortname', 'local_company') . '</strong>
-                        <i class="icon fa fa-circle-exclamation text-danger fa-fw " title="Required" role="img" aria-label="Required"></i>
-                    </label>
-                    <input type="text"
+                    <input type="hidden"
                         id="id_shortname"
                         name="shortname"
                         class="form-control"
                         value="' . s($shortname) . '"
                         required>
+                </div>
+
+                <div class="form-group text-left">
+                    <label for="id_description">
+                        <strong>' . get_string('description') . '</strong>
+                    </label>
+
+                    <textarea
+                        id="id_description"
+                        name="description"
+                        class="form-control"
+                        >
+                    </textarea>
+                    
                 </div>
 
                 <div class="form-group form-check text-left">
@@ -273,6 +280,7 @@ if (!$canmanageall) {
                 const button = document.getElementById("id_submit");
                 const nameField = document.getElementById("id_name");
                 const shortnameField = document.getElementById("id_shortname");
+                const descriptionField = document.getElementById("id_description");
 
                 checkbox.addEventListener("change", function() {
                     

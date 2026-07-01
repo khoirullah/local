@@ -6,6 +6,25 @@ defined('MOODLE_INTERNAL') || die();
 
 class wallet_manager {
 
+    public static function welcome_coins(int $companyid): int {
+        global $DB;
+
+        $welcomecoins =  (int)get_config(
+                'local_corporatecredits',
+                'welcomecoins'
+            ) ?: 0;
+
+        $record = (object)[
+            'companyid'   => $companyid,
+            'balance'     => $welcomecoins,
+            'status'      => 'active',
+            'timecreated' => time(),
+            'timemodified'=> time()
+        ];
+
+        return $DB->insert_record('local_corpcredits_wallet', $record);
+    }
+
     public static function create_wallet(int $companyid): int {
         global $DB;
 

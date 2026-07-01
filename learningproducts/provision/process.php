@@ -34,7 +34,7 @@ $returnurl =
     );
     
 try {
-
+    
     provision_manager::process($id, $newcourseid);
 
     redirect(

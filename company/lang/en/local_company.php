@@ -56,6 +56,8 @@ $string['statussuspend'] = 'Suspended';
 
 $string['navoverview'] = 'Overview';
 $string['naventitlements'] = 'Entitlements';
+$string['navsubscription'] = 'Subscriptions';
+$string['navenrollment'] = 'Enrollments';
 $string['navmembers'] = 'Members';
 $string['navassignments'] = 'Assignments';
 $string['navwallet'] = 'Wallet';

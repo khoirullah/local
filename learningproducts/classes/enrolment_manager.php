@@ -26,10 +26,12 @@ class enrolment_manager {
      */
     public static function enrol_product(
         int $productid,
-        int $userid
+        int $userid,
+        int $startdate,
+        int $enddate,
+        ?int $newcourseid = null,
+        ?int $templateuserid = null
     ): bool {
-
-        
 
         $product =
             product_manager::get_product(
@@ -44,28 +46,45 @@ class enrolment_manager {
 
             return self::enrol_bundle(
                 $productid,
-                $userid
+                $userid,
+                $startdate,
+                $enddate,
+                $newcourseid,
+                $templateuserid
             );
-        }
-
-        $courses =
-            course_mapper::get_courses(
-                $productid
-            );
-
-        if (empty($courses)) {
-            return false;
         }
 
         $success = true;
 
+        if (
+            $newcourseid !== null &&
+            $templateuserid !== null &&
+            $userid == $templateuserid
+        ) {
+
+            // Provision PIC
+            return self::enrol_user_to_course(
+                $userid,
+                $newcourseid,
+                $startdate,
+                $enddate
+            );
+
+        }
+        $courses =
+            self::get_template_courses(
+                $productid,
+                $templateuserid
+            );
+
         foreach ($courses as $course) {
 
-            $result =
-                self::enrol_user_to_course(
-                    $userid,
-                    $course->id
-                );
+            $result = self::enrol_user_to_course(
+                $userid,
+                $course->id,
+                $startdate,
+                $enddate
+            );
 
             if (!$result) {
                 $success = false;
@@ -75,6 +94,30 @@ class enrolment_manager {
         return $success;
     }
 
+    protected static function get_template_courses(
+        int $productid,
+        int $templateuserid
+    ): array{
+        $productcourses =
+            course_mapper::get_courses(
+                $productid
+            );
+
+        $result = [];
+
+        foreach ($productcourses as $course) {
+
+            $context = \context_course::instance($course->id);
+
+            if (is_enrolled($context, $templateuserid)) {
+
+                $result[] = $course;
+
+            }
+        }
+
+        return $result;
+    }
     /**
      * Enroll bundle products.
      *
@@ -84,7 +127,11 @@ class enrolment_manager {
      */
     protected static function enrol_bundle(
         int $bundleid,
-        int $userid
+        int $userid,
+        int $startdate,
+        int $enddate,
+        ?int $newcourseid = null,
+        ?int $templateuserid = null
     ): bool {
 
         $products =
@@ -98,7 +145,11 @@ class enrolment_manager {
 
             $result = self::enrol_product(
                 $product->id,
-                $userid
+                $userid,
+                $startdate,
+                $enddate,
+                $newcourseid,
+                $templateuserid
             );
 
             if (!$result) {
@@ -118,7 +169,9 @@ class enrolment_manager {
      */
     protected static function enrol_user_to_course(
         int $userid,
-        int $courseid
+        int $courseid,
+        int $stardate,
+        int $enddate
     ): bool {
 
         $context =
@@ -155,7 +208,9 @@ class enrolment_manager {
             $plugin->enrol_user(
                 $instance,
                 $userid,
-                self::get_student_roleid()
+                self::get_student_roleid(),
+                $stardate,
+                $enddate
             );
 
             return true;
@@ -204,7 +259,7 @@ class enrolment_manager {
         );
     }
 
-    public static function sync_user_product(
+    /* public static function sync_user_product(
         int $userid,
         int $productid,
         bool $assigned
@@ -214,7 +269,7 @@ class enrolment_manager {
 
             return self::enrol_product(
                 $productid,
-                $userid
+                $userid,
             );
         }
 
@@ -222,7 +277,7 @@ class enrolment_manager {
             $productid,
             $userid
         );
-    }
+    } */
 
     private static function get_student_roleid(): int {
 

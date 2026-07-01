@@ -3,11 +3,11 @@ require('../../config.php');
 
 use local_corporatecredits\wallet_manager;
 use local_company\company_manager;
-use local_company\subscription_manager;
+//use local_company\subscription_manager;
 use local_learningproducts\product_manager;
 use local_learningproducts\provision_manager;
 use local_learningproducts\purchase_manager;
-use local_learningproducts\enrolment_manager;
+//use local_learningproducts\enrolment_manager;
 
 require_login();
 require_sesskey();
@@ -16,8 +16,15 @@ $companyid = required_param('companyid', PARAM_INT);
 $productid = required_param('productid', PARAM_INT);
 $total = required_param('total', PARAM_FLOAT);
 $seat = required_param('seat', PARAM_INT);
-$startdate = required_param('startdate', PARAM_TEXT); // YYYY-MM-DD
-$enddate   = required_param('enddate', PARAM_TEXT);   // YYYY-MM-DD
+$duration = required_param('duration', PARAM_INT);
+
+$start = new DateTime();
+
+$end = clone $start;
+$end->modify("+{$duration} months");
+
+$startdate = $start->format('Y-m-d H:i:s');
+$enddate   = $end->format('Y-m-d H:i:s');
 $startdate = strtotime($startdate);
 $enddate   = strtotime($enddate);
 $product = product_manager::get_product($productid);

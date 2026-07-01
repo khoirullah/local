@@ -30,7 +30,14 @@ class company_manager {
 
         $companyid = $DB->insert_record('local_company', $record);
 
-        $wallet = \local_corporatecredits\wallet_manager::create_wallet($companyid);
+        $is_exist = \local_corporatecredits\wallet_manager::get_wallet($companyid);
+        
+        if ($is_exist) {
+            \local_corporatecredits\wallet_manager::create_wallet($companyid);
+        } else {
+            \local_corporatecredits\wallet_manager::welcome_coins($companyid);
+        }
+        
         // ==========================
         // CREATE COHORT
         // ==========================

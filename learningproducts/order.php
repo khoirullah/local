@@ -111,8 +111,29 @@ if ($imageurl) {
         'data:image/svg+xml;base64,' .
         base64_encode($svg);
 }
-
+$plans = [
+    [
+        'id' => 1,
+        'name' => 'Monthly',
+        'months' => 1,
+        'price' => 20,
+        'checked' => true,
+    ],
+    [
+        'id' => 2,
+        'name' => 'Semester',
+        'months' => 6,
+        'price' => 100,
+    ],
+    [
+        'id' => 3,
+        'name' => 'Yearly',
+        'months' => 12,
+        'price' => 180,
+    ],
+];
 $templatecontext = [
+    'plans' => $plans,  
     'purchaseurl' =>(
         new moodle_url(
             '/local/learningproducts/purchase.php',

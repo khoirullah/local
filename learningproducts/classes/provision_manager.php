@@ -1,11 +1,13 @@
 <?php
 namespace local_learningproducts;
 
+use local_company\assignment_manager;
 use local_learningproducts\purchase_manager;
 use local_learningproducts\product_manager;
 use local_learningproducts\course_mapper;
 use local_learningproducts\enrolment_manager;
 use local_company\subscription_manager;
+use local_company\entitlement_manager;
 use local_company\company_manager;
 
 defined('MOODLE_INTERNAL') || die();
@@ -217,7 +219,7 @@ class provision_manager {
             'local_company_provision',
             [
                 'id' => $id
-            ]
+            ] 
         );
     }
 
@@ -328,9 +330,7 @@ class provision_manager {
             //--------------------------------------------------
             // Load data.
             //--------------------------------------------------
-
             $company = company_manager::get($provision->companyid);
-
             $product = product_manager::get_product(
                 $provision->productid
             );
@@ -355,8 +355,15 @@ class provision_manager {
             //--------------------------------------------------
             // Enroll User to Product and course automatically
             //--------------------------------------------------
-            enrolment_manager::enrol_product($product->id, $provision->requestedby);
-                
+            enrolment_manager::enrol_product(
+                $product->id, 
+                $provision->requestedby, 
+                $provision->startdate, 
+                $provision->enddate, 
+                $newcourse->id,
+                $provision->requestedby
+            );
+            
             //--------------------------------------------------
             // Create subscription.
             //--------------------------------------------------
@@ -368,6 +375,19 @@ class provision_manager {
                     'startdate'  => $provision->startdate,
                     'enddate'    => $provision->enddate,
                 ]);
+            $entitlementid =
+                entitlement_manager::create(
+                    $company->id,
+                    $product->id,
+                    $provision->quota, 
+                    $provision->startdate,
+                    $provision->enddate,
+                );
+            assignment_manager::assign_user(
+                    $entitlementid,
+                    $provision->requestedby,
+                    $USER->id
+                );
 
             //--------------------------------------------------
             // Update provision record.

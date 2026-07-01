@@ -86,7 +86,7 @@ foreach ($invoices as $invoice) {
         'statusfailed' =>
             $invoice->status === 'failed',
 
-        'processurl' => (
+        'processurl' => ( 
             new moodle_url(
                 '/local/corporatecredits/invoice/process.php',
                 [

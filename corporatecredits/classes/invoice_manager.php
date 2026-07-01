@@ -87,6 +87,11 @@ class invoice_manager {
                 $invoiceid
             );
 
+        // Sudah pernah diproses.
+        if ($invoice->status === 'paid') {
+            return;
+        }
+
         $invoice->status = 'paid';
 
         $invoice->timepaid = time();

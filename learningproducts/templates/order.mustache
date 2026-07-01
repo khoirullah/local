@@ -43,19 +43,64 @@
 
             </div>
 
-            <div class="card shadow-sm border-0 my-4">
+            <div id="accordion">
+                <div class="card shadow-sm border-0 my-4">
+                    <div class="card-header">
+                        <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                            <strong>{{#str}}about, local_learningproducts{{/str}}</strong>
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                        <div class="card-body">
+                        {{{product.description}}}
+                        </div>
+                    </div>
+                </div>
+            </div>        
 
-                <div class="card-header bg-white">
-                    <strong>{{#str}}about, local_learningproducts{{/str}}</strong>
+            <div class="form-group">
+
+                <label class="font-weight-bold mb-3">
+                    {{#str}}subscriptionperiod, local_learningproducts{{/str}}
+                </label>
+
+                <div class="subscription-options">
+
+                    {{#plans}}
+
+                    <label class="subscription-card">
+
+                        <input
+                            type="radio"
+                            name="planid"
+                            value="{{id}}"
+                            data-price="{{price}}"
+                            data-months="{{months}}"
+                            {{#checked}}checked{{/checked}}>
+
+                        <div class="subscription-content">
+
+                            <div class="subscription-title">
+                                {{name}}
+                            </div>
+
+                            <div class="subscription-duration">
+                                {{months}} Months
+                            </div>
+
+                            <div class="subscription-price">
+                                {{price}} 🪙 / Seat
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                    {{/plans}}
+
                 </div>
 
-                <div class="card-body">
-
-                    {{{product.description}}}
-
-                </div>
-
-            </div>
+            </div>   
 
         </div>
 
@@ -188,73 +233,43 @@
                         <input type="hidden" name="total" id="total-price-field">
                         <input type="hidden" name="sesskey" value="{{sesskey}}">
                         <input type="hidden" id="unit-price-raw" value="{{product.priceraw}}">
-
-                        <div class="form-group">
-
-                            <label for="seat" class="font-weight-bold">
-
-                                {{#str}}seat, local_learningproducts{{/str}}
-
-                            </label>
-
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="seat"
-                                name="seat"
-                                value="1"
-                                min="1"
-                                required>
-
-                            <small class="text-muted">
-
-                                {{#str}}numseat, local_learningproducts{{/str}}
-
-                            </small>
-
-                        </div>
+                        <input type="hidden" id="duration" name="duration">
 
                         <div class="form-group">
 
                             <label class="font-weight-bold">
-
-                                {{#str}}subscriptionperiod, local_learningproducts{{/str}}
-
+                                {{#str}}seat, local_learningproducts{{/str}}
                             </label>
 
-                            <div class="row">
+                            <div class="seat-selector">
 
-                                <div class="col-6">
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary"
+                                    id="seat-minus">
 
-                                    <input
-                                        type="date"
-                                        class="form-control"
-                                        id="startdate"
-                                        name="startdate"
-                                        value="{{startdate}}"
-                                        required>
+                                    -
 
-                                </div>
+                                </button>
 
-                                <div class="col-6">
+                                <input
+                                    id="seat"
+                                    name="seat"
+                                    type="number"
+                                    value="1"
+                                    min="1"
+                                    class="form-control text-center w-100">
 
-                                    <input
-                                        type="date"
-                                        class="form-control"
-                                        id="enddate"
-                                        name="enddate"
-                                        value="{{enddate}}"
-                                        required>
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary"
+                                    id="seat-plus">
 
-                                </div>
+                                    +
+
+                                </button>
 
                             </div>
-
-                            <small class="text-muted">
-
-                                {{#str}}subscriptionperiod_desc, local_learningproducts{{/str}}
-
-                            </small>
 
                         </div>
 
@@ -286,92 +301,116 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const seatInput = document.getElementById('seat');
 
-    const unitPrice = parseFloat(
-        document.getElementById('unit-price-raw').value
-    );
-
     const walletBalance = {{walletbalance}};
-
+    const duration = document.getElementById('duration');
     const seatCount = document.getElementById('seat-count');
     const totalPrice = document.getElementById('total-price');
-    const totalfield = document.getElementById('total-price-field');
+    const totalField = document.getElementById('total-price-field');
     const remainingBalance = document.getElementById('remaining-balance');
+    const billingPeriod = document.getElementById('billing-period');
 
     function formatNumber(value) {
-        return value.toLocaleString('en-US');
+        return Number(value).toLocaleString('en-US');
+    }
+
+    function getSelectedPlan() {
+        return document.querySelector(
+            'input[name="planid"]:checked'
+        );
     }
 
     function refreshSummary() {
 
-        let seat = parseInt(seatInput.value, 10);
+        let seat = parseInt(seatInput.value);
 
         if (isNaN(seat) || seat < 1) {
             seat = 1;
             seatInput.value = 1;
         }
 
-        const start = new Date(document.getElementById('startdate').value);
-        const end   = new Date(document.getElementById('enddate').value);
+        const plan = getSelectedPlan();
 
-        let multiplier = 1;
-
-        if (!isNaN(start) && !isNaN(end) && end >= start) {
-
-            const diffDays = Math.ceil(
-                (end - start) / (1000 * 60 * 60 * 24)
-            ) + 1;
-
-            multiplier = Math.max(
-                1,
-                Math.ceil(diffDays / 30)
-            );
-
-            const billing = document.getElementById('billing-period');
-
-            if (billing) {
-                billing.textContent =
-                    multiplier + ' × 30 days';
-                    //multiplier + ' × 30 days (' + diffDays + ' days)';
-            }
+        if (!plan) {
+            return;
         }
 
-        const total = seat * unitPrice * multiplier;
+        const unitPrice = parseFloat(plan.dataset.price);
+        const months = plan.dataset.months;
+        const purchaseButton = document.getElementById('purchase-button');
 
+        duration.value = months;
+
+        const total = seat * unitPrice;
         const remaining = walletBalance - total;
 
         seatCount.innerHTML =
-            seat+' 👥';
+            '<i class="fa fa-users"></i> ' + seat;
 
-        totalPrice.textContent =
+        totalPrice.innerHTML =
             formatNumber(total) + ' 🪙';
 
-        totalfield.value = formatNumber(total);
+        totalField.value = total;
 
-        remainingBalance.textContent =
+        remainingBalance.innerHTML =
             formatNumber(remaining) + ' 🪙';
 
-        remainingBalance.classList.remove(
-            'text-success',
-            'text-danger'
-        );
-
-        remainingBalance.classList.add(
+        remainingBalance.className =
             remaining >= 0
-                ? 'text-success'
-                : 'text-danger'
-        );
+            ? 'text-success'
+            : 'text-danger';
+
+        billingPeriod.textContent =
+            months + ' Month' + (months > 1 ? 's' : '');
+
+        document.getElementById('unit-price').innerHTML =
+            formatNumber(unitPrice) + ' 🪙';
+
+        const enoughCredit = remaining >= 0;
+
+        purchaseButton.disabled = !enoughCredit;
+
+        purchaseButton.classList.toggle('btn-primary', enoughCredit);
+        purchaseButton.classList.toggle('btn-secondary', !enoughCredit);
+
     }
-
-    document.getElementById('startdate')
-    .addEventListener('change', refreshSummary);
-
-    document.getElementById('enddate')
-        .addEventListener('change', refreshSummary);
 
     seatInput.addEventListener('input', refreshSummary);
 
-    refreshSummary();
+    document.querySelectorAll('input[name="planid"]')
+        .forEach(function(item){
 
+            item.addEventListener(
+                'change',
+                refreshSummary
+            );
+
+        });
+
+    document.getElementById('seat-plus')
+        .addEventListener('click', function(){
+
+            seatInput.value =
+                parseInt(seatInput.value || 1) + 1;
+
+            refreshSummary();
+
+        });
+
+    document.getElementById('seat-minus')
+        .addEventListener('click', function(){
+
+            let value =
+                parseInt(seatInput.value || 1);
+
+            if (value > 1) {
+                seatInput.value = value - 1;
+            }
+
+            refreshSummary();
+
+        });
+
+    refreshSummary();
 
 });
 </script>

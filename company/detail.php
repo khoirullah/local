@@ -273,10 +273,9 @@ $overview = [
     'completiondata' => json_encode($completiondata),
 ]; 
 
-$entitlements = entitlement_manager::get_company_entitlements($id);
-//$entitlements = subscription_manager::get_by_company($id);
-
-
+$entitlements = subscription_manager::get_company_entitlements($id);
+$assignments = assignment_manager::get_company_assignments($id);
+        
 foreach ($entitlements as $entitlement) {
 
     $entitlement->remaining = max(
@@ -302,7 +301,7 @@ $entitlements = [
     'hasentitlements' => !empty($entitlements)
 ];
 
-$templatecontext['overview'] = $overview;
+//$templatecontext['overview'] = $overview;
 
 $company->logo = $logo; 
 $templatecontext = [
@@ -424,9 +423,7 @@ $templatecontext = [
 switch ($tab) {
 
     case 'entitlements':
-        //echo '<pre>';
-        //var_dump($templatecontext['entitlements']);
-        //die;
+        
         $tabcontent =
             $OUTPUT->render_from_template(
                 'local_company/company/tab_entitlements',
@@ -439,10 +436,7 @@ switch ($tab) {
 
         $templatecontext['members']
             = member_manager::get_company_members($id);
-        //$templatecontext['members']['userurl'] = new moodle_url('user/profile.php', ['id'=>$id]);
-        //$members = member_manager::get_company_members($id);
-        //var_dump($members->url);
-        //die;
+        
         $tabcontent =
             $OUTPUT->render_from_template(
                 'local_company/company/tab_members',
@@ -453,9 +447,6 @@ switch ($tab) {
 
     case 'assignments':
 
-        $templatecontext['assignments']
-            = assignment_manager::get_company_assignments($id);
-        
         $tabcontent =
             $OUTPUT->render_from_template(
                 'local_company/company/tab_assignments',

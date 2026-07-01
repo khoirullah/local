@@ -8,7 +8,6 @@
 require('../../../config.php');
 
 use local_corporatecredits\invoice_manager;
-use local_corporatecredits\wallet_manager;
 
 require_login();
 require_sesskey();

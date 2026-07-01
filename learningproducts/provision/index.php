@@ -150,6 +150,15 @@ foreach ($records as $record) {
                 ]
             )
         )->out(false),
+        'deleteurl' => (
+            new moodle_url(
+                '/local/learningproducts/provision/delete.php',
+                [
+                    'id' => $record->id,
+                    'sesskey' => sesskey()
+                ]
+            )
+        )->out(false),
         'duplicateurl' => (
             new moodle_url(
                 '/backup/copy.php',

@@ -1,4 +1,7 @@
 <?php
+
+use local_corporatecredits\invoice_manager;
+
 require('../../config.php');
 
 require_login();
@@ -78,34 +81,21 @@ if (empty($secret)) {
 // CREATE INVOICE RECORD
 // =========================
 
-$invoice = new stdClass();
-
-$invoice->companyid = $companyid;
-$invoice->invoicecode = '';
-$invoice->coins = $coins;
-$invoice->amount = $amount;
-$invoice->status = 'pending';
-$invoice->paymentmethod = 'xendit';
-$invoice->timecreated = time();
-$invoice->timemodified = time();
-
-$invoiceid = $DB->insert_record(
-    'local_corpcredits_invoice',
-    $invoice
+$invoiceid = invoice_manager::create_invoice(
+    $companyid,
+    $coins,
+    'xendit',
+    $amount
 );
-
 
 // =========================
 // CREATE XENDIT INVOICE
 // =========================
 
 $externalid =
-    'TOPUP-' .
-    $companyid .
-    '-' .
-    $invoiceid .
-    '-' .
-    time();
+    'XEN-' .strtoupper(
+        random_string(10)
+    );
 
 $description = get_string(
     'topupdescription',
