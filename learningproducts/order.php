@@ -111,27 +111,32 @@ if ($imageurl) {
         'data:image/svg+xml;base64,' .
         base64_encode($svg);
 }
+
 $plans = [
     [
-        'id' => 1,
-        'name' => 'Monthly',
+        'id' => 'monthly',
+        'name' => get_string('monthly', 'local_learningproducts'),
         'months' => 1,
-        'price' => 20,
         'checked' => true,
     ],
     [
-        'id' => 2,
-        'name' => 'Semester',
+        'id' => 'semester',
+        'name' => get_string('semester', 'local_learningproducts'),
         'months' => 6,
-        'price' => 100,
     ],
     [
-        'id' => 3,
-        'name' => 'Yearly',
+        'id' => 'annual',
+        'name' => get_string('annual', 'local_learningproducts'),
         'months' => 12,
-        'price' => 180,
     ],
 ];
+foreach ($plans as &$plan) {
+    $plan['totalprice'] = $product->price * $plan['months'];
+}
+unset($plan); // penting setelah foreach by reference
+//var_dump($plans);
+//die;
+
 $templatecontext = [
     'plans' => $plans,  
     'purchaseurl' =>(

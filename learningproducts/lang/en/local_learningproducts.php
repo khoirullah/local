@@ -83,3 +83,6 @@ $string['priceperuser'] = 'Cost per seat';
 $string['billing'] = 'Billing Period';
 $string['provisionqueue'] = 'Provision Queue';
 $string['purchasesuccess'] = 'Purchase completed successfully.';
+$string['monthly'] = 'Monthly';
+$string['semester'] = 'Semester';
+$string['annual'] = 'Annual';
